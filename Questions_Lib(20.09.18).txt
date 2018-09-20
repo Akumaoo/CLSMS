@@ -1,0 +1,15 @@
+
+SERIALS
+-are the serials being delivered individually or per packages?
+-are the serials being categorized "before" distributing it on the specified dept or it's based on whether who received the serial?
+
+
+DEPARTMENT
+-should we include the department name in the database? or is it specified(merge the department and specified courses).?
+-should we create users for specific college staff users(for receiving serials for college).
+
+DISTRIBUTOR--DELIVERY
+-you only receive specific serials from one distributor.one-one?
+-what do you want to do after you've been noticed that there is a deleyed delivery. cancel subscription? or update delivery date to new one?
+
+
