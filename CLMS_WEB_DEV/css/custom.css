@@ -1,0 +1,38 @@
+#child-tab{
+	padding-left: 0 !important;
+	margin-left: 20px;
+}
+
+.remove-hl{background: transparent !important;}
+
+.wrapper
+{
+	padding-bottom: 0 !important;
+}
+
+#profilepic{
+	border-radius: 6px;
+	margin-left: 25px;
+	margin-top: 15px;
+}
+
+.context{
+	margin-top: 56px;
+	margin-left: 10px;
+	margin-right: 25px;
+}
+.context>p{
+	font-size: 16px;
+}
+#ava
+{
+	padding-left: 3px;
+}
+.customhr
+{
+	border-color: #4ECDC4;
+}
+#NotifContainer{
+	max-height: 666px;
+	overflow:auto;
+}
