@@ -12,4 +12,7 @@ DISTRIBUTOR--DELIVERY
 -you only receive specific serials from one distributor.one-one?
 -what do you want to do after you've been noticed that there is a deleyed delivery. cancel subscription? or update delivery date to new one?
 
+ROLE
+-is there a chance that there will be another type of user in the future?(the verify if we're going for static or dynamic type on roles of user)
+
 

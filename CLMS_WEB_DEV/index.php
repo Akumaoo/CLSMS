@@ -115,6 +115,8 @@ require 'php_codes/db.php'
 
     }
   </script>
+  <!-- Script for left category click -->
+  <script type="text/javascript" src='lib/index_leftcateg.js'></script>
 
 <!--   <script type="text/javascript">
   $(function(){

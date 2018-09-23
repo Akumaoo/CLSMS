@@ -12,22 +12,23 @@
               </a>
           </li>
 
+            <!-- javascript:void(0) so that if yung page na ireredirect nung link is null or nonexistent magiistay sya sa page also it's good combination for ajax para maremove din yung # sa url :))) -->
           <li>
-            <a href="#">
+            <a href="javascript:void(0)" id='subs'>
               <i class="fa fa-handshake-o"></i>
               <span>Subscribe</span>
             </a>
           </li>
 
           <li>
-            <a href="#">
+            <a href="javascript:void(0)">
               <i class="fa fa-paper-plane"></i>
-              <span>Send Notifications</span> 
+              <span>Send Books</span> 
             </a>
           </li>
 
           <li>
-            <a href="#">
+            <a href="javascript:void(0)">
               <i class="fa fa-line-chart"></i>
               <span>Reports</span>
               </a>
@@ -35,7 +36,7 @@
           
             <!--DATA TAB-->
           <li class="sub-menu">
-            <a href="#">
+            <a href="javascript:void(0)">
               <i class="fa fa-file"></i>
               <span>Data's</span>
               </a>
@@ -43,15 +44,33 @@
             <!--ADD TAB-->
             <ul class="sub">
               <li class="sub-menu">
-                <a href="#" class="remove-hl">
+                <a href="javascript:void(0)" class="remove-hl">
                   <i class="fa fa-plus-square"></i>
                   <span>Add</span>
                 </a>
                 <ul class="sub">
 
                   <li class="sub-menu" id="child-tab">
-                    <a href="#" class="remove-hl">
+                    <a href="javascript:void(0)" class="remove-hl" id='adduser'>
                       <span>User</span>
+                    </a>
+                  </li>
+
+                  <li class="sub-menu" id="child-tab">
+                    <a href="javascript:void(0)" class="remove-hl" id='adddistrib'>
+                      <span>Distributor</span>
+                    </a>
+                  </li>
+
+                  <li class="sub-menu" id="child-tab">
+                    <a href="javascript:void(0)" class="remove-hl" id='addserial'>
+                      <span>Serial</span>
+                    </a>
+                  </li>
+
+                  <li class="sub-menu" id="child-tab">
+                    <a href="javascript:void(0)" class="remove-hl" id='addtype'>
+                      <span>Serial Type</span>
                     </a>
                   </li>
                   
@@ -59,14 +78,14 @@
               </li>
 
               <li>
-                <a href="#"  class="remove-hl">
+                <a href="javascript:void(0)"  class="remove-hl">
                   <i class="fa fa-pencil"></i>
                   <span>Modify</span>
                </a>
               </li>
 
               <li>
-                <a href="#"  class="remove-hl">
+                <a href="javascript:void(0)"  class="remove-hl">
                   <i class="fa fa-trash"></i>
                   <span>Delete</span>
                 </a>
@@ -75,7 +94,7 @@
           </li>
 
           <li>
-            <a href="#" id="arch">
+            <a href="javascript:void(0)" id="arch">
               <i class="fa fa-archive"></i>
               <span>Archive</span>
               </a>

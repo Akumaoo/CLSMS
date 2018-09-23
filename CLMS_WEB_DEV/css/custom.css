@@ -36,3 +36,23 @@
 	max-height: 666px;
 	overflow:auto;
 }
+.custom-form-radio{
+	height: 16px !important;
+	
+}
+.radio-label-center{
+	text-align: center;
+}
+.custom-btn{
+	background-color:#2F323B;
+	border-radius: 3px;
+	color: white;
+	text-align: center;
+	cursor:pointer;
+	padding:10px 30px;
+}
+.custom-btn:hover{
+	background-color:#4ECDC4;
+	color: white;
+}
+
