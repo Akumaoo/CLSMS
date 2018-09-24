@@ -9,7 +9,6 @@ DEPARTMENT
 -should we create users for specific college staff users(for receiving serials for college).
 
 DISTRIBUTOR--DELIVERY
--you only receive specific serials from one distributor.one-one?
 -what do you want to do after you've been noticed that there is a deleyed delivery. cancel subscription? or update delivery date to new one?
 
 ROLE
