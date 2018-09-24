@@ -14,10 +14,24 @@
 
             <!-- javascript:void(0) so that if yung page na ireredirect nung link is null or nonexistent magiistay sya sa page also it's good combination for ajax para maremove din yung # sa url :))) -->
           <li>
-            <a href="javascript:void(0)" id='subs'>
+            <a href="javascript:void(0)">
               <i class="fa fa-handshake-o"></i>
-              <span>Subscribe</span>
+              <span>Subscription</span>
             </a>
+
+            <ul class="sub">
+              <li class="sub-menu child-tab">
+                <a href="currentsubscribe.php" class="remove-hl">
+                  <span>Current Subscription</span>
+                </a>
+              </li>
+
+              <li class="sub-menu child-tab">
+                  <a href="javascript:void(0)" class="remove-hl">
+                  <span>Subscribe</span>
+                </a>
+              </li>
+            </ul>
           </li>
 
           <li>
@@ -50,25 +64,25 @@
                 </a>
                 <ul class="sub">
 
-                  <li class="sub-menu" id="child-tab">
+                  <li class="sub-menu child-tab">
                     <a href="javascript:void(0)" class="remove-hl" id='adduser'>
                       <span>User</span>
                     </a>
                   </li>
 
-                  <li class="sub-menu" id="child-tab">
+                  <li class="sub-menu child-tab">
                     <a href="javascript:void(0)" class="remove-hl" id='adddistrib'>
                       <span>Distributor</span>
                     </a>
                   </li>
 
-                  <li class="sub-menu" id="child-tab">
+                  <li class="sub-menu child-tab">
                     <a href="javascript:void(0)" class="remove-hl" id='addserial'>
                       <span>Serial</span>
                     </a>
                   </li>
 
-                  <li class="sub-menu" id="child-tab">
+                  <li class="sub-menu child-tab">
                     <a href="javascript:void(0)" class="remove-hl" id='addtype'>
                       <span>Serial Type</span>
                     </a>

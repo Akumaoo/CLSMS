@@ -38,13 +38,5 @@ $(function(){
     });
 
     // END OF ADDING TAB
-     $('#subs').click(function(){
-      $.ajax({
-        url:'Subscribe.php',
-        success:function(data){
-          $('.main-chart').html(data)
-        }
-      });
-    });
 
 });
