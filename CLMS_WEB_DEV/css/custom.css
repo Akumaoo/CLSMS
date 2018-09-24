@@ -1,6 +1,6 @@
-#child-tab{
+.child-tab{
 	padding-left: 0 !important;
-	margin-left: 20px;
+	margin-left: 20px !important;
 }
 
 .remove-hl{background: transparent !important;}
