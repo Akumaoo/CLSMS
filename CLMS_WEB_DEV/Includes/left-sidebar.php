@@ -23,7 +23,7 @@
           <li>
             <a href="javascript:void(0)">
               <i class="fa fa-paper-plane"></i>
-              <span>Send Books</span> 
+              <span>Send Serials</span> 
             </a>
           </li>
 

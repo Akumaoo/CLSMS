@@ -12,46 +12,30 @@ require 'php_codes/db.php'
           <div class="col-lg-9 main-chart">
 
             <div class="row">
-              <!-- TWITTER PANEL -->
-              <div class="col-md-4 mb">
-                <div class="twitter-panel pn">
-                  <i class="fa fa-twitter fa-4x"></i>
-                  <p>Dashio is here! Take a look and enjoy this new Bootstrap Dashboard theme.</p>
-                  <p class="user">@Alvrz_is</p>
-                </div>
-              </div>
-              <!-- /col-md-4 -->
-              <div class="col-md-4 mb">
-                <!-- WHITE PANEL - TOP USER -->
-                <div class="white-panel pn">
-                  <div class="white-header">
-                    <h5>TOP USER</h5>
-                  </div>
-                  <p><img src="img/ui-zac.jpg" class="img-circle" width="50"></p>
-                  <p><b>Zac Snider</b></p>
-                  <div class="row">
-                    <div class="col-md-6">
-                      <p class="small mt">MEMBER SINCE</p>
-                      <p>2012</p>
+             <?php
+                 $query = sqlsrv_query ($conn, 'SELECT * FROM Department');
+              if ($query){
+                
+                if(sqlsrv_has_rows($query) === true){
+                  while ($row = sqlsrv_fetch_array($query)){
+                    ?>
+                    <div class = "col-sm-6 col-xl-5">
+                      <form method = "post" action = "">
+                        <div class = "dept">
+                          <a href= "details.php?ID=<?php echo $row['DepartmentID']; ?>"> <img src ="img/<?php echo $row['DepartmentImage']; ?>"class = 'img-responsive'"/></a>
+                          <h4 class = "text-center"> <a href= "details.php?ID=<?php echo $row['DepartmentID']; ?>"> <?php echo $row['DepartmentName']; ?></a></h4>
+                        </div>
+                      </form>
                     </div>
-                    <div class="col-md-6">
-                      <p class="small mt">TOTAL SPEND</p>
-                      <p>$ 47,60</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- /col-md-4 -->
-              <div class="col-md-4 mb">
-                <!-- INSTAGRAM PANEL -->
-                <div class="instagram-panel pn">
-                  <i class="fa fa-instagram fa-4x"></i>
-                  <p>@THISISYOU<br/> 5 min. ago
-                  </p>
-                  <p><i class="fa fa-comment"></i> 18 | <i class="fa fa-heart"></i> 49</p>
-                </div>
-              </div>
-              <!-- /col-md-4 -->
+                    <?php
+                  }
+                }
+                else{
+                  echo "There are no rows. <br />";
+                }
+              }
+
+              ?>
             </div>
             <!-- /row -->
           </div>
