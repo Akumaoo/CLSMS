@@ -55,4 +55,38 @@
 	background-color:#4ECDC4;
 	color: white;
 }
+#whole_page{
+	min-height: 555px;
+}
+.thead_theme{
+	background-color:rgba(47, 50, 59,.6);
+	color: white;
+}
+.custom_table{
+	margin-top: 86px;
+	padding:0 12px;
+}
+#search_subs{
+	margin-top: 30px;
+	margin-left: 40px;
+}
+.search_tab{
+	float:left;
+	margin:0;
+	padding: 0;
+}
+.search_tab input[type=text]{
+	font-size:14px;
+	width: 560px;
+}
+.select_drop{
+	margin-top:1.5px;
+	height: 23px;
+	margin-left: 6px;
+	width: 95px;
+	float:right;
 
+}
+.select_drop option{
+	text-align: center;
+}

@@ -1,6 +1,5 @@
   <?php
      $initial_notif_launch="Select [Serial].[SerialName],[Notification].[NotificationType],[Notification].[NotificationSeen] from Serial Inner Join [Notification] ON [Serial].[SerialID]=[Notification].[SerialID] Where [Notification].[NotificationSeen]=?";
-      $opt=array('Scrollable'=>'keyset');
       $query=sqlsrv_query($conn,$initial_notif_launch,array('NotSeen'),$opt);
 
       

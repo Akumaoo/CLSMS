@@ -14,14 +14,14 @@
 
             <!-- javascript:void(0) so that if yung page na ireredirect nung link is null or nonexistent magiistay sya sa page also it's good combination for ajax para maremove din yung # sa url :))) -->
           <li>
-            <a href="javascript:void(0)" id='subs'>
+            <a href="javascript:void(0)">
               <i class="fa fa-handshake-o"></i>
               <span>Subscription</span>
             </a>
 
             <ul class="sub">
               <li class="sub-menu child-tab">
-                <a href="javascript:void(0)" class="remove-hl">
+                <a href="currentsubscribe.php" class="remove-hl">
                   <span>Current Subscription</span>
                 </a>
               </li>

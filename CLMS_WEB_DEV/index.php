@@ -8,7 +8,7 @@ require 'php_codes/db.php'
     <!--main content start-->
     <section id="main-content">
       <section class="wrapper">
-        <div class="row">
+        <div class="row" id='whole_page'>
           <div class="col-lg-9 main-chart">
 
             <div class="row">
