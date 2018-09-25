@@ -5,7 +5,15 @@ $(function(){
       $.ajax({
         url:'adduser.php',
         success:function(data){
-          $('.main-chart').html(data)
+          if($("#RSB").is(":hidden"))
+          {
+            $("#RSB").show(),
+            $('.main-chart').html(data)
+          }
+          else
+          {
+            $('.main-chart').html(data)
+          }
         }
       });
     });
@@ -14,7 +22,15 @@ $(function(){
       $.ajax({
         url:'adddistrib.php',
         success:function(data){
-          $('.main-chart').html(data)
+          if($("#RSB").is(":hidden"))
+          {
+            $("#RSB").show(),
+            $('.main-chart').html(data)
+          }
+          else
+          {
+            $('.main-chart').html(data)
+          }
         }
       });
     });
@@ -23,7 +39,15 @@ $(function(){
       $.ajax({
         url:'addserial.php',
         success:function(data){
-          $('.main-chart').html(data)
+          if($("#RSB").is(":hidden"))
+          {
+            $("#RSB").show(),
+            $('.main-chart').html(data)
+          }
+          else
+          {
+            $('.main-chart').html(data)
+          }
         }
       });
     });
@@ -32,11 +56,35 @@ $(function(){
       $.ajax({
         url:'addserialtype.php',
         success:function(data){
-          $('.main-chart').html(data)
+          if($("#RSB").is(":hidden"))
+          {
+            $("#RSB").show(),
+            $('.main-chart').html(data)
+          }
+          else
+          {
+            $('.main-chart').html(data)
+          }
         }
       });
     });
 
     // END OF ADDING TAB
+    $("#CS").click(function(){
+     $.ajax({
+      url:'currentsubscribe.php',
+      success:function(data){
+        if($("#RSB").is(":hidden"))
+        {
+          $('.main-chart').html(data) 
+        }
+        else
+        {
+          $('#RSB').hide(),
+          $('.main-chart').html(data)
+        }
+      }
+     });
+    });
 
 });

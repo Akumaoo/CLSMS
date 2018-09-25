@@ -1,5 +1,6 @@
 $(function(){
 
+
 	$('#remove-active').click(function() {
 		if($('#remove-active').hasClass('active'))
 		{

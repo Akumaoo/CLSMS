@@ -24,6 +24,9 @@
   <script src="lib/common-scripts.js"></script>
   <script type="text/javascript" src="lib/gritter/js/jquery.gritter.js"></script>
   <script type="text/javascript" src="lib/gritter-conf.js"></script>
+  <script type="text/javascript" src="Datatable/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" src="Datatable/js/dataTables.bootstrap.min.js"></script>
   
   <!--custom scripts-->
    <script type="text/javascript" src="lib/custom_js.js"></script>
+   <script type="text/javascript" src='lib/index_leftcateg.js'></script>

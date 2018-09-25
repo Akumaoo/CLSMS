@@ -8,7 +8,7 @@ require 'php_codes/db.php'
     <!--main content start-->
     <section id="main-content">
       <section class="wrapper">
-        <div class="row" id='whole_page'>
+        <div class="row">
           <div class="col-lg-9 main-chart">
 
             <div class="row">
@@ -100,7 +100,6 @@ require 'php_codes/db.php'
     }
   </script>
   <!-- Script for left category click -->
-  <script type="text/javascript" src='lib/index_leftcateg.js'></script>
 
 <!--   <script type="text/javascript">
   $(function(){

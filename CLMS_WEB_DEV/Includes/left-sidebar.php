@@ -21,7 +21,7 @@
 
             <ul class="sub">
               <li class="sub-menu child-tab">
-                <a href="currentsubscribe.php" class="remove-hl">
+                <a href=javascript:void(0)" class="remove-hl" id="CS">
                   <span>Current Subscription</span>
                 </a>
               </li>
