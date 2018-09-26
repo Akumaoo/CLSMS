@@ -42,7 +42,7 @@
           </li>
 
           <li>
-            <a href="javascript:void(0)">
+            <a href=javascript:void(0)" class="remove-hl" id="overallreport">
               <i class="fa fa-line-chart"></i>
               <span>Reports</span>
               </a>

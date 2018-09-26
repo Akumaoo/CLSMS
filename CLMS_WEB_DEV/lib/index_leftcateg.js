@@ -87,4 +87,21 @@ $(function(){
      });
     });
 
+    $("#overallreport").click(function(){
+     $.ajax({
+      url:'overallreport.php',
+      success:function(data){
+        if($("#RSB").is(":hidden"))
+        {
+          $('.main-chart').html(data) 
+        }
+        else
+        {
+          $('#RSB').hide(),
+          $('.main-chart').html(data)
+        }
+      }
+     });
+    });
+
 });
