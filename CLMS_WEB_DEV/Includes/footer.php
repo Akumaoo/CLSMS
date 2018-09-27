@@ -1,15 +1,7 @@
  <!--footer start-->
-    <footer class="site-footer">
-      <div class="text-center">
-        <p>
-          &copy; Copyrights <strong>Dashio</strong>. All Rights Reserved
-        </p>
-       
-        <a href="index.html#" class="go-top">
-          <i class="fa fa-angle-up"></i>
-          </a>
-      </div>
-    </footer>
+   <!--  <footer class="site-footer">
+    
+    </footer> -->
     <!--footer end-->
   </section>
   <!-- js placed at the end of the document so the pages load faster -->
@@ -26,6 +18,7 @@
   <script type="text/javascript" src="lib/gritter-conf.js"></script>
   <script type="text/javascript" src="Datatable/js/jquery.dataTables.min.js"></script>
   <script type="text/javascript" src="Datatable/js/dataTables.bootstrap.min.js"></script>
+  <script type="text/javascript" src="TableEdit/jquery.tabledit.min.js"></script>
   
   <!--custom scripts-->
    <script type="text/javascript" src="lib/custom_js.js"></script>
