@@ -115,6 +115,14 @@ $(function(){
 	 	{
 	 		alert("Cost Is Required");
 	 	}
+	 	else if($("#IniDel").val()=="")
+	 	{
+	 		alert("Initial Delivery Is Required");
+	 	}
+	 	else if($("#PN").val()=="")
+	 	{
+	 		alert("Package Name Is Required");
+	 	}
 	 	else{
 	 		$.ajax({
 	 			url:"php_codes/Insert_New_Subscription.php",

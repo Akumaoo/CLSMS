@@ -1,0 +1,13 @@
+-Delivery Tab(Managing Deliveries)|| Include here The Creation of Package
+-Dashboard
+-Sending Serials
+-Finish the Reports Generation
+-Archiving
+-Other Users UI
+-Distributor Tab(Managing Distributors)
+-User Tab
+-Serial Tab Include The Creation of Type of Serials here (for Type Table)
+-Department Tab
+-Categorizing The Serials Per Dept.
+
+=============================================FINALIZATION***

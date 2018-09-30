@@ -51,6 +51,8 @@ require 'php_codes/db.php'
     <!--main content end-->
    <?php
    include 'Includes/footer.php';
+   // check for deleyed deliveries
+   include 'php_codes/Check_Deliveries.php';
    ?>
  
   <!--script for this page-->

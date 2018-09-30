@@ -39,6 +39,38 @@
 				 					</div>
 				 				</div>
 
+				 				<hr class="theme_hr">
+
+				 				<div class="form-group form-group-center">
+				 					<label for="Cost" class="control-label col-lg-3">Date Of Issue</label>
+				 					<div class="col-lg-6">
+				 						<input type="date" class="form-control" name="DOI" id="DOI">
+				 					</div>
+				 				</div>
+
+				 				<div class="form-group form-group-center">
+				 					<label for="Cost" class="control-label col-lg-3">Issue Number</label>
+				 					<div class="col-lg-6">
+				 						<input type="number" class="form-control form_remove_up_down" name="IN" id="IN">
+				 					</div>
+				 				</div>
+
+				 				<div class="form-group form-group-center">
+				 					<label for="Cost" class="control-label col-lg-3">Vol. Number</label>
+				 					<div class="col-lg-6">
+				 						<input type="number" class="form-control form_remove_up_down" name="VN" id="VN">
+				 					</div>
+				 				</div>
+									
+								<hr class="theme_hr">
+
+				 				<div class="form-group form-group-center">
+				 					<label for="Cost" class="control-label col-lg-3">Package Name</label>
+				 					<div class="col-lg-6">
+				 						<input type="text" class="form-control" name="PN" id="PN">
+				 					</div>
+				 				</div>
+
 				 				<div class="form-group form-group-center">
 				 					<div class="col-lg-offset-8">
 				 						<button class="btn custom-btn" type="submit" id="btn_insert" value="save" name="save">Save</button>
