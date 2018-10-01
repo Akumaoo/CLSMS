@@ -10,4 +10,6 @@
 -Department Tab
 -Categorizing The Serials Per Dept.
 
+-Receiving Deliveries(additional Notification) For Auto Update numbersOfItemsReceive
+
 =============================================FINALIZATION***
