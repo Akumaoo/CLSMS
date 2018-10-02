@@ -1,0 +1,115 @@
+/*COLOR LIGHT BLUE:#4ECDC4
+LIGHT GRAY:#2F323B
+DARKER:#585a62(FONT COLORS);
+
+*/
+
+.child-tab{
+	padding-left: 0 !important;
+	margin-left: 20px !important;
+}
+
+.remove-hl{background: transparent !important;}
+
+.wrapper
+{
+	padding-bottom: 0 !important;
+}
+
+#profilepic{
+	border-radius: 6px;
+	margin-left: 25px;
+	margin-top: 15px;
+}
+
+.context{
+	
+	margin-top: 56px;
+	margin-left: 10px;
+	margin-right: 25px;
+}
+.context>p{
+	font-size: 20px;
+}
+#ava
+{
+	padding-left: 3px;
+}
+.customhr
+{
+	border-color: #4ECDC4;
+}
+#NotifContainer{
+	max-height: 666px;
+	overflow:auto;
+}
+.custom-form-radio{
+	height: 16px !important;
+	
+}
+.radio-label-center{
+	text-align: center;
+}
+.custom-btn{
+	background-color:#2F323B;
+	border-radius: 3px;
+	color: white;
+	text-align: center;
+	cursor:pointer;
+	padding:10px 30px;
+	
+}
+.custom-btn:hover{
+	
+	background-color:#4ECDC4;
+	color: white;
+}
+.main-chart{
+	min-height: 555px;
+	overflow: auto !important;
+}
+.thead_theme{
+	background-color:rgba(47, 50, 59,.6);
+	color: white;
+}
+.custom_table{
+	margin-top: 26px;
+	padding:0 12px;
+}
+.tag_style{
+	font-size: 18px;
+}
+.theme_hr{
+	border-color:rgba(47, 50, 59,.2);
+}
+#subs_click{
+	margin-top:28px;	
+}
+.form_custom{
+
+	padding:66px;
+}
+.form_remove_up_down{
+	-webkit-appearance: none; 
+  margin: 0;
+}
+.form-group-center label,.form-group-center button{
+	margin-left:13%;
+}
+label{
+	color:#585a62;
+}
+.modal-title{
+	text-align: center;
+	
+}
+.center{
+	text-align: center;
+}
+.logo{
+	font-size:40px !important;
+	text-align: center;
+	margin-left: 25%;
+	margin-bottom:10%;
+	color:#2F323B !important;
+}

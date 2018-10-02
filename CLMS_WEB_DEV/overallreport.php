@@ -9,7 +9,6 @@ echo '
 		<thead class="thead_theme">
 			<tr>
 				<th class="radio-label-center">Department</th>
-				<th class="radio-label-center">Course</th>
 				<th class="radio-label-center">Type of Publication</th>
 				<th class="radio-label-center">Title</th>
 				<th class="radio-label-center">Frequency</th>
@@ -21,27 +20,25 @@ echo '
 		</thead>
 		<tbody>';
 
-		$sqltxt='SELECT Department.DepartmentName, Course.CourseName, "Type".TypeName, Serial.SerialName, Subscription.Orders, Distributor.DistributorName, Subscription.Cost, Subscription.NumberOfItemReceived, Subscription."Status"
+		$sqltxt='SELECT Department.DepartmentName, "Type".TypeName, Serial.SerialName, Subscription.Orders, Distributor.DistributorName, Subscription.Cost, Subscription.NumberOfItemReceived, Subscription."Status"
 				FROM Distributor
-				LEFT JOIN Subscription
+				JOIN Subscription
 					ON Subscription.DistributorID = Distributor.DistributorID
-				LEFT JOIN Serial
+				JOIN Serial
 					On Serial.SerialID = Subscription.SerialID
-				LEFT JOIN ReceiveSerial
+				JOIN ReceiveSerial
 					On ReceiveSerial.SerialID = Serial.SerialID
-				LEFT JOIN Department
+				JOIN Department
 					ON Department.DepartmentID = ReceiveSerial.DepartmentID
-				LEFT JOIN Course
-					ON Course.DepartmentID = Department.DepartmentID
-				LEFT JOIN "Type"
+				JOIN "Type"
 					ON "Type".TypeID = Serial.TypeID';
+		
 		$query=sqlsrv_query($conn,$sqltxt,array(),$opt);
 		if(sqlsrv_has_rows($query))
 		{
 			while($row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
 			{
 				$dept=$row['DepartmentName'];
-				$course=$row['CourseName'];
 				$type=$row['TypeName'];
 				$title=$row['SerialName'];
 				$orders=$row['Orders'];
@@ -53,7 +50,6 @@ echo '
 		echo '
 				<tr class="gradeU">
 					<td class="radio-label-center">'.$dept.'</td>
-					<td class="radio-label-center">'.$course.'</td>
 					<td class="radio-label-center">'.$type.'</td>
 					<td class="radio-label-center">'.$title.'</td>
 					<td class="radio-label-center">'.$orders.'</td>
@@ -81,7 +77,7 @@ echo '
 			"searching":true,
 			"columnDefs":
 				[{
-					"targets":[2,3,4],
+					"targets":[3,5,6],
 					"searchable":false,
 					"visible":true
 				}]
