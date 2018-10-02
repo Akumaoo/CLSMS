@@ -13,3 +13,6 @@
 -Receiving Deliveries(additional Notification) For Auto Update numbersOfItemsReceive
 
 =============================================FINALIZATION***
+
+
+--UPDATE NO OF ITEMS RECEIVE WHEN DELIVERIES ARE UPDATE TO RECEIVED

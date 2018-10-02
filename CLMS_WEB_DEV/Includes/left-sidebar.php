@@ -21,6 +21,13 @@
           </li>
 
           <li>
+            <a href="javascript:void(0)" id="Deli">
+              <i class="fa fa-truck"></i>
+              <span>Deliveries</span> 
+            </a>
+          </li>
+
+          <li>
             <a href="javascript:void(0)">
               <i class="fa fa-paper-plane"></i>
               <span>Send Serials</span> 

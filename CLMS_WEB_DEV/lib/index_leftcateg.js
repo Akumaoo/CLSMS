@@ -56,4 +56,13 @@ $(function(){
      });
     });
 
+    $("#Deli").click(function(){
+     $.ajax({
+      url:'Delivery.php',
+      success:function(data){
+        $('.main-chart').html(data)
+      }
+     });
+    });
+
 });

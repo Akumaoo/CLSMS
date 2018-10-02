@@ -59,7 +59,7 @@ if($input["action"]==="edit")
 		$queryedit=sqlsrv_query($conn,$sqltxt,array($disb_id,$serial_id,$orders,$cost,$NIR,$stat,$sub_id),$opt);
 	}
 }
-if($input["action"]==='delete')
+else if($input["action"]==='delete')
 {
 	$sqltxtdel="Delete FROM [Subscription] Where [SubscriptionID]=?";
 	$querydel=sqlsrv_query($conn,$sqltxtdel,array($sub_id),$opt);

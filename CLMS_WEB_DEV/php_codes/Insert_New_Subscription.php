@@ -9,6 +9,7 @@ if(!empty($_POST))
 	$Cost=$_POST["Cost"];
 	$NIR=0;
 	$stat="OnGoing";
+	$Scopy=$_POST['Copy'];
 	//check if value are null
 	if(!$_POST['DOI'])
 	{
@@ -92,8 +93,26 @@ function CheckPackName($pn)
 		return 'NotValid';
 	}
 }
+function CheckPackDistributor($pn2)
+{
+	require 'db.php';
+	$cpd="Select DistributorID From Package_Delivery Where PackageName=?";
+	$cpdquery=sqlsrv_query($conn,$cpd,array($pn2),$opt);
+	if(sqlsrv_has_rows($cpdquery))
+	{
+		while($row=sqlsrv_fetch_array($cpdquery,SQLSRV_FETCH_ASSOC))
+		{
+			$Disb_id=$row['DistributorID'];
+			return $Disb_id;
+		}
+	}
+	else
+	{
+		return 'NotValid';
+	}
+}
 
-	if((CheckDisbtributor($distname)!="NotValid" && CheckSerial($sn)!="NotValid" && CheckPackName($PN)!="NotValid"))
+	if((CheckDisbtributor($distname)!="NotValid" && CheckSerial($sn)!="NotValid" && CheckPackName($PN)!="NotValid" && (CheckPackDistributor($PN)==CheckDisbtributor($distname))))
 	{
 		$dID=CheckDisbtributor($distname);
 		$SID=CheckSerial($sn);
@@ -103,8 +122,8 @@ function CheckPackName($pn)
 		$query=sqlsrv_query($conn,$sqlinsert,array($dID,$SID,$orders,$Cost,$NIR,$stat),$opt);
 
 		// inserting on delivery table
-		$sqlinserdel="Insert Into Delivery(SerialID,DateofIssue,IssueNumber,VolumeNumber,PackageID) Values(?,?,?,?,?)";
-		$querydel=sqlsrv_query($conn,$sqlinserdel,array($SID,$DOI,$IN,$VN,$PID),$opt);
+		$sqlinserdel="Insert Into Delivery(SerialID,DateofIssue,IssueNumber,VolumeNumber,PackageID,Copies) Values(?,?,?,?,?,?)";
+		$querydel=sqlsrv_query($conn,$sqlinserdel,array($SID,$DOI,$IN,$VN,$PID,$Scopy),$opt);
 
 		if($query && $querydel)
 		{

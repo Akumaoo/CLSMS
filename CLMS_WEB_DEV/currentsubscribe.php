@@ -99,6 +99,15 @@ $(function(){
 	$('#subscribe_new_form').on('submit',function(event){
 		event.preventDefault();
 
+		var d = new Date();
+
+		var month = d.getMonth()+1;
+		var day = d.getDate();
+
+		var output_date_today = d.getFullYear() + '/' +
+		    (month<10 ? '0' : '') + month + '/' +
+		    (day<10 ? '0' : '') + day;
+
 	 	if($("#DN").val()=="")
 	 	{
 	 		alert("Disbtributor Name Is Required");
@@ -115,13 +124,17 @@ $(function(){
 	 	{
 	 		alert("Cost Is Required");
 	 	}
-	 	else if($("#IniDel").val()=="")
+	 	else if(new Date($('#DOI').val())<=new Date(output_date_today))
 	 	{
-	 		alert("Initial Delivery Is Required");
+	 		alert("Date Of Issue Is Past The Date Today");
 	 	}
 	 	else if($("#PN").val()=="")
 	 	{
 	 		alert("Package Name Is Required");
+	 	}
+	 	else if($("#Copy").val()=="")
+	 	{
+	 		alert("Number Of Copies Is Required");
 	 	}
 	 	else{
 	 		$.ajax({
