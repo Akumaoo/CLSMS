@@ -13,6 +13,13 @@
           </li>
 
             <!-- javascript:void(0) so that if yung page na ireredirect nung link is null or nonexistent magiistay sya sa page also it's good combination for ajax para maremove din yung # sa url :))) -->
+           <li>
+            <a href="javascript:void(0)" id="Disb">
+              <i class="fa fa-building"></i>
+              <span>Distributors</span>
+            </a>
+          </li>
+
           <li>
             <a href="javascript:void(0)" id="CS">
               <i class="fa fa-handshake-o"></i>

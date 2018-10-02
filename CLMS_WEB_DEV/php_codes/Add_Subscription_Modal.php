@@ -28,14 +28,14 @@
 				 				<div class="form-group form-group-center">
 				 					<label for="Freq" class="control-label col-lg-3">Frequency</label>
 				 					<div class="col-lg-6">
-				 						<input type="number" class="form-control form_remove_up_down" name="Freq" id="Freq">
+				 						<input type="number" class="form-control" name="Freq" id="Freq">
 				 					</div>
 				 				</div>
 
 				 				<div class="form-group form-group-center">
 				 					<label for="Cost" class="control-label col-lg-3">Cost</label>
 				 					<div class="col-lg-6">
-				 						<input type="number" class="form-control form_remove_up_down" name="Cost" id="Cost">
+				 						<input type="number" class="form-control" name="Cost" id="Cost">
 				 					</div>
 				 				</div>
 
@@ -51,21 +51,21 @@
 				 				<div class="form-group form-group-center">
 				 					<label for="IN" class="control-label col-lg-3">Issue Number</label>
 				 					<div class="col-lg-6">
-				 						<input type="number" class="form-control form_remove_up_down" name="IN" id="IN">
+				 						<input type="number" class="form-control" name="IN" id="IN">
 				 					</div>
 				 				</div>
 
 				 				<div class="form-group form-group-center">
 				 					<label for="VN" class="control-label col-lg-3">Vol. Number</label>
 				 					<div class="col-lg-6">
-				 						<input type="number" class="form-control form_remove_up_down" name="VN" id="VN">
+				 						<input type="number" class="form-control" name="VN" id="VN">
 				 					</div>
 				 				</div>
 									
 								<div class="form-group form-group-center">
 				 					<label for="Copy" class="control-label col-lg-3">Serial Copies</label>
 				 					<div class="col-lg-6">
-				 						<input type="number" class="form-control form_remove_up_down" name="Copy" id="Copy">
+				 						<input type="number" class="form-control" name="Copy" id="Copy">
 				 					</div>
 				 				</div>
 				 					

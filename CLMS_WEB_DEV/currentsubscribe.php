@@ -4,7 +4,7 @@ echo '
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-lg-12">
-			<h5 class="tag_style">Subscription:</h5>
+			<h5 class="tag_style">Subscriptions:</h5>
 			<hr class="theme_hr">
 		</div>
 	</div>	

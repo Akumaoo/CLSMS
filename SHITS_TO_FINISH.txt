@@ -4,7 +4,7 @@
 -Finish the Reports Generation
 -Archiving
 -Other Users UI
--Distributor Tab(Managing Distributors)
+(DONE!!!!)-Distributor Tab(Managing Distributors)
 -User Tab
 -Serial Tab Include The Creation of Type of Serials here (for Type Table)
 -Department Tab

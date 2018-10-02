@@ -65,4 +65,13 @@ $(function(){
      });
     });
 
+    $("#Disb").click(function(){
+     $.ajax({
+      url:'Distributors.php',
+      success:function(data){
+        $('.main-chart').html(data)
+      }
+     });
+    });
+
 });
