@@ -101,7 +101,7 @@
 		url:"php_codes/modify_delivery.php",
 		columns:{
 		identifier:[0,"PackageID"],
-		editable:[[1,"PackageName"],[2,"ReceiveDate"],[3,"ExpectedReceiveDate"]]
+		editable:[[3,"ReceiveDate"]]
 			},
 		onSuccess:function(data,textStatus,jqXHR)
 		{

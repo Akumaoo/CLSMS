@@ -111,8 +111,22 @@ function CheckPackDistributor($pn2)
 		return 'NotValid';
 	}
 }
+function CheckDup($sid)
+{
+	require 'db.php';
+	$sql="Select * from Subscription Where SerialID=? AND Status=?";
+	$query=sqlsrv_query($conn,$sql,array($sid,'OnGoing'));
+	if(sqlsrv_has_rows($query))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
 
-	if((CheckDisbtributor($distname)!="NotValid" && CheckSerial($sn)!="NotValid" && CheckPackName($PN)!="NotValid" && (CheckPackDistributor($PN)==CheckDisbtributor($distname))))
+	if((CheckDisbtributor($distname)!="NotValid" && CheckSerial($sn)!="NotValid" && CheckPackName($PN)!="NotValid" && (CheckPackDistributor($PN)==CheckDisbtributor($distname)) && !CheckDup(CheckSerial($sn))))
 	{
 		$dID=CheckDisbtributor($distname);
 		$SID=CheckSerial($sn);

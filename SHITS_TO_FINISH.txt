@@ -1,4 +1,4 @@
--Delivery Tab(Managing Deliveries)|| Include here The Creation of Package
+(DONE!!!)-Delivery Tab(Managing Deliveries)|| Include here The Creation of Package
 -Dashboard
 -Sending Serials
 -Finish the Reports Generation
@@ -15,4 +15,4 @@
 =============================================FINALIZATION***
 
 
---UPDATE NO OF ITEMS RECEIVE WHEN DELIVERIES ARE UPDATE TO RECEIVED
+(DONE!!!)--UPDATE NO OF ITEMS RECEIVE WHEN DELIVERIES ARE UPDATE TO RECEIVED
