@@ -2,7 +2,6 @@
 require "db.php";
 
 $input=filter_input_array(INPUT_POST);
-$distname=$input["DistributorName"];
 $serialname=$input["SerialName"];
 
 $orders=$input["Orders"];
@@ -11,30 +10,12 @@ $NIR=$input["NumberOfItemReceived"];
 $stat=$input["Status"];
 $sub_id=$input['SubscriptionID'];
 
-function CheckDisbtributor($disb){
-	require "db.php";
-	$Dname=$disb;
-	$checksql="Select * from [Distributor] Where [Distributor].[DistributorName]=?";
-	$query=sqlsrv_query($conn,$checksql,array($Dname),$opt);
-	if(sqlsrv_has_rows($query))
-	{
-		while($row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
-		{
-			$DisbID=$row["DistributorID"];
-			return $DisbID;
-		}
-	}
-	else
-	{
-		return "NotValid";
-	}
-}
 function CheckSerial($ser)
 {
 	require "db.php";
 	$Sname=$ser;
 	$checksqlser="Select * from [Serial] Where [Serial].[SerialName]=?";
-	$queryser=sqlsrv_query($conn,$checksqlser,array($Sname),$opt);
+	$queryser=sqlsrv_query($conn,$checksqlser,array($Sname));
 	if(sqlsrv_has_rows($queryser))
 	{
 		while($row=sqlsrv_fetch_array($queryser,SQLSRV_FETCH_ASSOC))
@@ -51,12 +32,17 @@ function CheckSerial($ser)
 
 if($input["action"]==="edit")
 {
-	if((CheckDisbtributor($distname)!="NotValid" && CheckSerial($serialname)!="NotValid"))
+	if(CheckSerial($serialname)!="NotValid" && $stat!='stat')
 	{
-		$disb_id=CheckDisbtributor($distname);
 		$serial_id=CheckSerial($serialname);
-		$sqltxt="Update [Subscription] SET [DistributorID]=?,[SerialID]=?,[Orders]=?,[Cost]=?,[NumberOfItemReceived]=?,[Status]=? WHERE [Subscription].[SubscriptionID]=?";
-		$queryedit=sqlsrv_query($conn,$sqltxt,array($disb_id,$serial_id,$orders,$cost,$NIR,$stat,$sub_id),$opt);
+		$sqltxt="Update [Subscription] SET [SerialID]=?,[Orders]=?,[Cost]=?,[NumberOfItemReceived]=?,[Status]=? WHERE [Subscription].[SubscriptionID]=?";
+		$queryedit=sqlsrv_query($conn,$sqltxt,array($serial_id,$orders,$cost,$NIR,$stat,$sub_id));
+		$input['status']='success';
+
+	}
+	else
+	{
+		$input['status']='fail';
 	}
 }
 else if($input["action"]==='delete')

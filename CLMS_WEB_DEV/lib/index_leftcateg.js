@@ -74,4 +74,12 @@ $(function(){
      });
     });
 
+     $("#MS").click(function(){
+     $.ajax({
+      url:'manage_serials.php',
+      success:function(data){
+        $('.main-chart').html(data)
+      }
+     });
+    });
 });

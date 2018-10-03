@@ -1,7 +1,7 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-lg-12">
-			<h5 class="tag_style">Deliveries:</h5>
+			<h5 class="tag_style">Serials:</h5>
 			<hr class="theme_hr">
 		</div>
 	</div>
@@ -19,56 +19,16 @@
 	<div class="row custom_table">
 
 		<div class="col-lg-10 col-lg-offset-1">
-			<table cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover" id="table_deli">
+			<table cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover" id="table_MS">
 				<thead class="thead_theme">
 				<tr>
-					<th class="radio-label-center">Package ID</th>
-					<th class="radio-label-center">Distributor Name</th>
-					<th class="radio-label-center">Package Name</th>
-					<th class="radio-label-center">Receive Date</th>
-					<th class="radio-label-center">Expected Receive Date</th>
-					<th class="radio-label-center">Package Phase</th>
+					<th class="radio-label-center">Serial ID</th>
+					<th class="radio-label-center">Serial Name</th>
+					<th class="radio-label-center">Type</th>
+					<th class="radio-label-center">Departments</th>
 				</tr>
 				</thead>
 				<tbody>
-					<?php 
-						require 'php_codes/db.php';
-						$sql="Select Package_Delivery.PackageID,DistributorName,PackageName,ReceiveDate,ExpectedReceiveDate,Package_Phase from Package_Delivery 
-							Inner join Distributor ON Package_Delivery.DistributorID=Distributor.DistributorID
-							WHERE ReceiveDate IS NULL ";
-						$query=sqlsrv_query($conn,$sql,array(),$opt);
-						if(sqlsrv_has_rows($query))
-						{
-							while($row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
-							{
-								$PID=$row['PackageID'];
-								$Dname=$row['DistributorName'];
-								$Pname=$row['PackageName'];
-								if(isset($row['ReceiveDate']))
-								{
-									$RD=$row['ReceiveDate']->format("Y/m/d");
-								}
-								else
-								{
-									$RD=$row['ReceiveDate'];
-								}
-								
-								$ERD=$row['ExpectedReceiveDate']->format("Y/m/d");
-								$phase=$row['Package_Phase'];
-
-								echo '
-									<tr class="gradeU">
-										<td class="radio-label-center">'.$PID.'</td>
-										<td class="radio-label-center">'.$Dname.'</td>
-										<td class="radio-label-center PName_click">'.$Pname.'</td>
-										<td class="radio-label-center">'.$RD.'</td>
-										<td class="radio-label-center">'.$ERD.'</td>
-										<td class="radio-label-center">'.$phase.'</td>									
-									</tr>
-								';
-							}
-						}
-					 ?>
 				</tbody>
 			</table>
 		</div>
@@ -81,14 +41,12 @@
 		</div>
 	</div>
 </div>
-<?php 
-		include 'Modals/Create_Package_Modal.php';
-?>
+
 <script>
 	$(function(){
 
-		if( ! $.fn.DataTable.isDataTable("#table_deli")){
-			$('#table_deli').DataTable({			
+		if( ! $.fn.DataTable.isDataTable("#table_MS")){
+			$('#table_MS').DataTable({			
 		// "processing":true,
 		// "serverSide":true,
 		"ordering":true,
@@ -97,7 +55,7 @@
 			});
 		}
 
-	$('#table_deli').Tabledit({
+	$('#table_MS').Tabledit({
 		url:"php_codes/modify_delivery.php",
 		columns:{
 		identifier:[0,"PackageID"],

@@ -2,6 +2,11 @@
 LIGHT GRAY:#2F323B
 DARKER:#585a62(FONT COLORS);
 
+Dark:left-sidebar color: #2f323a;
+font color left sidebar(default): #aeb2b7;
+new left color background:rgba(0,213,193,.6);
+ligth blue color: left sidebar hover:active : #4ECDC4;
+
 */
 
 .child-tab{
@@ -9,7 +14,18 @@ DARKER:#585a62(FONT COLORS);
 	margin-left: 20px !important;
 }
 
-.remove-hl{background: transparent !important;}
+.remove-hl{
+	background: transparent !important;
+	margin-left:10px;
+
+}
+.sub-menu li a.active{
+		color:#4ECDC4 !important;
+}
+.sidebar-menu>li>a.active{
+
+	background:rgba(0,213,193,.6)!important;
+}
 
 .wrapper
 {

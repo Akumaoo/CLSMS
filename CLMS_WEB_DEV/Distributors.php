@@ -73,7 +73,7 @@
 	</div>
 </div>
 <?php 
-include 'php_codes/New_Distributor_Modal.php'
+include 'Modals/New_Distributor_Modal.php'
  ?>
 
 <script>
@@ -101,7 +101,11 @@ include 'php_codes/New_Distributor_Modal.php'
 			{
 				$("#"+data.DistributorID).remove();			
 			}
-		}
+		},onDraw: function() {
+			$('tbody tr td:nth-child(4)>input').each(function(){
+				$('<input class="tabledit-input form-control input-sm" type="number" style="display: none;" disabled="">').attr({ name: this.name, value: this.value }).insertBefore(this)
+			}).remove()
+ 		 }
 	
 	});
 
