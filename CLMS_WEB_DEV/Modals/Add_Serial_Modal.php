@@ -15,14 +15,14 @@
 				 			<form class="cmxform form-horizontal style-form" id="Add_Distributor" method="post">
 				 				
 				 				<div class="form-group form-group-center">
-				 					<label for="NOI" class="control-label col-lg-3">Serial Name</label>
+				 					<label for="serial" class="control-label col-lg-3">Serial Name</label>
 				 					<div class="col-lg-6">
 				 						<input type="text" class="form-control" name="serialname" id="serialname">
 				 					</div>
 				 				</div>
 
 				 				<div class="form-group form-group-center">
-				 					<label for="CN" class="control-label col-lg-3">Type</label>
+				 					<label for="type" class="control-label col-lg-3">Type</label>
 				 					<div class="col-lg-6">
 				 						<select name="type" id="">
 				 						<?php require "php_codes/db.php";
@@ -35,17 +35,26 @@
 				 										echo '<option value="'.$name.'">'.$name.'</option>';
 				 								}
 				 							}
-				 						?>
-				 						
-				 							
+				 						?>			
 				 						</select>
 				 					</div>
 				 				</div>
 
-				 				<div class="form-group form-group-center">
-				 					<label for="mail" class="control-label col-lg-3">Departments</label>
+				 				<div class="form-group ">
+				 					<label for="department" class="control-label col-lg-3">Departments</label>
 				 					<div class="col-lg-6">
-				 						<input type="Email" class="form-control" name="departments" id="departments">
+				 						<?php require "php_codes/db.php";
+				 						$sql="SELECT * FROM Department";
+				 						$query = sqlsrv_query($conn, $sql, array());
+				 						if (sqlsrv_has_rows($query))
+				 							{
+				 								echo "<ul>";
+				 								while ($row = sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC)){
+				 										echo "<label><input type='checkbox' name=dept[] value='".$row['DepartmentID']."'>".$row['DepartmentName'];
+				 								}
+				 								echo "</label></ul>";
+				 							}
+				 						?>			
 				 					</div>
 				 				</div>
 
