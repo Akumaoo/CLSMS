@@ -1,5 +1,5 @@
 <?php
-$serverName = "DESKTOP-QERUPN0\SQLEXPRESS";
+$serverName = "ACER\SQLEXPRESS";
 $connectionInfo = array( "Database"=>"CLSMS");
 $conn = sqlsrv_connect( $serverName, $connectionInfo);
 

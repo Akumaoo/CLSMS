@@ -29,6 +29,40 @@
 				</tr>
 				</thead>
 				<tbody>
+					<?php 
+
+						require 'php_codes/db.php';
+						$sql="SELECT DISTINCT CS2.SerialID,SerialName,TypeName, 
+							    SUBSTRING(
+							        (
+							            SELECT ', '+CS1.DepartmentID  AS [text()]
+							            FROM Categorize_Serials CS1
+										WHERE CS1.SerialID=CS2.SerialID
+							            ORDER BY CS1.SerialID
+							            FOR XML PATH ('')
+							        ), 2, 1000) [Departments]
+							FROM Categorize_Serials CS2 Inner JOIN Serial ON CS2.SerialID=Serial.SerialID Inner Join [Type] ON Serial.TypeID=[Type].TypeID";
+							$query=sqlsrv_query($conn,$sql,array());
+							if(sqlsrv_has_rows($query))
+							{
+								while($row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
+								{
+									$sID=$row['SerialID'];
+									$sname=$row['SerialName'];
+									$tn=$row['TypeName'];
+									$dept=$row['Departments'];
+
+									echo '
+									<tr class="gradeU">
+										<td class="radio-label-center">'.$sID.'</td>
+										<td class="radio-label-center dept_click">'.$sname.'</td>
+										<td class="radio-label-center">'.$tn.'</td>
+										<td class="radio-label-center ">'.$dept.'</td>									
+									</tr>
+								';
+								}
+							}
+					 ?>
 				</tbody>
 			</table>
 		</div>
@@ -37,11 +71,11 @@
 
 	<div class="row">
 		<div class="col-lg-offset-9">
-			<button type="button" name="New_pack" id="New_pack" data-toggle="modal" data-target="#add_package_data_Modal" class="btn custom-btn">Create Package!</button>
+			<button type="button" name="New_pack" id="New_pack" data-toggle="modal" data-target="#Add_Serial_Modal" class="btn custom-btn">Add New Serial</button>
 		</div>
 	</div>
 </div>
-
+<?php include "Modals/Add_Serial_Modal.php";?>
 <script>
 	$(function(){
 
@@ -56,21 +90,35 @@
 		}
 
 	$('#table_MS').Tabledit({
-		url:"php_codes/modify_delivery.php",
+		url:"php_codes/modify_serials.php",
 		columns:{
-		identifier:[0,"PackageID"],
-		editable:[[3,"ReceiveDate"]]
+		identifier:[0,"SerialID"],
+		editable:[[1,"SerialName"],[2,"TypeName"]]
 			},
 		onSuccess:function(data,textStatus,jqXHR)
 		{
 			if(data.action=='delete')
 			{
-				$("#"+data.PackageID).remove();			
+				$("#"+data.SerialID).remove();		
+
+			}
+			if(data.status=='success')
+			{
+				$("#msg_scs").removeClass('collapse');
+			}
+			else
+			{
+				$("#msg_fail").removeClass('collapse');
 			}
 		},onDraw: function() {
-			$('tbody tr td:nth-child(4)>input').each(function(){
-				$('<input class="tabledit-input form-control input-sm" type="date" style="display: none;" disabled="">').attr({ name: this.name, value: this.value }).insertBefore(this)
-			}).remove()
+					$.ajax({
+					url:'php_codes/get_types.php',
+					success:function(data){
+					$('tbody tr td:nth-child(3)>input').each(function(){
+						$('<select class="tabledit-input form-control input-sm" style="display: none;" disabled=""><option style="display: none" value="stat">--Status--</option>'+data).attr({ name: this.name, value: this.value }).insertBefore(this)		
+					}).remove()
+					}
+					});
  		 }
 	
 	});
@@ -126,12 +174,12 @@
 	 	}
 	});
 
-	$(".PName_click").click(function(){
-		var Package_Name=$(this).text();
+	$(".dept_click").click(function(){
+		var serial_ID=$(this).text();
 		$.ajax({
 		type:'POST',
-		url:'php_codes/ViewPackage.php',
-		data:{P_Name:Package_Name},
+		url:'php_codes/View_dept_serial.php',
+		data:{S_ID:serial_ID},
 		success:function(data){
 			$('.main-chart').html(data)
 		}

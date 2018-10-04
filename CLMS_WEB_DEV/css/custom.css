@@ -22,10 +22,6 @@ ligth blue color: left sidebar hover:active : #4ECDC4;
 .sub-menu li a.active{
 		color:#4ECDC4 !important;
 }
-.sidebar-menu>li>a.active{
-
-	background:rgba(0,213,193,.6)!important;
-}
 
 .wrapper
 {

@@ -1,0 +1,68 @@
+
+
+<div id="Add_Serial_Modal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button class="close" type="button" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Add Serial</h4>
+			</div>
+			<div class="modal-body">
+			 <div class="container-fluid">
+			 	<div class="row">
+			 		<div class="col-lg-12">
+			 			<div class="form form_custom form-panel">
+				 			<form class="cmxform form-horizontal style-form" id="Add_Distributor" method="post">
+				 				
+				 				<div class="form-group form-group-center">
+				 					<label for="NOI" class="control-label col-lg-3">Serial Name</label>
+				 					<div class="col-lg-6">
+				 						<input type="text" class="form-control" name="serialname" id="serialname">
+				 					</div>
+				 				</div>
+
+				 				<div class="form-group form-group-center">
+				 					<label for="CN" class="control-label col-lg-3">Type</label>
+				 					<div class="col-lg-6">
+				 						<select name="type" id="">
+				 						<?php require "php_codes/db.php";
+				 						$sql="SELECT TypeName FROM [Type]";
+				 						$query = sqlsrv_query($conn, $sql, array());
+				 						if (sqlsrv_has_rows($query))
+				 							{
+				 								while ($row = sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC)){
+				 									$name = $row['TypeName'];
+				 										echo '<option value="'.$name.'">'.$name.'</option>';
+				 								}
+				 							}
+				 						?>
+				 						
+				 							
+				 						</select>
+				 					</div>
+				 				</div>
+
+				 				<div class="form-group form-group-center">
+				 					<label for="mail" class="control-label col-lg-3">Departments</label>
+				 					<div class="col-lg-6">
+				 						<input type="Email" class="form-control" name="departments" id="departments">
+				 					</div>
+				 				</div>
+
+				 				
+
+				 				<div class="form-group form-group-center">
+				 					<div class="col-lg-offset-8">
+				 						<button class="btn custom-btn" type="submit" id="btn_insert" value="save" name="save">Save</button>
+				 					</div>
+				 				</div>
+				 			</form>
+			 			</div>
+			 		</div>
+			 	</div><!--row-->
+			 </div><!--container-->
+			</div><!--modal-body-->
+		</div>
+	</div>
+</div>
+
