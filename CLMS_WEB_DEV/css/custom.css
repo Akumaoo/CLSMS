@@ -2,11 +2,6 @@
 LIGHT GRAY:#2F323B
 DARKER:#585a62(FONT COLORS);
 
-Dark:left-sidebar color: #2f323a;
-font color left sidebar(default): #aeb2b7;
-new left color background:rgba(0,213,193,.6);
-ligth blue color: left sidebar hover:active : #4ECDC4;
-
 */
 
 .child-tab{
@@ -14,14 +9,7 @@ ligth blue color: left sidebar hover:active : #4ECDC4;
 	margin-left: 20px !important;
 }
 
-.remove-hl{
-	background: transparent !important;
-	margin-left:10px;
-
-}
-.sub-menu li a.active{
-		color:#4ECDC4 !important;
-}
+.remove-hl{background: transparent !important;}
 
 .wrapper
 {
@@ -63,22 +51,26 @@ ligth blue color: left sidebar hover:active : #4ECDC4;
 }
 .custom-btn{
 	background-color:#2F323B;
-	border-radius: 3px;
+	border-radius: 5px;
+	height:50px;
 	color: white;
 	text-align: center;
 	cursor:pointer;
 	padding:10px 30px;
+	margin-left:32px;
 }
 .custom-btn:hover{
 	background-color:#4ECDC4;
-	color: white;
+	text-align: center;
+	cursor:pointer;
+	padding:10px 30px;
 }
 .main-chart{
 	min-height: 555px;
 	overflow: auto !important;
 }
 .thead_theme{
-	background-color:rgba(47, 50, 59,.6);
+	background-color:rgba(47, 50, 59,.89);
 	color: white;
 }
 .custom_table{
@@ -110,6 +102,7 @@ label{
 }
 .modal-title{
 	text-align: center;
+	
 }
 .center{
 	text-align: center;
@@ -120,4 +113,40 @@ input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button { 
   -webkit-appearance: none; 
   margin: 0; 
+}
+
+.custom-boxxx{
+ margin-top:-5px;
+ background: #ffffff;
+	box-shadow: 0px 3px 2px #aab2bd;
+max-height:170px;
+}
+
+.custom-box{
+
+	background: #ffffff;
+	box-shadow: 0px 3px 2px #aab2bd;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	min-height:60px;
+}
+.custom-boxx{
+	background: #ffffff;
+	box-shadow: 0px 3px 2px #aab2bd;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	min-height:400px;
+}
+.custom-text1{
+	color:black !important;
+}
+.custom-pos{
+	margin-top:-15px;
+	margin-left:130px;
+}
+.custom-sect{
+	margin-top:38px;
+}
+.custom-sect1{
+	margin-top:45px;
 }

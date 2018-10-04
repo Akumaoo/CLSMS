@@ -105,7 +105,7 @@ $querygetid=sqlsrv_query($conn,$getpid,array($name),$opt);
 	</div>
 	<div class="row">
 		<div class="col-lg-offset-9">
-			<button type="button" name="New_pack" id="New_pack" data-toggle="modal" data-target="#add_delivery_data_Modal" class="btn custom-btn">Add New Serial!</button>
+			<button type="button" name="New_pack" id="New_pack" data-toggle="modal" data-target="#add_delivery_data_Modal" class=" custom-btn">Add New Serial!</button>
 		</div>
 	</div>
 </div>';
