@@ -34,11 +34,43 @@
             </a>
           </li>
 
-          <li>
+          <li class="sub-menu">
             <a href="javascript:void(0)">
-              <i class="fa fa-paper-plane"></i>
-              <span>Send Serials</span> 
+              <i class="fa fa-book"></i>
+              <span>Serials</span> 
             </a>
+
+             <ul class="sub">
+              <li>
+                <a href="javascript:void(0)" class="remove-hl" id="MS">
+                  <i class="fa fa-plus-square"></i>
+                  <span>Manage Serial</span>
+                </a>
+              </li>
+
+              <li>
+                <a href="javascript:void(0)" class="remove-hl">
+                  <i class="fa fa-paper-plane"></i>
+                  <span>Send Serials</span>
+                </a>
+              </li>
+
+               <li>
+                <a href="javascript:void(0)" class="remove-hl" id="MT">
+                  <i class="fa fa-plus-square"></i>
+                  <span>Manage Type</span>
+                </a>
+              </li>
+
+              </ul>
+
+          </li>
+
+          <li>
+            <a href=javascript:void(0)" id="Dept">
+              <i class="fa fa-university"></i>
+              <span>Departments</span>
+              </a>
           </li>
 
           <li>
@@ -46,65 +78,6 @@
               <i class="fa fa-line-chart"></i>
               <span>Reports</span>
               </a>
-          </li>
-          
-            <!--DATA TAB-->
-          <li class="sub-menu">
-            <a href="javascript:void(0)">
-              <i class="fa fa-file"></i>
-              <span>Data Management</span>
-              </a>
-            
-            <!--ADD TAB-->
-            <ul class="sub">
-              <li class="sub-menu">
-                <a href="javascript:void(0)" class="remove-hl">
-                  <i class="fa fa-plus-square"></i>
-                  <span>Add</span>
-                </a>
-                <ul class="sub">
-
-                  <li class="sub-menu child-tab">
-                    <a href="javascript:void(0)" class="remove-hl" id='adduser'>
-                      <span>User</span>
-                    </a>
-                  </li>
-
-                  <li class="sub-menu child-tab">
-                    <a href="javascript:void(0)" class="remove-hl" id='adddistrib'>
-                      <span>Distributor</span>
-                    </a>
-                  </li>
-
-                  <li class="sub-menu child-tab">
-                    <a href="javascript:void(0)" class="remove-hl" id='addserial'>
-                      <span>Serial</span>
-                    </a>
-                  </li>
-
-                  <li class="sub-menu child-tab">
-                    <a href="javascript:void(0)" class="remove-hl" id='addtype'>
-                      <span>Serial Type</span>
-                    </a>
-                  </li>
-                  
-                </ul>
-              </li>
-
-              <li>
-                <a href="javascript:void(0)"  class="remove-hl">
-                  <i class="fa fa-pencil"></i>
-                  <span>Modify</span>
-               </a>
-              </li>
-
-              <li>
-                <a href="javascript:void(0)"  class="remove-hl">
-                  <i class="fa fa-trash"></i>
-                  <span>Delete</span>
-                </a>
-            </li>
-            </ul>
           </li>
 
           <li>

@@ -1,16 +1,16 @@
 (DONE!!!)-Delivery Tab(Managing Deliveries)|| Include here The Creation of Package
 -Dashboard
--Sending Serials
+-Sending Serials ADDING SERIALS
 -Finish the Reports Generation
 -Archiving
 -Other Users UI
 (DONE!!!!)-Distributor Tab(Managing Distributors)
 -User Tab
--Serial Tab Include The Creation of Type of Serials here (for Type Table)
--Department Tab
--Categorizing The Serials Per Dept.
-
--Receiving Deliveries(additional Notification) For Auto Update numbersOfItemsReceive
+-Serial Tab 
+(DONE!!)-Serial Type Tab
+(DONE!!!)-Department Tab
+(DONE!!)-Categorizing The Serials Per Dept.
+(DONE!!)-Distributors Tab
 
 =============================================FINALIZATION***
 

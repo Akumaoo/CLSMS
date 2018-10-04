@@ -8,9 +8,6 @@ require "php_codes/db.php"
 <head>
   <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="Dashboard">
-    <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
 
     <title>CLSMS</title>
 
@@ -42,16 +39,9 @@ require "php_codes/db.php"
 					  
 		            <input type="text" class="form-control" placeholder="User ID" autofocus>
 		            <br>
-		            <input type="password" class="form-control" placeholder="Password">
-		            <label class="checkbox">
-		                
-		            </label>
+		            <input type="password" class="form-control" placeholder="Password" style="margin-bottom: 15px;">
 		            <button class="btn btn-theme btn-block" href="index.php" type="submit"><i class="fa fa-lock"></i> SIGN IN</button>
 		            <hr>
-		            
-		            <div >
-		            
-		            </div>
 		            
 		        </div>
 		
@@ -65,13 +55,12 @@ require "php_codes/db.php"
 		                  </div>
 		              </div>
 		          </div>
-		          <!-- modal -->
 		
 		      </form>	  	
 	  	
 	  	</div>
 	  </div>
-<script src="lib/jquery/jquery.min.js"></script>
+  <script src="lib/jquery/jquery.min.js"></script>
   <script src="lib/bootstrap/js/bootstrap.min.js"></script>
   <!--BACKSTRETCH-->
   <!-- You can use an image of whatever size. This script will stretch to fit in any screen size.-->

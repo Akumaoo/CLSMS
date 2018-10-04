@@ -8,7 +8,7 @@
 	
 	<div class="alert alert-success alert-dismissible collapse center" id="msg_scs">
 	    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-	    <strong>Successfully Subscribed!</strong> , Please Reload The Page To Update The Table.
+	    <strong>Successfully Added Distributor!</strong> , Please Reload The Page To Update The Table.
  	 </div>
 
   	<div class="alert alert-danger alert-dismissible collapse center" id="msg_fail">
@@ -19,7 +19,7 @@
 	<div class="row custom_table">
 
 		<div class="col-lg-10 col-lg-offset-1">
-			<table cellpadding="0" cellspacing="0" border="1" class="table table-bordered table-hover" id="table_disb">
+			<table cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover" id="table_disb">
 				<thead class="thead_theme">
 				<tr>
 					<th class="radio-label-center">Distributor ID</th>
@@ -68,12 +68,12 @@
 
 	<div class="row">
 		<div class="col-lg-offset-9">
-			<button type="button" name="New_pack" id="New_pack" data-toggle="modal" data-target="#add_Distributor_data_Modal" class=" custom-btn">New Distributor</button>
+			<button type="button" name="New_pack" id="New_pack" data-toggle="modal" data-target="#add_Distributor_data_Modal" class="custom-btn">New Distributor</button>
 		</div>
 	</div>
 </div>
 <?php 
-include 'php_codes/New_Distributor_Modal.php'
+include 'Modals/New_Distributor_Modal.php'
  ?>
 
 <script>
@@ -101,7 +101,11 @@ include 'php_codes/New_Distributor_Modal.php'
 			{
 				$("#"+data.DistributorID).remove();			
 			}
-		}
+		},onDraw: function() {
+			$('tbody tr td:nth-child(4)>input').each(function(){
+				$('<input class="tabledit-input form-control input-sm" type="number" style="display: none;" disabled="">').attr({ name: this.name, value: this.value }).insertBefore(this)
+			}).remove()
+ 		 }
 	
 	});
 
@@ -140,6 +144,11 @@ include 'php_codes/New_Distributor_Modal.php'
 
  					}
  					
+	 			},
+	 			error:function(){
+	 				$("#Add_Distributor")[0].reset();
+ 					$("#add_Distributor_data_Modal").modal('hide');
+	 				$("#msg_fail").removeClass('collapse');
 	 			}
 	 		});
 	 	}

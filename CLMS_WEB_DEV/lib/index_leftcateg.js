@@ -82,4 +82,22 @@ $(function(){
       }
      });
     });
+
+     $("#Dept").click(function(){
+     $.ajax({
+      url:'Department.php',
+      success:function(data){
+        $('.main-chart').html(data)
+      }
+     });
+    });
+
+       $("#MT").click(function(){
+     $.ajax({
+      url:'Type.php',
+      success:function(data){
+        $('.main-chart').html(data)
+      }
+     });
+    });
 });

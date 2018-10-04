@@ -20,7 +20,7 @@ echo '
 
 	<div class="alert alert-success alert-dismissible collapse center" id="msg_scs">
 	    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-	    <strong>Successfully Subscribed!</strong> , Please Reload The Page To Update The Table.
+	    <strong>Successfully Added Serial Into This Package!</strong> , Please Reload The Page To Update The Table.
  	 </div>
 
   	<div class="alert alert-danger alert-dismissible collapse center" id="msg_fail">
@@ -105,12 +105,12 @@ $querygetid=sqlsrv_query($conn,$getpid,array($name),$opt);
 	</div>
 	<div class="row">
 		<div class="col-lg-offset-9">
-			<button type="button" name="New_pack" id="New_pack" data-toggle="modal" data-target="#add_delivery_data_Modal" class=" custom-btn">Add New Serial!</button>
+			<button type="button" name="New_pack" id="New_pack" data-toggle="modal" data-target="#add_delivery_data_Modal" class="custom-btn">Add New Serial!</button>
 		</div>
 	</div>
 </div>';
 
-include 'add_serial_pack.php';
+include '../Modals/add_serial_pack_modal.php';
 }
 
  ?>
@@ -136,9 +136,13 @@ include 'add_serial_pack.php';
 		{
 			if(data.action=='delete')
 			{
-				$("#"+data.PackageID).remove();			
+				$("#"+data.DeliveryID).remove();			
 			}
-		}
+		},onDraw: function() {
+			$('tbody tr td:nth-child(4)>input').each(function(){
+				$('<input class="tabledit-input form-control input-sm" type="date" style="display: none;" disabled="">').attr({ name: this.name, value: this.value }).insertBefore(this)
+			}).remove()
+ 		 }
 	
 		});
 
@@ -184,6 +188,11 @@ include 'add_serial_pack.php';
  					{
  						$("#msg_fail").removeClass('collapse');
  					}
+	 			},
+	 			error:function(){
+	 				$("#create_new_delivery")[0].reset();
+ 					$("#add_delivery_data_Modal").modal('hide');
+	 				$("#msg_fail").removeClass('collapse');
 	 			}
 	 		});
 	 	}

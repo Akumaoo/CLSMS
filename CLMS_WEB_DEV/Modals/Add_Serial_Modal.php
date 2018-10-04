@@ -15,7 +15,7 @@
 				 			<form class="cmxform form-horizontal style-form" id="Add_Distributor" method="post">
 				 				
 				 				<div class="form-group form-group-center">
-				 					<label for="serial" class="control-label col-lg-3">Serial Name</label>
+				 					<label for="serialname" class="control-label col-lg-3">Serial Name</label>
 				 					<div class="col-lg-6">
 				 						<input type="text" class="form-control" name="serialname" id="serialname">
 				 					</div>
@@ -35,7 +35,9 @@
 				 										echo '<option value="'.$name.'">'.$name.'</option>';
 				 								}
 				 							}
-				 						?>			
+				 						?>
+				 						
+				 							
 				 						</select>
 				 					</div>
 				 				</div>

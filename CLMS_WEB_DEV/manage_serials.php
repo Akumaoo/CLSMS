@@ -8,7 +8,7 @@
 	
 	<div class="alert alert-success alert-dismissible collapse center" id="msg_scs">
 	    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-	    <strong>Successfully Subscribed!</strong> , Please Reload The Page To Update The Table.
+	    <strong>Successfully Added Serial!</strong> , Please Reload The Page To Update The Table.
  	 </div>
 
   	<div class="alert alert-danger alert-dismissible collapse center" id="msg_fail">
@@ -41,7 +41,7 @@
 							            ORDER BY CS1.SerialID
 							            FOR XML PATH ('')
 							        ), 2, 1000) [Departments]
-							FROM Categorize_Serials CS2 Inner JOIN Serial ON CS2.SerialID=Serial.SerialID Inner Join [Type] ON Serial.TypeID=[Type].TypeID";
+							FROM Categorize_Serials CS2 Inner JOIN Serial ON CS2.SerialID=Serial.SerialID LEFT Join [Type] ON Serial.TypeID=[Type].TypeID";
 							$query=sqlsrv_query($conn,$sql,array());
 							if(sqlsrv_has_rows($query))
 							{
@@ -71,11 +71,12 @@
 
 	<div class="row">
 		<div class="col-lg-offset-9">
-			<button type="button" name="New_pack" id="New_pack" data-toggle="modal" data-target="#Add_Serial_Modal" class="btn custom-btn">Add New Serial</button>
+			<button type="button" name="New_pack" id="New_pack" data-toggle="modal" data-target="#Add_Serial_Modal" class="custom-btn">Add New Serial</button>
 		</div>
 	</div>
 </div>
-<?php include "Modals/Add_Serial_Modal.php";?>
+<?php include "Modals/Add_Serial_Modal.php";
+?>
 <script>
 	$(function(){
 
@@ -125,16 +126,6 @@
 
 	$('#create_new_package').on('submit',function(event){
 		event.preventDefault();
-
-		var d = new Date();
-
-		var month = d.getMonth()+1;
-		var day = d.getDate();
-
-		var output_date_today = d.getFullYear() + '/' +
-		    (month<10 ? '0' : '') + month + '/' +
-		    (day<10 ? '0' : '') + day;
-
 
 	 	if($("#Pname").val()=="")
 	 	{

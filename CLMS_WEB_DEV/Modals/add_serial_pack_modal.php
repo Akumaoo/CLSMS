@@ -46,11 +46,11 @@
 				 					</div>
 				 				</div>		
 
-				 				<input type="hidden" name="Pack_name" value=<?php echo $name ?>>
+				 				<input type="hidden" name="Pack_name" <?php echo 'value="'.$name.'"'?>>
 
 				 				<div class="form-group form-group-center">
 				 					<div class="col-lg-offset-8">
-				 						<button class=" custom-btn" type="submit" id="btn_insert" value="save" name="save">Save</button>
+				 						<button class="custom-btn" type="submit" id="btn_insert" value="save" name="save">Save</button>
 				 					</div>
 				 				</div>
 				 			</form>

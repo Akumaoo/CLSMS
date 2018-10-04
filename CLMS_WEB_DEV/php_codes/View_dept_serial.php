@@ -2,9 +2,9 @@
 
 require 'db.php';
 
+
 if(isset($_POST['S_ID']))
 {
-
 	function getID($name)
 	{
 		require 'db.php';
@@ -35,7 +35,7 @@ if(isset($_POST['S_ID']))
 		
 		<div class="alert alert-success alert-dismissible collapse center" id="msg_scs">
 		    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-		    <strong>Successfully Subscribed!</strong> , Please Reload The Page To Update The Table.
+		    <strong>Successfully Added Department Into This Serial!</strong> , Please Reload The Page To Update The Table.
 	 	 </div>
 
 	  	<div class="alert alert-danger alert-dismissible collapse center" id="msg_fail">
@@ -87,11 +87,13 @@ if(isset($_POST['S_ID']))
 
 		<div class="row">
 			<div class="col-lg-offset-9">
-				<button type="button" name="New_pack" id="New_pack" data-toggle="modal" data-target="#add_package_data_Modal" class="btn custom-btn">Create Package!</button>
+				<button type="button" name="New_pack" id="New_pack" data-toggle="modal" data-target="#add_dept_serial_Modal" class="custom-btn">Add Department!</button>
 			</div>
 		</div>
 	</div>';
 }
+
+include '../Modals/add_dept_category.php';
 ?>
 <script>
  	$(function(){
@@ -122,5 +124,35 @@ if(isset($_POST['S_ID']))
 		});
 
 		$('button.tabledit-edit-button').remove();
+
+		$('#add_dept_serial').on('submit',function(event){
+		event.preventDefault();
+
+	 	if($("#DeptID").val()=="")
+	 	{
+	 		alert("DepartmentID Is Required");
+	 	}
+	 	else{
+	 		$.ajax({
+	 			url:"php_codes/modify_serial_category.php",
+	 			method:"POST",
+	 			data:$("#add_dept_serial").serialize(),
+	 			success:function(data)
+	 			{
+ 					$("#add_dept_serial")[0].reset();
+ 					$("#add_dept_serial_Modal").modal('hide');
+ 					if(data.status=='success')
+ 					{
+ 						$("#msg_scs").removeClass('collapse');
+ 					}
+ 					else
+ 					{
+ 						$("#msg_fail").removeClass('collapse');
+ 					}
+	 			}
+	 		});
+	 	}
+	});
+
  	});
  </script>

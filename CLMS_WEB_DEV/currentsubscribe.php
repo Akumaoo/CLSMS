@@ -35,8 +35,8 @@ echo '
 		</thead>
 		<tbody>';
 
-		$sqltxt="Select [Subscription].[SubscriptionID],[Distributor].[DistributorName],[Serial].[SerialName],[Subscription].[Orders],[Subscription].[Cost],[Subscription].[NumberOfItemReceived],[Subscription].[Status] From [Distributor] Inner Join [Subscription] ON [Distributor].[DistributorID]=[Subscription].[DistributorID] Inner Join [Serial] ON [Subscription].[SerialID]=[Serial].[SerialID]";
-		$query=sqlsrv_query($conn,$sqltxt,array(),$opt);
+		$sqltxt="Select [Subscription].[SubscriptionID],[Distributor].[DistributorName],[Serial].[SerialName],[Subscription].[Orders],[Subscription].[Cost],[Subscription].[NumberOfItemReceived],[Subscription].[Status] From [Distributor] Inner Join [Subscription] ON [Distributor].[DistributorID]=[Subscription].[DistributorID] Inner Join [Serial] ON [Subscription].[SerialID]=[Serial].[SerialID] WHERE Status=?";
+		$query=sqlsrv_query($conn,$sqltxt,array('OnGoing'));
 		if(sqlsrv_has_rows($query))
 		{
 			while($row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
@@ -68,11 +68,11 @@ echo '
 </div>
 	<div class="row">
 		<div class="col-lg-offset-9">
-			<button type="button" name="SN" id="SN" data-toggle="modal" data-target="#add_data_Modal" class=" custom-btn">Subscribe Now!</button>
+			<button type="button" name="SN" id="SN" data-toggle="modal" data-target="#add_data_Modal" class="custom-btn">Subscribe Now!</button>
 		</div>
 	</div>
 <div>';
-include 'php_codes/Add_Subscription_Modal.php';
+include 'Modals/Add_Subscription_Modal.php';
 ?>
 
 <script type="text/javascript">
@@ -83,7 +83,7 @@ $(function(){
 	url:"php_codes/modify_subs.php",
 	columns:{
 		identifier:[0,"SubscriptionID"],
-		editable:[[1,"DistributorName"],[2,"SerialName"],[3,"Orders"],[4,"Cost"],[5,"NumberOfItemReceived"],[6,"Status"]]
+		editable:[[2,"SerialName"],[3,"Orders"],[4,"Cost"],[5,"NumberOfItemReceived"],[6,"Status"]]
 			},
 		onSuccess:function(data,textStatus,jqXHR)
 		{
@@ -91,8 +91,24 @@ $(function(){
 			{
 				$("#"+data.SubscriptionID).remove();			
 			}
+			if(data.status=='success')
+			{
+				$("#msg_scs").removeClass('collapse');
+			}
+			else
+			{
+				$("#msg_fail").removeClass('collapse');
+			}
 
-		}
+		},onDraw: function() {
+			$('tbody tr td:nth-child(4)>input,tbody tr td:nth-child(5)>input,tbody tr td:nth-child(6)>input').each(function(){
+				$('<input class="tabledit-input form-control input-sm" type="number" style="display: none;" disabled="">').attr({ name: this.name, value: this.value }).insertBefore(this)
+			}).remove()
+			$('tbody tr td:nth-child(7)>input').each(function(){
+				$('<select class="tabledit-input form-control input-sm" style="display: none;" disabled=""><option style="display: none" value="stat">--Status--</option><option value="OnGoing">OnGoing</option><option value="Finished">Finished</option><option value="Cancelled">Cancelled</option><option value="Refunded">Refunded</option></select>').attr({ name: this.name, value: this.value }).insertBefore(this)
+			}).remove()
+ 		 }
+		
 	
 	});
 
@@ -174,7 +190,9 @@ if( ! $.fn.DataTable.isDataTable("#table_subs")){
 			[{
 				"targets":[0,3,4,5],
 				"searchable":false,
-				"visible":true
+			},{
+				"targets":[7],
+				"orderable":false
 			}]
 	});
 }

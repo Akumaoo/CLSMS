@@ -35,7 +35,7 @@ if(!empty($_POST))
 	{
 		require 'db.php';
 		$getsidsql="Select SerialID from Serial Where SerialName=?";
-		$getidquery=sqlsrv_query($conn,$getsidsql,array($sn),$opt);
+		$getidquery=sqlsrv_query($conn,$getsidsql,array($sn));
 		if(sqlsrv_has_rows($getidquery))
 		{
 			while($row=sqlsrv_fetch_array($getidquery,SQLSRV_FETCH_ASSOC))
@@ -54,7 +54,7 @@ if(!empty($_POST))
 	{
 		require 'db.php';
 		$sqlpn="Select PackageID from Package_Delivery Where PackageName=?";
-		$pnquery=sqlsrv_query($conn,$sqlpn,array($pn),$opt);
+		$pnquery=sqlsrv_query($conn,$sqlpn,array($pn));
 		if(sqlsrv_has_rows($pnquery))
 		{
 			while($row=sqlsrv_fetch_array($pnquery,SQLSRV_FETCH_ASSOC))
@@ -73,14 +73,14 @@ if(!empty($_POST))
 	{
 		require 'db.php';
 		$dupsql="Select * from Delivery Where SerialID=? AND PackageID=?";
-		$dupquery=sqlsrv_query($conn,$dupsql,array($sid,$pid),$opt);
+		$dupquery=sqlsrv_query($conn,$dupsql,array($sid,$pid));
 		if(sqlsrv_has_rows($dupquery))
 		{
-			return true;
+			return false;
 		}
 		else
 		{
-			return false;
+			return true;
 		}
 	}
 
@@ -88,10 +88,10 @@ if(!empty($_POST))
 	{
 		$serial_id=GetSerialID($SN);
 		$pack_id=GetPackID($packname);
-		if(!CheckDup($serial_id,$pack_id))
+		if(CheckDup($serial_id,$pack_id))
 		{
 			$insertsql="Insert Into Delivery(SerialID,DateofIssue,IssueNumber,VolumeNumber,PackageID,Copies) Values(?,?,?,?,?,?)";
-			$insertquery=sqlsrv_query($conn,$insertsql,array($serial_id,$DOI,$IN,$VN,$pack_id,$cop),$opt);
+			$insertquery=sqlsrv_query($conn,$insertsql,array($serial_id,$DOI,$IN,$VN,$pack_id,$cop));
 
 			if($insertquery)
 			{
@@ -101,9 +101,10 @@ if(!empty($_POST))
 			{
 				$scs['status']='fail';
 			}
-		 header('Content-type: application/json');
-		echo json_encode($scs);
+			header('Content-type: application/json');
+			echo json_encode($scs);
 		}
 	}
+
 }
  ?>

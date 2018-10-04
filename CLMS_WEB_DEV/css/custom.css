@@ -2,6 +2,11 @@
 LIGHT GRAY:#2F323B
 DARKER:#585a62(FONT COLORS);
 
+Dark:left-sidebar color: #2f323a;
+font color left sidebar(default): #aeb2b7;
+new left color background:rgba(0,213,193,.6);
+ligth blue color: left sidebar hover:active : #4ECDC4;
+
 */
 
 .child-tab{
@@ -9,7 +14,14 @@ DARKER:#585a62(FONT COLORS);
 	margin-left: 20px !important;
 }
 
-.remove-hl{background: transparent !important;}
+.remove-hl{
+	background: transparent !important;
+	margin-left:10px;
+
+}
+.sub-menu li a.active{
+		color:#21b0f1 !important;
+}
 
 .wrapper
 {
@@ -60,7 +72,7 @@ DARKER:#585a62(FONT COLORS);
 	margin-left:32px;
 }
 .custom-btn:hover{
-	background-color:#4ECDC4;
+	background-color:#21b0f1;
 	text-align: center;
 	cursor:pointer;
 	padding:10px 30px;
@@ -102,7 +114,6 @@ label{
 }
 .modal-title{
 	text-align: center;
-	
 }
 .center{
 	text-align: center;
@@ -114,7 +125,6 @@ input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none; 
   margin: 0; 
 }
-
 .custom-boxxx{
  margin-top:-5px;
  background: #ffffff;
@@ -149,4 +159,3 @@ max-height:170px;
 }
 .custom-sect1{
 	margin-top:45px;
-}

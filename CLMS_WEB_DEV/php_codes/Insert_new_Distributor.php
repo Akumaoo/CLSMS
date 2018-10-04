@@ -19,7 +19,7 @@ if(!empty($_POST))
 	{
 		require 'db.php';
 		$sql="Select * from Distributor Where DistributorName=?";
-		$query=sqlsrv_query($conn,$sql,array($Dname),$opt);
+		$query=sqlsrv_query($conn,$sql,array($Dname));
 		if(sqlsrv_has_rows($query))
 		{
 			return false;
@@ -33,7 +33,7 @@ if(!empty($_POST))
 	if(CheckDup($name))
 	{
 		$insertsql="Insert INTO Distributor(DistributorName,NameOfIncharge,ContactNumber,Email) VALUES(?,?,?,?)";
-		$queryinsert=sqlsrv_query($conn,$insertsql,array($name,$NOI,$contact,$mail),$opt);
+		$queryinsert=sqlsrv_query($conn,$insertsql,array($name,$NOI,$contact,$mail));
 		if($queryinsert)
 			{
 				$scs['status']="success";
