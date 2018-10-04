@@ -7,43 +7,123 @@ require 'php_codes/db.php'
         *********************************************************************************************************************************************************** -->
     <!--main content start-->
     <section id="main-content">
-      <section class="wrapper">
-        <div class="row main-chart">
-          <div class="col-lg-9">
+      <section class="wrapper site-min-height">
+		<div class="main-chart">
+		  <div class="row custom-box">
+		  
+	        <div>
 
-            <div class="row">
-             <?php
-                 $query = sqlsrv_query ($conn, 'SELECT * FROM Department');
-              if ($query){
-                
-                if(sqlsrv_has_rows($query) === true){
-                  while ($row = sqlsrv_fetch_array($query)){
-                    ?>
-                    <div class = "col-sm-6 col-xl-5">
-                      <form method = "post" action = "">
-                        <div class = "dept">
-                          <a href= "details.php?ID=<?php echo $row['DepartmentID']; ?>"> <img src ="img/<?php echo $row['DepartmentImage']; ?>"class = 'img-responsive'"/></a>
-                          <h4 class = "text-center"> <a href= "details.php?ID=<?php echo $row['DepartmentID']; ?>"> <?php echo $row['DepartmentName']; ?></a></h4>
-                        </div>
-                      </form>
-                    </div>
-                    <?php
-                  }
-                }
-                else{
-                  echo "There are no rows. <br />";
-                }
-              }
-
-              ?>
+            <div class="col-md-2 profile-text mt mb centered">    
+						<div><h3 class="custom-pos mt">Journals</h3></div>
+				<div class="right-divider hidden-sm hidden-xs ">
+                  <h4 >1922</h4>
+                  <h6 class="custom-text1">ELEMENTARY</h6>
+                  <h4>290</h4>
+                  <h6 class="custom-text1">JUNIOR HIGH</h6>
+                </div>
+				
             </div>
-            <!-- /row -->
+	        <div class="col-md-2 profile-text mt mb centered custom-sect">
+        
+				<div class="right-divider hidden-sm hidden-xs ">
+
+                  <h4>13,980</h4>
+                  <h6 class="custom-text1">SENIOR HIGH</h6>
+				  <h4>13,980</h4>
+                  <h6 class="custom-text1">COLLEGE</h6>
+                </div>
+				
+            </div>
+			
+		</div>
+		              <div class="col-md-4 profile-text">
+                
+                <h1 class="custom-sect1">College Library Serial Monitoring System</h1>
+               <br>
+              </div>
+              <!-- /col-md-4 -->
+
+				</div>
+		
+	<!---TAb-->
+	<div class="col-lg-12  ">
+	
+            <div class="row content-panel">
+              <div class="panel-heading">
+                <ul class="nav nav-tabs nav-justified">
+                  <li class="active">
+                    <a data-toggle="tab" href="#notification">Notification</a>
+                  </li>
+                  <li>
+                    <a data-toggle="tab" href="#overview" class="contact-map">Overview</a>
+                  </li>
+
+                </ul>
+              </div>
+	<!---TAb-->  		  
+     <div class="panel-body">
+		<div class="tab-content">
+				<div id="notification" class="tab-pane active">
+					<div class="row">
+		<div class=" ">
+			
+          <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+			<div class="custom-boxx centered" id="NotifContainer" >
+              <div  id='notifbox'>
+			  <h4>SENT SERIALS</h4>
+			  <hr>               
+              </div>			 
+            </div>
           </div>
-          <!-- /col-lg-9 END SECTION MIDDLE -->
-          
-          <!--right Sidebar-->
-          <?php include 'includes/right-sidebar.php'; ?>
+		<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">	
+			<div class="custom-boxx centered" id="NotifContainer" >
+              <div  id='notifbox'>
+			  <h4>RECEIVED SERIALS</h4>
+			  <hr>
+			  <br>
+                <?php include 'php_codes/receivenotif.php'?>
+             </div>			 
+            </div>
+          </div>
+		  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+			<div class="custom-boxx centered" id="NotifContainer" >
+              <div  id='notifbox'>
+			  <h4>LATE DELIVERY</h4>
+			  <hr>
+			  <br>
+                <?php include 'php_codes/latenotif.php'?>
+              </div>
+			 
+            </div>
         </div>
+		</div>
+		
+			</div>
+			</div>
+			
+	<div id="overview" class="tab-pane active">
+		<div class="row">
+
+		
+		</div>
+	</div>
+	
+		</div>
+	</div>
+	  
+
+            </div>
+		
+     </div>
+	  
+
+
+          <!-- /col-lg-12 -->
+  
+           </div>
+          
+            <!-- /col-lg-12 -->
+          </div>		
         <!-- /row -->
       </section>
 

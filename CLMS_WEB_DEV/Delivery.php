@@ -77,12 +77,12 @@
 
 	<div class="row">
 		<div class="col-lg-offset-9">
-			<button type="button" name="New_pack" id="New_pack" data-toggle="modal" data-target="#add_package_data_Modal" class="btn custom-btn">Create Package!</button>
+			<button type="button" name="New_pack" id="New_pack" data-toggle="modal" data-target="#add_package_data_Modal" class=" custom-btn">Create Package!</button>
 		</div>
 	</div>
 </div>
 <?php 
-		include 'Modals/Create_Package_Modal.php';
+		include 'php_codes/Create_Package_Modal.php';
 ?>
 <script>
 	$(function(){
@@ -109,11 +109,7 @@
 			{
 				$("#"+data.PackageID).remove();			
 			}
-		},onDraw: function() {
-			$('tbody tr td:nth-child(4)>input').each(function(){
-				$('<input class="tabledit-input form-control input-sm" type="date" style="display: none;" disabled="">').attr({ name: this.name, value: this.value }).insertBefore(this)
-			}).remove()
- 		 }
+		}
 	
 	});
 
