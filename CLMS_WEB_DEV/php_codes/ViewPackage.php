@@ -121,7 +121,8 @@ include '../Modals/add_serial_pack_modal.php';
 		// "processing":true,
 		// "serverSide":true,
 		"ordering":true,
-		"searching":true
+		"searching":true,
+		"pageLength":50
 		// "ajax":"php_codes/serverside_currentSubs.php",
 			});
 		}

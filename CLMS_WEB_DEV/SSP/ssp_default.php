@@ -74,21 +74,13 @@ class SSP {
 	 *  @param  array $columns Column information array
 	 *  @return string SQL limit clause
 	 */
-	static function limit ( $request, $columns ) {
-	 $limit = '';
-	 if ( isset($request['start']) && $request['length'] != -1 ) {
-	  $limit = "ORDER BY [LINE] OFFSET ".intval($request['start'])." ROWS FETCH NEXT ".intval($request['length'])." ROWS ONLY";
-	  }
-	// limit and order conflict when using sql server.
-	// so duplicate the functionality in ORDER and switch on/off as needed based on ORDER
-	  if ( isset($request['order'])) {
-	   $limit = '';    // if there is an ORDER request then clear the limit
-	   return $limit;    // because the ORDER function will handle the LIMIT
-	  }
-	  else
-	  {
-	  return $limit;
-	  }
+	static function limit ( $request, $columns )
+	{
+		$limit = '';
+		if ( isset($request['start']) && $request['length'] != -1 ) {
+			$limit = "LIMIT ".intval($request['start']).", ".intval($request['length']);
+		}
+		return $limit;
 	}
 	/**
 	 * Ordering
@@ -99,28 +91,30 @@ class SSP {
 	 *  @param  array $columns Column information array
 	 *  @return string SQL order by clause
 	 */
-	static function order ( $request, $columns ) {
-	  $order = '';
-	  if ( isset($request['order']) && count($request['order']) ) {
-	    $orderBy = array();
-	    $dtColumns = self::pluck( $columns, 'dt' );
-	    for ( $i=0, $ien=count($request['order']) ; $i<$ien ; $i++ ) {
-	      // Convert the column index into the column data property
-	      $columnIdx = intval($request['order'][$i]['column']);
-	      $requestColumn = $request['columns'][$columnIdx];
-	      $columnIdx = array_search( $requestColumn['data'], $dtColumns );
-	      $column = $columns[ $columnIdx ];
-	      if ( $requestColumn['orderable'] == 'true' ) {
-	        $dir = $request['order'][$i]['dir'] === 'asc' ?
-	         'ASC' :
-	         'DESC';
-	         $orderBy[] = '['.$column['db'].'] '.$dir;   // revised for SQL Server
-	      }
-	    }
-	  // see "static function limit" above to explain the next line.
-	  $order =  "ORDER BY ".implode(', ', $orderBy)." OFFSET ".intval($request['start'])." ROWS FETCH NEXT ".intval($request['length'])." ROWS ONLY";
-	  }
-	  return $order;
+	static function order ( $request, $columns )
+	{
+		$order = '';
+		if ( isset($request['order']) && count($request['order']) ) {
+			$orderBy = array();
+			$dtColumns = self::pluck( $columns, 'dt' );
+			for ( $i=0, $ien=count($request['order']) ; $i<$ien ; $i++ ) {
+				// Convert the column index into the column data property
+				$columnIdx = intval($request['order'][$i]['column']);
+				$requestColumn = $request['columns'][$columnIdx];
+				$columnIdx = array_search( $requestColumn['data'], $dtColumns );
+				$column = $columns[ $columnIdx ];
+				if ( $requestColumn['orderable'] == 'true' ) {
+					$dir = $request['order'][$i]['dir'] === 'asc' ?
+						'ASC' :
+						'DESC';
+					$orderBy[] = '`'.$column['db'].'` '.$dir;
+				}
+			}
+			if ( count( $orderBy ) ) {
+				$order = 'ORDER BY '.implode(', ', $orderBy);
+			}
+		}
+		return $order;
 	}
 	/**
 	 * Searching / Filtering
@@ -150,7 +144,7 @@ class SSP {
 				$column = $columns[ $columnIdx ];
 				if ( $requestColumn['searchable'] == 'true' ) {
 					$binding = self::bind( $bindings, '%'.$str.'%', PDO::PARAM_STR );
-					$globalSearch[] = $column['db']." LIKE ".$binding;
+					$globalSearch[] = "`".$column['db']."` LIKE ".$binding;
 				}
 			}
 		}
@@ -164,7 +158,7 @@ class SSP {
 				if ( $requestColumn['searchable'] == 'true' &&
 				 $str != '' ) {
 					$binding = self::bind( $bindings, '%'.$str.'%', PDO::PARAM_STR );
-					$columnSearch[] = $column['db']." LIKE ".$binding;
+					$columnSearch[] = "`".$column['db']."` LIKE ".$binding;
 				}
 			}
 		}
@@ -207,23 +201,23 @@ class SSP {
 		$where = self::filter( $request, $columns, $bindings );
 		// Main query to actually get the data
 		$data = self::sql_exec( $db, $bindings,
-			"SELECT ".implode(",", self::pluck($columns, 'db'))."
-			 FROM $table
+			"SELECT `".implode("`, `", self::pluck($columns, 'db'))."`
+			 FROM `$table`
 			 $where
 			 $order
 			 $limit"
 		);
 		// Data set length after filtering
 		$resFilterLength = self::sql_exec( $db, $bindings,
-			"SELECT COUNT({$primaryKey})
-			 FROM   $table
+			"SELECT COUNT(`{$primaryKey}`)
+			 FROM   `$table`
 			 $where"
 		);
 		$recordsFiltered = $resFilterLength[0][0];
 		// Total data set length
 		$resTotalLength = self::sql_exec( $db,
-			"SELECT COUNT({$primaryKey})
-			 FROM   $table"
+			"SELECT COUNT(`{$primaryKey}`)
+			 FROM   `$table`"
 		);
 		$recordsTotal = $resTotalLength[0][0];
 		/*
@@ -263,60 +257,61 @@ class SSP {
 	 */
 	static function complex ( $request, $conn, $table, $primaryKey, $columns, $whereResult=null, $whereAll=null )
 	{
-		
-        $bindings = array();
-        $db = self::db( $conn );
-        $localWhereResult = array();
-        $localWhereAll = array();
-        $whereAllSql = '';
- 
-        // Build the SQL query string from the request
-        $limit = self::limit( $request, $columns );
-        $order = self::order( $request, $columns );
-        $where = self::filter( $request, $columns, $bindings );
- 
-        $whereResult = self::_flatten( $whereResult );
-        $whereAll = self::_flatten( $whereAll );
- 
-        if ( $whereResult ) {
-            $where = $where ?
-                $where .' AND '.$whereResult :
-                'WHERE '.$whereResult;
-        }
- 
-        if ( $whereAll ) {
-            $where = $where ?
-                $where .' AND '.$whereAll :
-                'WHERE '.$whereAll;
- 
-            //$whereAllSql = 'WHERE '.$whereAll;
-        }
-    
-        // Main query to actually get the data
-		     $data = self::sql_exec( $db, $bindings,
-		//        "SET NOCOUNT ON SELECT ".implode(", ", self::pluck($columns, 'db'))." FROM $table $where $order $limit" );
-		 "SET NOCOUNT ON SELECT * FROM $table $where $order $limit" );
-		 
-		        // Data set length after filtering
-		          $resFilterLength = self::sql_exec( $db, $bindings,
-		        "SELECT count({$primaryKey}) FROM $table $where" );
-		  $recordsFiltered = $resFilterLength[0][0];
-		 
-		        // Total data set length
-		    $resTotalLength = self::sql_exec( $db,"SELECT COUNT({$primaryKey}) FROM $table" );
-		  $recordsTotal = $resTotalLength[0][0];
- 
-        /*
-         * Output
-         */
-        return array(
-            "draw"            => isset ( $request['draw'] ) ?
-                intval( $request['draw'] ) :
-                0,
-            "recordsTotal"    => $recordsTotal,
-            "recordsFiltered" => $recordsFiltered,
-            "data"            => self::data_output( $columns, $data )
-        );
+		$bindings = array();
+		$db = self::db( $conn );
+		$localWhereResult = array();
+		$localWhereAll = array();
+		$whereAllSql = '';
+		// Build the SQL query string from the request
+		$limit = self::limit( $request, $columns );
+		$order = self::order( $request, $columns );
+		$where = self::filter( $request, $columns, $bindings );
+		$whereResult = self::_flatten( $whereResult );
+		$whereAll = self::_flatten( $whereAll );
+		if ( $whereResult ) {
+			$where = $where ?
+				$where .' AND '.$whereResult :
+				'WHERE '.$whereResult;
+		}
+		if ( $whereAll ) {
+			$where = $where ?
+				$where .' AND '.$whereAll :
+				'WHERE '.$whereAll;
+			$whereAllSql = 'WHERE '.$whereAll;
+		}
+		// Main query to actually get the data
+		$data = self::sql_exec( $db, $bindings,
+			"SELECT `".implode("`, `", self::pluck($columns, 'db'))."`
+			 FROM `$table`
+			 $where
+			 $order
+			 $limit"
+		);
+		// Data set length after filtering
+		$resFilterLength = self::sql_exec( $db, $bindings,
+			"SELECT COUNT(`{$primaryKey}`)
+			 FROM   `$table`
+			 $where"
+		);
+		$recordsFiltered = $resFilterLength[0][0];
+		// Total data set length
+		$resTotalLength = self::sql_exec( $db, $bindings,
+			"SELECT COUNT(`{$primaryKey}`)
+			 FROM   `$table` ".
+			$whereAllSql
+		);
+		$recordsTotal = $resTotalLength[0][0];
+		/*
+		 * Output
+		 */
+		return array(
+			"draw"            => isset ( $request['draw'] ) ?
+				intval( $request['draw'] ) :
+				0,
+			"recordsTotal"    => intval( $recordsTotal ),
+			"recordsFiltered" => intval( $recordsFiltered ),
+			"data"            => self::data_output( $columns, $data )
+		);
 	}
 	/**
 	 * Connect to the database
@@ -333,10 +328,10 @@ class SSP {
 	{
 		try {
 			$db = @new PDO(
-				"sqlsrv:server={$sql_details['host']};database={$sql_details['db']}",
-                $sql_details['user'],
-                $sql_details['pass'],
-                array( PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION )
+				"mysql:host={$sql_details['host']};dbname={$sql_details['db']}",
+				$sql_details['user'],
+				$sql_details['pass'],
+				array( PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION )
 			);
 		}
 		catch (PDOException $e) {

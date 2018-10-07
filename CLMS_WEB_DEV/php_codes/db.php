@@ -10,4 +10,10 @@ if(!$conn)
 {
 	die('Cannot Connect To Database');
 }
+
+$sql_details=array(
+	'db'=>'CLSMS',
+	'host'=>'DESKTOP-QERUPN0\SQLEXPRESS'
+);
+
 ?>

@@ -92,9 +92,18 @@ $(function(){
      });
     });
 
-       $("#MT").click(function(){
+     $("#MT").click(function(){
      $.ajax({
       url:'Type.php',
+      success:function(data){
+        $('.main-chart').html(data)
+      }
+     });
+    });
+
+     $("#SS").click(function(){
+     $.ajax({
+      url:'Send_serials.php',
       success:function(data){
         $('.main-chart').html(data)
       }

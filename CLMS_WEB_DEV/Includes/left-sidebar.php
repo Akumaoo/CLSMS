@@ -49,7 +49,7 @@
               </li>
 
               <li>
-                <a href="javascript:void(0)" class="remove-hl">
+                <a href="javascript:void(0)" class="remove-hl" id="SS">
                   <i class="fa fa-paper-plane"></i>
                   <span>Send Serials</span>
                 </a>

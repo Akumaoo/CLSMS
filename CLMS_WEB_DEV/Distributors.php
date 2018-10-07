@@ -32,34 +32,6 @@
 				</tr>
 				</thead>
 				<tbody>
-					<?php 
-						require 'php_codes/db.php';
-						$sql="Select * from Distributor";
-						$query=sqlsrv_query($conn,$sql,array(),$opt);
-						if(sqlsrv_has_rows($query))
-						{
-							while($row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
-							{
-								$id=$row['DistributorID'];
-								$name=$row['DistributorName'];
-								$NOI=$row['NameOfIncharge'];
-								$contact=$row['ContactNumber'];
-								$mail=$row['Email'];
-
-								echo '
-									<tr class="gradeU">
-										<td class="radio-label-center">'.$id.'</td>
-										<td class="radio-label-center">'.$name.'</td>
-										<td class="radio-label-center">'.$NOI.'</td>
-										<td class="radio-label-center">'.$contact.'</td>
-										<td class="radio-label-center">'.$mail.'</td>
-																	
-									</tr>
-								';
-							}
-						}
-
-					 ?>
 				</tbody>
 			</table>
 		</div>
@@ -81,32 +53,34 @@ include 'Modals/New_Distributor_Modal.php'
 
 		if( ! $.fn.DataTable.isDataTable("#table_disb")){
 			$('#table_disb').DataTable({			
-		// "processing":true,
-		// "serverSide":true,
+		"processing":true,
+		"serverSide":true,
 		"ordering":true,
-		"searching":true
-		// "ajax":"php_codes/serverside_currentSubs.php",
+		"searching":true,
+		"ajax":"SSP/serverside_distrib.php"
 			});
 		}
 
-	$('#table_disb').Tabledit({
-		url:"php_codes/modify_distributors.php",
-		columns:{
-		identifier:[0,"DistributorID"],
-		editable:[[1,"DistributorName"],[2,"NameOfIncharge"],[3,"ContactNumber"],[4,"Email"]]
-			},
-		onSuccess:function(data,textStatus,jqXHR)
-		{
-			if(data.action=='delete')
+	$('#table_disb').on('draw.dt', function() {
+		$('#table_disb').Tabledit({
+			url:"php_codes/modify_distributors.php",
+			columns:{
+			identifier:[0,"DistributorID"],
+			editable:[[1,"DistributorName"],[2,"NameOfIncharge"],[3,"ContactNumber"],[4,"Email"]]
+				},
+			onSuccess:function(data,textStatus,jqXHR)
 			{
-				$("#"+data.DistributorID).remove();			
-			}
-		},onDraw: function() {
-			$('tbody tr td:nth-child(4)>input').each(function(){
-				$('<input class="tabledit-input form-control input-sm" type="number" style="display: none;" disabled="">').attr({ name: this.name, value: this.value }).insertBefore(this)
-			}).remove()
- 		 }
-	
+				if(data.action=='delete')
+				{
+					$("#"+data.DistributorID).remove();			
+				}
+			},onDraw: function() {
+				$('tbody tr td:nth-child(4)>input').each(function(){
+					$('<input class="tabledit-input form-control input-sm" type="number" style="display: none;" disabled="">').attr({ name: this.name, value: this.value }).insertBefore(this)
+				}).remove()
+	 		 }
+		
+		});
 	});
 
 	$('#Add_Distributor').on('submit',function(event){

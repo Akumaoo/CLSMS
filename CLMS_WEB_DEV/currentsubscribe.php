@@ -34,33 +34,6 @@ echo '
 			</tr>
 		</thead>
 		<tbody>';
-
-		$sqltxt="Select [Subscription].[SubscriptionID],[Distributor].[DistributorName],[Serial].[SerialName],[Subscription].[Orders],[Subscription].[Cost],[Subscription].[NumberOfItemReceived],[Subscription].[Status] From [Distributor] Inner Join [Subscription] ON [Distributor].[DistributorID]=[Subscription].[DistributorID] Inner Join [Serial] ON [Subscription].[SerialID]=[Serial].[SerialID] WHERE Status=?";
-		$query=sqlsrv_query($conn,$sqltxt,array('OnGoing'));
-		if(sqlsrv_has_rows($query))
-		{
-			while($row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
-			{
-				$subsID=$row['SubscriptionID'];
-				$distname=$row['DistributorName'];
-				$serialname=$row['SerialName'];
-				$orders=$row['Orders'];
-				$cost=$row['Cost'];
-				$NIR=$row['NumberOfItemReceived'];
-				$stat=$row['Status'];
-		echo '
-				<tr class="gradeU">
-					<td class="radio-label-center">'.$subsID.'</td>
-					<td class="radio-label-center">'.$distname.'</td>
-					<td class="radio-label-center">'.$serialname.'</td>
-					<td class="radio-label-center">'.$orders.'</td>
-					<td class="radio-label-center">'.$cost.'</td>
-					<td class="radio-label-center">'.$NIR.'</td>
-					<td class="radio-label-center">'.$stat.'</td>
-				</tr>				
-			';
-			}
-		}
 echo '
 </tbody>
 </table>
@@ -79,37 +52,52 @@ include 'Modals/Add_Subscription_Modal.php';
 
 $(function(){
 
-	$('#table_subs').Tabledit({
-	url:"php_codes/modify_subs.php",
-	columns:{
-		identifier:[0,"SubscriptionID"],
-		editable:[[2,"SerialName"],[3,"Orders"],[4,"Cost"],[5,"NumberOfItemReceived"],[6,"Status"]]
-			},
-		onSuccess:function(data,textStatus,jqXHR)
-		{
-			if(data.action=='delete')
+	if( !$.fn.DataTable.isDataTable("#table_subs")){
+		$('#table_subs').DataTable({			
+			"processing":true,
+			"serverSide":true,
+			"ordering":true,
+			"searching":true,
+			"ajax":"SSP/serverside_currentSubs.php",
+			"columnDefs":
+				[{
+					"targets":[0,3,4,5],
+					"searchable":false,
+				}]
+		});
+	}
+	$('#table_subs').on('draw.dt', function() {
+		$('#table_subs').Tabledit({
+		url:"php_codes/modify_subs.php",
+		columns:{
+			identifier:[0,"SubscriptionID"],
+			editable:[[2,"SerialName"],[3,"Orders"],[4,"Cost"],[5,"NumberOfItemReceived"],[6,"Status"]]
+				},
+			onSuccess:function(data,textStatus,jqXHR)
 			{
-				$("#"+data.SubscriptionID).remove();			
-			}
-			if(data.status=='success')
-			{
-				$("#msg_scs").removeClass('collapse');
-			}
-			else
-			{
-				$("#msg_fail").removeClass('collapse');
-			}
+				if(data.action=='delete')
+				{
+					$("#"+data.SubscriptionID).remove();			
+				}
+				if(data.status=='success')
+				{
+					$("#msg_scs").removeClass('collapse');
+				}
+				else
+				{
+					$("#msg_fail").removeClass('collapse');
+				}
 
-		},onDraw: function() {
-			$('tbody tr td:nth-child(4)>input,tbody tr td:nth-child(5)>input,tbody tr td:nth-child(6)>input').each(function(){
-				$('<input class="tabledit-input form-control input-sm" type="number" style="display: none;" disabled="">').attr({ name: this.name, value: this.value }).insertBefore(this)
-			}).remove()
-			$('tbody tr td:nth-child(7)>input').each(function(){
-				$('<select class="tabledit-input form-control input-sm" style="display: none;" disabled=""><option style="display: none" value="stat">--Status--</option><option value="OnGoing">OnGoing</option><option value="Finished">Finished</option><option value="Cancelled">Cancelled</option><option value="Refunded">Refunded</option></select>').attr({ name: this.name, value: this.value }).insertBefore(this)
-			}).remove()
- 		 }
+			},onDraw: function() {
+				$('tbody tr td:nth-child(4)>input,tbody tr td:nth-child(5)>input,tbody tr td:nth-child(6)>input').each(function(){
+					$('<input class="tabledit-input form-control input-sm" type="number" style="display: none;" disabled="">').attr({ name: this.name, value: this.value }).insertBefore(this)
+				}).remove()
+				$('tbody tr td:nth-child(7)>input').each(function(){
+					$('<select class="tabledit-input form-control input-sm" style="display: none;" disabled=""><option style="display: none" value="stat">--Status--</option><option value="OnGoing">OnGoing</option><option value="Finished">Finished</option><option value="Cancelled">Cancelled</option><option value="Refunded">Refunded</option></select>').attr({ name: this.name, value: this.value }).insertBefore(this)
+				}).remove()
+	 		 }		
 		
-	
+		});
 	});
 
 	$('#subscribe_new_form').on('submit',function(event){
@@ -176,26 +164,6 @@ $(function(){
 	});
 
 });
-
-
-
-if( ! $.fn.DataTable.isDataTable("#table_subs")){
-	$('#table_subs').DataTable({			
-		// "processing":true,
-		// "serverSide":true,
-		"ordering":true,
-		"searching":true,
-		// "ajax":"php_codes/serverside_currentSubs.php",
-		"columnDefs":
-			[{
-				"targets":[0,3,4,5],
-				"searchable":false,
-			},{
-				"targets":[7],
-				"orderable":false
-			}]
-	});
-}
 
 </script>
 

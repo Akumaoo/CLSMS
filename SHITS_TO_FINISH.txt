@@ -1,18 +1,29 @@
-(DONE!!!)-Delivery Tab(Managing Deliveries)|| Include here The Creation of Package
+***OnGoing:***
 -Dashboard
+-User Tab
+-Serial Tab 
 -Sending Serials ADDING SERIALS
+
+
+
+***PENDING:***
+
 -Finish the Reports Generation
 -Archiving
 -Other Users UI
-(DONE!!!!)-Distributor Tab(Managing Distributors)
--User Tab
--Serial Tab 
+-PRINT Functionality
+
+
+***FINISHED:***
+(DONE!!!)-SSP for Subscription,Deliveries,SendSerials
 (DONE!!)-Serial Type Tab
 (DONE!!!)-Department Tab
 (DONE!!)-Categorizing The Serials Per Dept.
 (DONE!!)-Distributors Tab
+(DONE!!!)--UPDATE NO OF ITEMS RECEIVE WHEN DELIVERIES ARE UPDATE TO RECEIVED
+(DONE!!!!)-Distributor Tab(Managing Distributors)
+(DONE!!!)-Delivery Tab(Managing Deliveries)|| Include here The Creation of Package
 
 =============================================FINALIZATION***
 
 
-(DONE!!!)--UPDATE NO OF ITEMS RECEIVE WHEN DELIVERIES ARE UPDATE TO RECEIVED
