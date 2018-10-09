@@ -120,7 +120,7 @@ include '../Modals/add_serial_pack_modal.php';
 		// "serverSide":true,
 		"ordering":true,
 		"searching":true,
-		"pageLength":50
+		"pageLength":100
 		// "ajax":"php_codes/serverside_currentSubs.php",
 			});
 

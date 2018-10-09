@@ -1,9 +1,14 @@
-    <aside>
+   <?php 
+    if($_SESSION['Role']=='Admin')
+      {
+        echo '
+        
+         <aside>
       <div id="sidebar" class="nav-collapse ">
         <!-- sidebar menu start-->
         <ul class="sidebar-menu" id="nav-accordion">
-          <p class="centered"><a href="profile.php"><img src="img/02.jpg" class="img-circle" width="95"></a></p>
-          <h5 class="centered">Akumao</h5>
+          <p class="centered"><a href="profile.php"><img src="img/Avatars/'.$_SESSION['Avatar'].'" class="img-circle" width="95"></a></p>
+          <h5 class="centered">'.$_SESSION['current_user'].'</h5>
 
           <li class="mt">
             <a class="active" href="index.php">
@@ -12,8 +17,7 @@
               </a>
           </li>
 
-            <!-- javascript:void(0) so that if yung page na ireredirect nung link is null or nonexistent magiistay sya sa page also it's good combination for ajax para maremove din yung # sa url :))) -->
-           
+            <!-- javascript:void(0) so that if yung page na ireredirect nung link is null or nonexistent magiistay sya sa page also its good combination for ajax para maremove din yung # sa url :))) -->
 
           <li>
             <a href="javascript:void(0)" id="CS">
@@ -82,6 +86,13 @@
                 </a>
               </li>
 
+               <li>
+                <a href="javascript:void(0)" class="remove-hl" id="MU">
+                  <i class="fa fa-user-plus"></i>
+                  <span>Manage User</span>
+                </a>
+              </li>
+
               </ul>
 
           </li>
@@ -106,3 +117,37 @@
         <!-- sidebar menu end-->
       </div>
     </aside>
+
+        ';
+    }
+    else
+    {
+
+      echo '
+
+       <aside>
+      <div id="sidebar" class="nav-collapse ">
+        <!-- sidebar menu start-->
+        <ul class="sidebar-menu" id="nav-accordion">
+          <p class="centered"><a href="profile.php"><img src="img/02.jpg" class="img-circle" width="95"></a></p>
+          <h5 class="centered">'.$_SESSION['current_user'].'</h5>
+
+          <li class="mt">
+            <a class="active" href="index.php">
+              <i class="fa fa-home"></i>
+              <span>Dash Board</span>
+              </a>
+          </li>
+
+            <!-- javascript:void(0) so that if yung page na ireredirect nung link is null or nonexistent magiistay sya sa page also its good combination for ajax para maremove din yung # sa url :))) -->
+
+        </ul>
+        <!-- sidebar menu end-->
+      </div>
+    </aside>
+
+      ';
+    }
+     ?>
+    }
+   

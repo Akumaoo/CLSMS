@@ -1,3 +1,12 @@
+<?php 
+session_start();
+if(!isset($_SESSION['current_user']))
+{
+  header('location:login.php');
+}
+
+ ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -38,7 +47,9 @@
       </div>
       <div class="top-menu">
         <ul class="nav pull-right top-menu">
-          <li><a class="logout" href="login.php">Logout</a></li>
+          <li><a class="logout" href="php_codes/logout.php">Logout</a></li>
+          <script>
+          </script>
         </ul>
       </div>
     </header>

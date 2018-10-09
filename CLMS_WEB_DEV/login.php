@@ -1,13 +1,16 @@
 <?php
- 
+ session_start();
 require'php_codes/db.php';
-
+if(isset($_SESSION['current_user']))
+{
+  header ("Location:index.php");
+}
 
 
 if(isset($_POST['submit'])){
     
     $username = $_POST['UserName'];
-    $password = $_POST['Password'];
+    $password = md5($_POST['Password']);
     
     
     $sql = "SELECT * from [User] WHERE UserName = ? AND Password = ?";
@@ -15,16 +18,15 @@ if(isset($_POST['submit'])){
     if(sqlsrv_has_rows($query)){
         while($row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC)){
          $dbusername=$row['UserName'];
-         $firstname=$row['FirstName'];
-        $lastname=$row['LastName'];
-         $avatar=$row['Avatar'];
-        $email=$row['Email'];
          $dbrole=$row['Role'];
+         $avat=$row['Avatar'];
         $dbdepartment=$row['DepartmentID'];
             
         }      
-            session_start();
-            $_SESSION['current_user'] = $username;
+            
+            $_SESSION['current_user'] = $dbusername;
+            $_SESSION['Role']=$dbrole;
+            $_SESSION['Avatar']=$avat;
             header ("Location:index.php");        
     }
       
@@ -74,7 +76,7 @@ if(isset($_POST['submit'])){
 		            <br>
 		            <input type="password" class="form-control" name="Password" id="password" placeholder="Password">
 		           
-		            <button class="btn btn-theme btn-block" name="submit" value="submit" type="submit"><i class="fa fa-lock"></i> SIGN IN</button>
+		            <button class="btn btn-theme btn-block" name="submit" value="submit" type="submit"  style="margin-top: 20px;"><i class="fa fa-lock"></i> SIGN IN</button>
 		            <hr>
 		            
 		            <div >

@@ -225,6 +225,7 @@ ul.top-menu > li > .logout {
 	margin-right: 15px;
 	background: #21b0f1;
 	margin-top: 15px;
+    cursor: pointer;
 }
 
 

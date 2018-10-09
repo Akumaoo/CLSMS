@@ -109,4 +109,13 @@ $(function(){
       }
      });
     });
+
+     $("#MU").click(function(){
+     $.ajax({
+      url:'User.php',
+      success:function(data){
+        $('.main-chart').html(data)
+      }
+     });
+    });
 });

@@ -10,8 +10,8 @@ $primary_key='SubscriptionID';
 
 $columns=array(
 	array('db'=>'SubscriptionID','dt'=>0),
-	array('db'=>'DistributorName','dt'=>1),
-	array('db'=>'SerialName','dt'=>2),
+	array('db'=>'DistributorName','dt'=>2),
+	array('db'=>'SerialName','dt'=>1),
 	array('db'=>'Orders','dt'=>3),
 	array('db'=>'Cost','dt'=>4),
 	array('db'=>'NumberOfItemReceived','dt'=>5),

@@ -24,8 +24,8 @@ echo '
 		<thead class="thead_theme">
 			<tr>
 				<th class="radio-label-center">SubscriptionID</th>
-				<th class="radio-label-center">Distributor</th>
 				<th class="radio-label-center">Serial</th>
+				<th class="radio-label-center">Distributor</th>
 				<th class="radio-label-center">Frequency</th>
 				<th class="radio-label-center">Cost</th>
 				<th class="radio-label-center">Received</th>
@@ -71,7 +71,7 @@ $(function(){
 		url:"php_codes/modify_subs.php",
 		columns:{
 			identifier:[0,"SubscriptionID"],
-			editable:[[2,"SerialName"],[3,"Orders"],[4,"Cost"],[6,"Status"]]
+			editable:[[1,"SerialName"],[3,"Orders"],[4,"Cost"],[6,"Status"]]
 				},
 			onSuccess:function(data,textStatus,jqXHR)
 			{

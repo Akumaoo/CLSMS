@@ -64,41 +64,44 @@
 
 	
 	$('#table_SS').on('draw.dt', function() {
+		
+	$('tbody tr td:nth-child(3)').addClass('PName_click');
+	$(".PName_click").click(function(){
+		$SR_ID=$(this).closest('tr').attr('id');
+		$Sname=$(this).text();
+		$.ajax({
+		type:'POST',
+		url:'View_RS_Serial.php',
+		data:{
+			send_ID:$SR_ID,
+			send_name:$Sname
+		},
+		success:function(data){
+			$('.container-fluid').html(data)
+		}
+		});
+	});
+
 	if(!$('tbody>tr:nth-child(1)>td').hasClass('dataTables_empty'))
 	{
 		$('#table_SS').Tabledit({
-			url:"php_codes/modify_send_Serial.php",
-			columns:{
-			identifier:[0,"ReceivedSerialID"],
-			editable:[]
-				},
-			onSuccess:function(data,textStatus,jqXHR)
-			{
-				if(data.action=='delete')
-				{
-					$("#"+data.ReceivedSerialID).remove();			
-				}
-
-			}
-		});
-		
-		$('button.tabledit-edit-button').remove();
-		$('tbody tr td:nth-child(3)').addClass('PName_click');
-		$(".PName_click").click(function(){
-			$SR_ID=$(this).closest('tr').attr('id');
-			$Sname=$(this).text();
-			$.ajax({
-			type:'POST',
-			url:'View_RS_Serial.php',
-			data:{
-				send_ID:$SR_ID,
-				send_name:$Sname
+		url:"php_codes/modify_send_Serial.php",
+		columns:{
+		identifier:[0,"ReceivedSerialID"],
+		editable:[]
 			},
-			success:function(data){
-				$('.container-fluid').html(data)
+		onSuccess:function(data,textStatus,jqXHR)
+		{
+			if(data.action=='delete')
+			{
+				$("#"+data.ReceivedSerialID).remove();			
 			}
-			});
+
+		}
 		});
+		$('button.tabledit-edit-button').remove();
+
+		
 	}
 	else
 	{
