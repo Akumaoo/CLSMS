@@ -1,13 +1,46 @@
-<?php if (isset($_POST['login'])){
-        header('location: index.php');
-    } 
+<?php
+ 
+require'php_codes/db.php';
+
+
+
+if(isset($_POST['submit'])){
+    
+    $username = $_POST['UserName'];
+    $password = $_POST['Password'];
+    
+    
+    $sql = "SELECT * from [User] WHERE UserName = ? AND Password = ?";
+    $query=sqlsrv_query($conn,$sql,array($username, $password));
+    if(sqlsrv_has_rows($query)){
+        while($row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC)){
+         $dbusername=$row['UserName'];
+         $firstname=$row['FirstName'];
+        $lastname=$row['LastName'];
+         $avatar=$row['Avatar'];
+        $email=$row['Email'];
+         $dbrole=$row['Role'];
+        $dbdepartment=$row['DepartmentID'];
+            
+        }      
+            session_start();
+            $_SESSION['current_user'] = $username;
+            header ("Location:index.php");        
+    }
+      
+
+    
+
+}
 	
-require "php_codes/db.php"
  ?>
  
 <head>
   <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Dashboard">
+    <meta name="keyword" content="Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
 
     <title>CLSMS</title>
 
@@ -28,7 +61,7 @@ require "php_codes/db.php"
   	  <div id="login-page">
 	  	<div class="container">
 	  	
-		      <form class="form-login" action="index.php" method="post">
+		      <form class="form-login" method="post">
 		        <h2 class="form-login-heading">Sign In now</h2>
 		        <div class="login-wrap">
 					<div >
@@ -37,14 +70,18 @@ require "php_codes/db.php"
 				
 					
 					  
-		            <input type="text" class="form-control" placeholder="User ID" autofocus>
+		            <input type="text" class="form-control" name="UserName" id="username" placeholder="User ID" autofocus>
 		            <br>
-		            <input type="password" class="form-control" placeholder="Password" style="margin-bottom: 15px;">
-		            <button class="btn btn-theme btn-block" href="index.php" type="submit"><i class="fa fa-lock"></i> SIGN IN</button>
+		            <input type="password" class="form-control" name="Password" id="password" placeholder="Password">
+		           
+		            <button class="btn btn-theme btn-block" name="submit" value="submit" type="submit"><i class="fa fa-lock"></i> SIGN IN</button>
 		            <hr>
 		            
+		            <div >
+		            
+		            </div>
+		            
 		        </div>
-		
 		          <!-- Modal -->
 		          <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
 		              <div class="modal-dialog">
@@ -60,7 +97,7 @@ require "php_codes/db.php"
 	  	
 	  	</div>
 	  </div>
-  <script src="lib/jquery/jquery.min.js"></script>
+<script src="lib/jquery/jquery.min.js"></script>
   <script src="lib/bootstrap/js/bootstrap.min.js"></script>
   <!--BACKSTRETCH-->
   <!-- You can use an image of whatever size. This script will stretch to fit in any screen size.-->
@@ -69,3 +106,19 @@ require "php_codes/db.php"
         $.backstretch("img/login-bg.jpg", {speed: 500});
     </script>
   </body>
+<script>
+    $(function(){
+        $('#loginid_form').on('submit',function(event){
+        event.preventDefault();
+        
+        if($("#username").val()=="" && $("#password").val()==""){
+            alert("Username and Password is required!")
+        }
+        else{
+            
+        }
+                
+    });
+     
+     });
+</script>

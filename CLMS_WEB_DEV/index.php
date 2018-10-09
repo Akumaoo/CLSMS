@@ -47,26 +47,27 @@ require 'php_codes/db.php'
 		
 	<!---TAb-->
 	<div class="col-lg-12  ">
-	
-            <div class="row content-panel">
+        <div class="row content-panel">
               <div class="panel-heading">
                 <ul class="nav nav-tabs nav-justified">
                   <li class="active">
                     <a data-toggle="tab" href="#notification">Notification</a>
                   </li>
                   <li>
-                    <a data-toggle="tab" href="#overview" class="contact-map">Overview</a>
+                    <a data-toggle="tab" href="#overview">Overview</a>
                   </li>
 
                 </ul>
               </div>
-	<!---TAb-->  		  
-     <div class="panel-body">
-		<div class="tab-content">
-				<div id="notification" class="tab-pane active">
-					<div class="row">
+	<!---TAb--> 
+<!---panelbody-->
+ <div class="panel-body">
+ <!---content-->
+	<div class="tab-content">
+		<div id="notification" class="tab-pane active">
+			<div class="row">
+	<!---notifbar-->	
 		<div class=" ">
-			
           <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
 			<div class="custom-boxx centered" id="NotifContainer" >
               <div  id='notifbox'>
@@ -97,20 +98,51 @@ require 'php_codes/db.php'
             </div>
         </div>
 		</div>
-		
-			</div>
-			</div>
+	<!---notifbar-->		
+	</div>
+</div>
 			
-	<div id="overview" class="tab-pane active">
+	<div id="overview" class="tab-pane ">
 		<div class="row">
+			            <!--CUSTOM CHART START -->
+            <div class="border-head">
+              <h3>Subscription Chart</h3>
+            </div>
+            <div class="custom-bar-chart">
+              <ul class="y-axis">
+                <li><span><?php include 'php_codes/barchart_count.php'?></span></li>
+                <li><span></span></li>
+                <li><span></span></li>
+                <li><span></span></li>
+            
+                <li><span>0</span></li>
+              </ul>
+              <div class="bar">
+			  <div class="title">On Going</div>
+                <?php include 'php_codes/barchart_ongoing.php'?>
+              </div>
+              <div class="bar ">
+                <div class="title">Cancelled</div>
+                <?php include 'php_codes/barchart_cancelled.php'?>
+              </div>
+              <div class="bar ">
+                <div class="title">Refunded</div>
+               <?php include 'php_codes/barchart_refunded.php'?>
+              </div>
+              <div class="bar ">
+                <div class="title">Finished</div>
+                <?php include 'php_codes/barchart_finished.php'?>
+              </div>
 
-		
+            </div>
+            <!--custom chart end-->
 		</div>
 	</div>
 	
-		</div>
 	</div>
-	  
+ <!---content-->		
+</div>
+<!---panelbody-->	  
 
             </div>
 		
