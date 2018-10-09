@@ -38,6 +38,8 @@ if($input['action']=='edit')
 				{
 					$sql="Update Package_Delivery Set ReceiveDate=? Where PackageID=?";
 					$query=sqlsrv_query($conn,$sql,array($RD,$PID),$opt);
+
+					
 				}
 			}
 		}

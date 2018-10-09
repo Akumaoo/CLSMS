@@ -22,6 +22,13 @@ if(sqlsrv_has_rows($query))
 				$phase2_date=date("Y/m/d",strtotime($ERD.'+ 6 month'));
 				$sqlupdate="Update Package_Delivery Set Package_Phase=?,ExpectedReceiveDate=? Where PackageID=?";
 				$queryupdate=sqlsrv_query($conn,$sqlupdate,array('Phase2',$phase2_date,$PID),$opt);
+
+				$sid=getSerialID($PID);
+				for($x=0;$x<count($sid);$x++)
+				{
+					$sqlinsert="Insert Into Notification(SerialID,NotificationType,NotificationSeen,Date_Receive_RedFlag) Values(?,?,?,?)";
+					$queryinsert=sqlsrv_query($conn,$sqlinsert,array($sid[$x],'DeleyedDeliver_P1','NotSeen',$date_today));
+				}
 			}
 			else
 			{
@@ -31,7 +38,7 @@ if(sqlsrv_has_rows($query))
 					if(checkNotifSerial($sid[$x]))
 					{
 						$sqlinsert="Insert Into Notification(SerialID,NotificationType,NotificationSeen,Date_Receive_RedFlag) Values(?,?,?,?)";
-						$queryinsert=sqlsrv_query($conn,$sqlinsert,array($sid[$x],'DeleyedDeliver','NotSeen',$date_today));
+						$queryinsert=sqlsrv_query($conn,$sqlinsert,array($sid[$x],'DeleyedDeliver_P2','NotSeen',$date_today));
 					}
 				}
 			}
@@ -41,7 +48,7 @@ if(sqlsrv_has_rows($query))
 function getSerialID($pack){
 	require 'db.php';
 	$sql="Select SerialID from Delivery Where PackageID=?";
-	$query=sqlsrv_query($conn,$sql,array($pack),$opt);
+	$query=sqlsrv_query($conn,$sql,array($pack));
 	$id=array();
 	$x=0;
 	if(sqlsrv_has_rows($query))

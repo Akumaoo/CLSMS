@@ -147,10 +147,14 @@ function CheckDup($sid)
 		{
 			$scs['status']='fail';
 		}
-		 header('Content-type: application/json');
-		echo json_encode($scs);
+		 
 	}
-
+	else
+	{
+		$scs['status']='fail';
+	}
+header('Content-type: application/json');
+echo json_encode($scs);
 }
 
  ?>

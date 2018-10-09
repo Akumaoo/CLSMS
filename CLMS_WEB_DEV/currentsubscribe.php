@@ -7,17 +7,16 @@ echo '
 			<h5 class="tag_style">Subscriptions:</h5>
 			<hr class="theme_hr">
 		</div>
-	</div>	
-
-	<div class="alert alert-success alert-dismissible collapse center" id="msg_scs">
+	</div>
+	<div class="alert alert-success alert-dismissible collapse center" id="msg_scs_enter">
 	    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-	    <strong>Successfully Subscribed!</strong> , Please Reload The Page To Update The Table.
+	    <strong>Successfully Update Subscriptions!</strong>
  	 </div>
 
-  	<div class="alert alert-danger alert-dismissible collapse center" id="msg_fail">
+  	<div class="alert alert-danger alert-dismissible collapse center" id="msg_fail_enter">
 	    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 	    <strong>Something Went Wrong!</strong> , Please Check The Values You Entered And Try Again.
-  	</div>
+  	</div>	
   
 	<div class="row custom_table">
 		<div class="col-lg-10 col-lg-offset-1">
@@ -46,6 +45,7 @@ echo '
 	</div>
 <div>';
 include 'Modals/Add_Subscription_Modal.php';
+include 'Modals/Add_Subscription_Modal_secondstep.php';
 ?>
 
 <script type="text/javascript">
@@ -71,7 +71,7 @@ $(function(){
 		url:"php_codes/modify_subs.php",
 		columns:{
 			identifier:[0,"SubscriptionID"],
-			editable:[[2,"SerialName"],[3,"Orders"],[4,"Cost"],[5,"NumberOfItemReceived"],[6,"Status"]]
+			editable:[[2,"SerialName"],[3,"Orders"],[4,"Cost"],[6,"Status"]]
 				},
 			onSuccess:function(data,textStatus,jqXHR)
 			{
@@ -81,11 +81,11 @@ $(function(){
 				}
 				if(data.status=='success')
 				{
-					$("#msg_scs").removeClass('collapse');
+					$("#msg_scs_enter").removeClass('collapse');
 				}
 				else
 				{
-					$("#msg_fail").removeClass('collapse');
+					$("#msg_fail_enter").removeClass('collapse');
 				}
 
 			},onDraw: function() {
@@ -100,62 +100,37 @@ $(function(){
 		});
 	});
 
-	$('#subscribe_new_form').on('submit',function(event){
+	$show_SS=false;
+
+	$('#first_step').on('submit',function(event){
 		event.preventDefault();
-
-		var d = new Date();
-
-		var month = d.getMonth()+1;
-		var day = d.getDate();
-
-		var output_date_today = d.getFullYear() + '/' +
-		    (month<10 ? '0' : '') + month + '/' +
-		    (day<10 ? '0' : '') + day;
-
 	 	if($("#DN").val()=="")
 	 	{
 	 		alert("Disbtributor Name Is Required");
-	 	}
-	 	else if($("#SNf").val()=="")
-	 	{
-	 		alert("Serial Name Is Required");
-	 	}
-	 	else if($("#Freq").val()=="")
-	 	{
-	 		alert("Frequency Is Required");
-	 	}
-	 	else if($("#Cost").val()=="")
-	 	{
-	 		alert("Cost Is Required");
-	 	}
-	 	else if(new Date($('#DOI').val())<=new Date(output_date_today))
-	 	{
-	 		alert("Date Of Issue Is Past The Date Today");
 	 	}
 	 	else if($("#PN").val()=="")
 	 	{
 	 		alert("Package Name Is Required");
 	 	}
-	 	else if($("#Copy").val()=="")
-	 	{
-	 		alert("Number Of Copies Is Required");
-	 	}
 	 	else{
 	 		$.ajax({
-	 			url:"php_codes/Insert_New_Subscription.php",
+	 			url:"Modals/validate_add_subs.php",
 	 			method:"POST",
-	 			data:$("#subscribe_new_form").serialize(),
+	 			data:$("#first_step").serialize(),
 	 			success:function(data)
-	 			{
- 					$("#subscribe_new_form")[0].reset();
- 					$("#add_data_Modal").modal('hide');
- 					if(data.status=='success')
- 					{
- 						$("#msg_scs").removeClass('collapse');
+	 			{	
+	 				if(data.status!='fail')
+	 				{	$show_SS=true;
+
+	 					$('#Disb_N').val($('#DN').val())
+	 					$('#Pack_N').val($('#PN').val())
+ 						$('#add_data_Modal').modal('hide');
+ 						
  					}
  					else
  					{
- 						$("#msg_fail").removeClass('collapse');
+ 						$("#error").removeClass('collapse');
+ 						$("#first_step")[0].reset();
  					}
 
 	 			}
@@ -163,7 +138,29 @@ $(function(){
 	 	}
 	});
 
-});
+	  $('#add_data_Modal').on('hidden.bs.modal', function(){
+		 if($show_SS)
+			{
+ 				$('#add_data_Modal_next').modal('show');
+ 				$show_SS=false;
+ 			}else if(!$('#error').hasClass('collapse'))
+			{
+ 				$('#error').addClass('collapse');
+ 			}
+ 		
+ 		});
+	  $('#add_data_Modal_next').on('hidden.bs.modal', function(){
+			$("#subscribe_new_form")[0].reset();
+ 			if(!$('#msg_fail').hasClass('collapse'))
+ 			{
+ 				$('#msg_fail').addClass('collapse');
+ 			}
+ 		});
 
+	 
+	
+
+
+});
 </script>
 

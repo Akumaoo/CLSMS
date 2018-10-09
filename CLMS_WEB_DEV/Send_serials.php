@@ -7,13 +7,15 @@
 	</div>
 	
 	<div class="alert alert-success alert-dismissible collapse center" id="msg_scs">
-	    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 	    <strong>Successfully Send Serial!</strong> , Please Reload The Page To Update The Table.
  	 </div>
 
   	<div class="alert alert-danger alert-dismissible collapse center" id="msg_fail">
-	    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 	    <strong>Something Went Wrong!</strong> , Please Check The Values You Entered And Try Again.
+  	</div>
+
+  	<div class="alert alert-warning alert-dismissible collapse center" id="msg_warn">
+	 	 <strong>WARNING!!</strong> <p class="warn_val"></p>
   	</div>
 
 	<div class="row custom_table">
@@ -62,6 +64,8 @@
 
 	
 	$('#table_SS').on('draw.dt', function() {
+	if(!$('tbody>tr:nth-child(1)>td').hasClass('dataTables_empty'))
+	{
 		$('#table_SS').Tabledit({
 			url:"php_codes/modify_send_Serial.php",
 			columns:{
@@ -74,51 +78,69 @@
 				{
 					$("#"+data.ReceivedSerialID).remove();			
 				}
+
 			}
 		});
+		
+		$('button.tabledit-edit-button').remove();
+		$('tbody tr td:nth-child(3)').addClass('PName_click');
+		$(".PName_click").click(function(){
+			$SR_ID=$(this).closest('tr').attr('id');
+			$Sname=$(this).text();
+			$.ajax({
+			type:'POST',
+			url:'View_RS_Serial.php',
+			data:{
+				send_ID:$SR_ID,
+				send_name:$Sname
+			},
+			success:function(data){
+				$('.container-fluid').html(data)
+			}
+			});
+		});
+	}
+	else
+	{
+		$('.tabledit-toolbar-column').remove()
+	}
+		
 	});
 
 	$('#Send_Serial').on('submit',function(event){
 		event.preventDefault();
+		 var deptlist=[];
+		 $.each($('input[name="dept"]:checked'),function(){
+		 	deptlist.push($(this).val());
+		 });
 
-		var d = new Date();
+		 var sName=$('#serialname').val();
 
-		var month = d.getMonth()+1;
-		var day = d.getDate();
-
-		var output_date_today = d.getFullYear() + '/' +
-		    (month<10 ? '0' : '') + month + '/' +
-		    (day<10 ? '0' : '') + day;
-
-
-	 	if($("#Pname").val()=="")
+	 	if($("#serialname").val()=="")
 	 	{
-	 		alert("Package Name Is Required");
+	 		alert("Serial Name Is Required");
 	 	}
-	 	else if($("#ERD").val()=="")
+	 	else if(deptlist.length==0)
 	 	{
-	 		alert("Expected Receive Date Is Required");
-	 	}
-	 	else if(new Date($('#ERD').val())<=new Date(output_date_today))
-	 	{
-	 		alert("Expected Receive Date Is Past The Date Today");
-	 	}
-	 	else if($("#Dname").val()=="")
-	 	{
-	 		alert('Distributor Name Is Required');
+	 		alert("Please Choose Atleast One Department");
 	 	}
 	 	else{
 	 		$.ajax({
-	 			url:"php_codes/Insert_new_Package.php",
+	 			url:"php_codes/insert_send_serial.php",
 	 			method:"POST",
-	 			data:$("#Send_Serial").serialize(),
+	 			data:{sername:sName,depts:deptlist},
 	 			success:function(data)
 	 			{
  					$("#Send_Serial")[0].reset();
  					$("#Send_Serial_Modal").modal('hide');
- 					if(data.status=='success')
+ 					if(data.fail_enter==0)
  					{
  						$("#msg_scs").removeClass('collapse');
+ 					}
+ 					else if(data.status>0 && data.fail_enter>0)
+ 					{
+ 						$("#msg_warn").removeClass('collapse');
+ 						$('.warn_val').text('Successfully Entered: '+data.status+' Data And Fail To Enter: '+data.fail_enter+' Data');
  					}
  					else
  					{
@@ -128,18 +150,5 @@
 	 		});
 	 	}
 	});
-
-	$(".PName_click").click(function(){
-		var Package_Name=$(this).text();
-		$.ajax({
-		type:'POST',
-		url:'php_codes/ViewPackage.php',
-		data:{P_Name:Package_Name},
-		success:function(data){
-			$('.main-chart').html(data)
-		}
-		});
-	});
-	$('button.tabledit-edit-button').remove();
 });
 </script>

@@ -6,9 +6,10 @@ $serialname=$input["SerialName"];
 
 $orders=$input["Orders"];
 $cost=$input["Cost"];
-$NIR=$input["NumberOfItemReceived"];
 $stat=$input["Status"];
 $sub_id=$input['SubscriptionID'];
+// $sub_id=151;
+// $input['action']='delete';
 
 function CheckSerial($ser)
 {
@@ -34,10 +35,41 @@ if($input["action"]==="edit")
 {
 	if(CheckSerial($serialname)!="NotValid" && $stat!='stat')
 	{
-		$serial_id=CheckSerial($serialname);
-		$sqltxt="Update [Subscription] SET [SerialID]=?,[Orders]=?,[Cost]=?,[NumberOfItemReceived]=?,[Status]=? WHERE [Subscription].[SubscriptionID]=?";
-		$queryedit=sqlsrv_query($conn,$sqltxt,array($serial_id,$orders,$cost,$NIR,$stat,$sub_id));
-		$input['status']='success';
+		if($stat!='OnGoing')
+		{
+			$sqldeliv_del="Select SubscriptionID,DeliveryID,Delivery.SerialID from Subscription Inner JOin Delivery ON Subscription.SerialID=Delivery.SerialID Where Subscription.Status=? AND SubscriptionID=?";
+			$querydeliv_del=sqlsrv_query($conn,$sqldeliv_del,array('OnGoing',$sub_id));
+			if(sqlsrv_has_rows($querydeliv_del))
+			{	$id_list=[];
+				$inc=0;
+				while($row=sqlsrv_fetch_array($querydeliv_del))
+				{
+					$id_list[$inc]=$row['DeliveryID'];
+					$inc++;
+				}
+			}
+
+			if(isset($id_list))
+			{
+				for($x=0;$x<count($id_list);$x++)
+				{
+					$del="Delete From Delivery Where DeliveryID=?";
+					$delquery=sqlsrv_query($conn,$del,array($id_list[$x]));
+				}
+			}
+
+			$serial_id=CheckSerial($serialname);
+			$sqltxt="Update [Subscription] SET [SerialID]=?,[Orders]=?,[Cost]=?,[Status]=? WHERE [Subscription].[SubscriptionID]=?";
+			$queryedit=sqlsrv_query($conn,$sqltxt,array($serial_id,$orders,$cost,$stat,$sub_id));
+			$input['status']='success';
+		}
+		else
+		{
+			$serial_id=CheckSerial($serialname);
+			$sqltxt="Update [Subscription] SET [SerialID]=?,[Orders]=?,[Cost]=?,[Status]=? WHERE [Subscription].[SubscriptionID]=?";
+			$queryedit=sqlsrv_query($conn,$sqltxt,array($serial_id,$orders,$cost,$stat,$sub_id));
+			$input['status']='success';
+		}
 
 	}
 	else
@@ -47,8 +79,29 @@ if($input["action"]==="edit")
 }
 else if($input["action"]==='delete')
 {
+	$sqldeliv_del="Select SubscriptionID,DeliveryID,Delivery.SerialID from Subscription Inner JOin Delivery ON Subscription.SerialID=Delivery.SerialID Where Subscription.Status=? AND SubscriptionID=?";
+	$querydeliv_del=sqlsrv_query($conn,$sqldeliv_del,array('OnGoing',$sub_id));
+	if(sqlsrv_has_rows($querydeliv_del))
+	{	$id_list=[];
+		$inc=0;
+		while($row=sqlsrv_fetch_array($querydeliv_del))
+		{
+			$id_list[$inc]=$row['DeliveryID'];
+			$inc++;
+		}
+	}
+
+	if(isset($id_list))
+	{
+		for($x=0;$x<count($id_list);$x++)
+		{
+			$del="Delete From Delivery Where DeliveryID=?";
+			$delquery=sqlsrv_query($conn,$del,array($id_list[$x]));
+		}
+	}
+
 	$sqltxtdel="Delete FROM [Subscription] Where [SubscriptionID]=?";
-	$querydel=sqlsrv_query($conn,$sqltxtdel,array($sub_id),$opt);
+	$querydel=sqlsrv_query($conn,$sqltxtdel,array($sub_id));
 }
 
 echo json_encode($input);

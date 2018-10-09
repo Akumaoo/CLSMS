@@ -19,12 +19,10 @@ echo '
 	</div>
 
 	<div class="alert alert-success alert-dismissible collapse center" id="msg_scs">
-	    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-	    <strong>Successfully Added Serial Into This Package!</strong> , Please Reload The Page To Update The Table.
+	    <strong>Successfully Updated Serial Into This Package!</strong>
  	 </div>
 
   	<div class="alert alert-danger alert-dismissible collapse center" id="msg_fail">
-	    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 	    <strong>Something Went Wrong!</strong> , Please Check The Values You Entered And Try Again.
   	</div>
 
@@ -117,7 +115,7 @@ include '../Modals/add_serial_pack_modal.php';
  <script>
  	$(function(){
  		if( ! $.fn.DataTable.isDataTable("#table_pack")){
-			$('#table_pack').DataTable({			
+		$('#table_pack').DataTable({			
 		// "processing":true,
 		// "serverSide":true,
 		"ordering":true,
@@ -125,6 +123,8 @@ include '../Modals/add_serial_pack_modal.php';
 		"pageLength":50
 		// "ajax":"php_codes/serverside_currentSubs.php",
 			});
+
+
 		}
 
 		$('#table_pack').Tabledit({
@@ -139,6 +139,10 @@ include '../Modals/add_serial_pack_modal.php';
 			{
 				$("#"+data.DeliveryID).remove();			
 			}
+			else if(data.status=='success')
+			{
+				$('#msg_scs').removeClass('collapse');
+			}
 		},onDraw: function() {
 			$('tbody tr td:nth-child(4)>input').each(function(){
 				$('<input class="tabledit-input form-control input-sm" type="date" style="display: none;" disabled="">').attr({ name: this.name, value: this.value }).insertBefore(this)
@@ -147,6 +151,7 @@ include '../Modals/add_serial_pack_modal.php';
 	
 		});
 
+	
 		$('#create_new_delivery').on('submit',function(event){
 		event.preventDefault();
 
@@ -180,10 +185,12 @@ include '../Modals/add_serial_pack_modal.php';
 	 			success:function(data)
 	 			{
  					$("#create_new_delivery")[0].reset();
- 					$("#add_delivery_data_Modal").modal('hide');
  					if(data.status=='success')
  					{
- 						$("#msg_scs").removeClass('collapse');
+ 						$("#msg_scs_modal").removeClass('collapse');
+ 						$('#save_btn').addClass('collapse');
+ 						$('#retry').removeClass('collapse');
+
  					}
  					else
  					{
@@ -198,5 +205,25 @@ include '../Modals/add_serial_pack_modal.php';
 	 		});
 	 	}
 	});
+
+	$('#btn_yes').click(function(){
+		$("#msg_scs_modal").addClass('collapse');
+		$("#create_new_delivery")[0].reset();
+		$('#save_btn').removeClass('collapse');
+ 		$('#retry').addClass('collapse');
+	});
+
+	$('#btn_no').click(function(){
+		$("#create_new_delivery")[0].reset();
+		$('#add_delivery_data_Modal').modal('hide');
+	});
+
+	$('#add_delivery_data_Modal').on('hidden.bs.modal', function(){
+ 			if(!$('#msg_fail_modal').hasClass('collapse'))
+ 			{
+ 				$('#msg_fail_modal').addClass('collapse');
+ 			}
+ 	});
+
  	});
  </script>

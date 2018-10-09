@@ -33,6 +33,7 @@ if($input['action']=='edit')
 {
 	$sql="Update Delivery Set DateofIssue=?,IssueNumber=?,VolumeNumber=?,Copies=? Where DeliveryID=?";
 	$query=sqlsrv_query($conn,$sql,array($DOI,$IN,$VN,$cop,$delID),$opt);
+	$input['status']='success';
 
 }
 else if($input['action']=='delete')

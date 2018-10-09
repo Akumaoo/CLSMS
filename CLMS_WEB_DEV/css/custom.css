@@ -166,3 +166,33 @@ max-height:170px;
 table{
 	width: 100% !important;
 }
+#c_pack,#c_pack_multiple
+{
+	float:right;
+	margin-right:66px;
+	margin-top:15px;
+}
+.RS_header{
+	margin-top: 59px;
+	position: relative;
+}
+.RS_header_left{
+	margin-left: 89px;
+	position:relative;
+	float: left;
+}
+.RS_header_right{
+	position:relative;
+	float: right;
+	margin-right:210px;
+	
+}
+.RS_MSG{
+	margin-top:89px;
+	position:relative;
+}
+p.RS_comment{
+	margin-top:49px;
+	max-width: 759px;
+	margin-left: 120px;
+}

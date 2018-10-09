@@ -21,40 +21,21 @@
 				 					</div>
 				 				</div>
 
-				 				<div class="form-group form-group-center">
-				 					<label for="type" class="control-label col-lg-3">Type</label>
-				 					<div class="col-lg-6">
-				 						<select name="type" id="">
-				 						<?php require "php_codes/db.php";
-				 						$sql="SELECT TypeName FROM [Type]";
-				 						$query = sqlsrv_query($conn, $sql, array());
-				 						if (sqlsrv_has_rows($query))
-				 							{
-				 								while ($row = sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC)){
-				 									$name = $row['TypeName'];
-				 										echo '<option value="'.$name.'">'.$name.'</option>';
-				 								}
-				 							}
-				 						?>
-				 						
-				 							
-				 						</select>
-				 					</div>
-				 				</div>
+				 				
 
-				 				<div class="form-group ">
+				 				<div class="form-group  form-group-center">
 				 					<label for="department" class="control-label col-lg-3">Departments</label>
 				 					<div class="col-lg-6">
 				 						<?php require "php_codes/db.php";
 				 						$sql="SELECT * FROM Department";
 				 						$query = sqlsrv_query($conn, $sql, array());
 				 						if (sqlsrv_has_rows($query))
-				 							{
-				 								echo "<ul>";
-				 								while ($row = sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC)){
-				 										echo "<label><input type='checkbox' name=dept[] value='".$row['DepartmentID']."'>".$row['DepartmentName'];
-				 								}
-				 								echo "</label></ul>";
+				 							{	
+				 								echo '<ul>';
+			 									while ($row = sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC)){
+			 										echo "<li><input type='checkbox' name=dept value='".$row['DepartmentID']."'>".$row['DepartmentID']."</li>";
+			 									}
+			 									echo "</ul";			 								
 				 							}
 				 						?>			
 				 					</div>
@@ -64,7 +45,7 @@
 
 				 				<div class="form-group form-group-center">
 				 					<div class="col-lg-offset-8">
-				 						<button class="btn custom-btn" type="submit" id="btn_insert" value="save" name="save">Save</button>
+				 						<button class="custom-btn" type="submit" id="btn_insert" value="save" name="save">Save</button>
 				 					</div>
 				 				</div>
 				 			</form>

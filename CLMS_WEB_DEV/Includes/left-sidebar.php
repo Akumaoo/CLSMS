@@ -13,12 +13,7 @@
           </li>
 
             <!-- javascript:void(0) so that if yung page na ireredirect nung link is null or nonexistent magiistay sya sa page also it's good combination for ajax para maremove din yung # sa url :))) -->
-           <li>
-            <a href="javascript:void(0)" id="Disb">
-              <i class="fa fa-building"></i>
-              <span>Distributors</span>
-            </a>
-          </li>
+           
 
           <li>
             <a href="javascript:void(0)" id="CS">
@@ -30,7 +25,7 @@
           <li>
             <a href="javascript:void(0)" id="Deli">
               <i class="fa fa-truck"></i>
-              <span>Deliveries</span> 
+              <span>Manage Deliveries</span> 
             </a>
           </li>
 
@@ -55,7 +50,32 @@
                 </a>
               </li>
 
-               <li>
+              </ul>
+
+          </li>
+
+          <li class="sub-menu">
+            <a href="javascript:void(0)">
+              <i class="fa fa-wrench"></i>
+              <span>Maintenance</span> 
+            </a>
+
+             <ul class="sub">
+              <li>
+                <a href="javascript:void(0)" class="remove-hl" id="Disb">
+                  <i class="fa fa-building"></i>
+                  <span>Distributors</span>
+                </a>
+              </li>
+
+              <li>
+                <a href=javascript:void(0)" class="remove-hl" id="Dept">
+                  <i class="fa fa-university"></i>
+                  <span>Departments</span>
+                  </a>
+              </li>
+
+              <li>
                 <a href="javascript:void(0)" class="remove-hl" id="MT">
                   <i class="fa fa-plus-square"></i>
                   <span>Manage Type</span>
@@ -66,12 +86,7 @@
 
           </li>
 
-          <li>
-            <a href=javascript:void(0)" id="Dept">
-              <i class="fa fa-university"></i>
-              <span>Departments</span>
-              </a>
-          </li>
+         
 
           <li>
             <a href=javascript:void(0)" id="overallreport">
