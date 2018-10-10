@@ -1,9 +1,23 @@
 <?php
 require 'php_codes/db.php';
 echo '
+<div class="container-fluid">
+			<div class="row custom-boxxx">		
+		        <div>
+					<h2 class="custom-sect2 ">College Library Serial Monitoring System</h2><br>
+				</div>
+			</div>
 
+<div class=" custom-panelbox">				
+	<div class="">
+		<div class="">
+			<h4 class="fa fa-line-chart tag_style"> Reports:</h4>
+			<h4 class="dividerr"></h4>
+		</div>
+	</div>
+	
 <div class="container custom_table">
-	<div class="row">
+	<div class="">
 		<div class="col-md-10 col-md-offset-1">
 		<table cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover" id="or" ">
 		<thead class="thead_theme">
@@ -20,7 +34,7 @@ echo '
 		</thead>
 		<tbody>';
 
-		$sqltxt='SELECT Department.DepartmentName, "Type".TypeName, Serial.SerialName, Subscription.Orders, Distributor.DistributorName, Subscription.Cost, Subscription.NumberOfItemReceived, Subscription."Status"
+		$sqltxt='SELECT Department.DepartmentName, "Type".TypeName, Serial.SerialName, Subscription.Orders, Distributor.DistributorName, Subscription.Cost, Subscription.NumberOfItemReceived, Subscription.[Status]
 				FROM Distributor
 				JOIN Subscription
 					ON Subscription.DistributorID = Distributor.DistributorID
@@ -67,7 +81,8 @@ echo '
 </table>
 </div>
 </div>
-<div>';
+</div>
+</div>';
 ?>
 
 <script type="text/javascript">

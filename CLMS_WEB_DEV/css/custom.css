@@ -88,11 +88,17 @@ ligth blue color: left sidebar hover:active : #4ECDC4;
 .custom_table{
 	margin-top: 26px;
 	padding:0 12px;
+	width:auto;
 }
 .tag_style{
+	padding-top:10px;
+	padding-bottom:-15px;
+	padding-left:10px;
 	font-size: 18px;
+	
 }
 .theme_hr{
+
 	border-color:rgba(47, 50, 59,.2);
 }
 #subs_click{
@@ -133,19 +139,41 @@ max-height:170px;
 }
 
 .custom-box{
-
 	background: #ffffff;
-	box-shadow: 0px 3px 2px #aab2bd;
+	box-shadow: 0px 0px 0px #aab2bd;
 	padding-top: 0px;
 	padding-bottom: 0px;
-	min-height:60px;
+	min-height:55px;
+	width:100%;
 }
 .custom-boxx{
+	
 	background: #ffffff;
-	box-shadow: 0px 3px 2px #aab2bd;
+	box-shadow: 0px 2px 3px 2px #aab2bd;
 	padding-top: 0px;
 	padding-bottom: 0px;
-	min-height:400px;
+	min-height:410px;
+	width:100%;
+}
+.custom-boxxx{
+	background: #ffffff;
+	box-shadow: 0px 2px 3px 2px #aab2bd;
+	padding-top: 0px;
+	padding-bottom: 10px;
+	min-height:50px;
+	width:auto;
+	
+}
+.custom-panelbox{
+	background: #ffffff;
+	box-shadow: 0px 2px 3px 2px #aab2bd;
+	margin-top:10px;
+	padding-bottom: 15px;
+	min-height:400px;		
+	margin-right: -15px;
+	margin-left: -15px;
+	
+	
 }
 .custom-text1{
 	color:black !important;
@@ -153,6 +181,7 @@ max-height:170px;
 .custom-pos{
 	margin-top:-15px;
 	margin-left:130px;
+	text-align:right ;
 }
 .custom-sect{
 	margin-top:38px;
@@ -160,39 +189,14 @@ max-height:170px;
 .custom-sect1{
 	margin-top:45px;
 }
+.custom-sect2{
+	margin-top:20px;
+	margin-bottom:-8px;
+	text-align:center;
+}
 .remove-margin{
 	margin:0 !important;
 }
 table{
 	width: 100% !important;
-}
-#c_pack,#c_pack_multiple
-{
-	float:right;
-	margin-right:66px;
-	margin-top:15px;
-}
-.RS_header{
-	margin-top: 59px;
-	position: relative;
-}
-.RS_header_left{
-	margin-left: 89px;
-	position:relative;
-	float: left;
-}
-.RS_header_right{
-	position:relative;
-	float: right;
-	margin-right:210px;
-	
-}
-.RS_MSG{
-	margin-top:89px;
-	position:relative;
-}
-p.RS_comment{
-	margin-top:49px;
-	max-width: 759px;
-	margin-left: 120px;
 }

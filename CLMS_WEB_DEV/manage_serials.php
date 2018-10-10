@@ -1,8 +1,15 @@
 <div class="container-fluid">
-	<div class="row">
-		<div class="col-lg-12">
-			<h5 class="tag_style">Serials:</h5>
-			<hr class="theme_hr">
+			<div class="row custom-boxxx">		
+		        <div>
+					<h2 class="custom-sect2 ">College Library Serial Monitoring System</h2><br>
+				</div>
+			</div>
+
+<div class=" custom-panelbox">				
+	<div class="">
+		<div class="">
+			<h4 class="fa fa-plus-square tag_style"> Serials:</h4>
+			<h4 class="dividerr"></h4>
 		</div>
 	</div>
 	
@@ -16,62 +23,61 @@
 	    <strong>Something Went Wrong!</strong> , Please Check The Values You Entered And Try Again.
   	</div>
 
-	<div class="row custom_table">
-
-		<div class="col-lg-10 col-lg-offset-1">
-			<table cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover" id="table_MS">
-				<thead class="thead_theme">
-				<tr>
-					<th class="radio-label-center">Serial ID</th>
-					<th class="radio-label-center">Serial Name</th>
-					<th class="radio-label-center">Type</th>
-					<th class="radio-label-center">Departments</th>
-				</tr>
-				</thead>
-				<tbody>
-					<?php 
-
-						require 'php_codes/db.php';
-						$sql="SELECT DISTINCT CS2.SerialID,SerialName,TypeName, 
-							    SUBSTRING(
-							        (
-							            SELECT ', '+CS1.DepartmentID  AS [text()]
-							            FROM Categorize_Serials CS1
-										WHERE CS1.SerialID=CS2.SerialID
-							            ORDER BY CS1.SerialID
-							            FOR XML PATH ('')
-							        ), 2, 1000) [Departments]
-							FROM Categorize_Serials CS2 Inner JOIN Serial ON CS2.SerialID=Serial.SerialID LEFT Join [Type] ON Serial.TypeID=[Type].TypeID";
-							$query=sqlsrv_query($conn,$sql,array());
-							if(sqlsrv_has_rows($query))
-							{
-								while($row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
+	<div class="custom_table">
+			<div class="col-lg-10 col-lg-offset-1">
+				<table cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover" id="table_MS">
+					<thead class="thead_theme">
+					<tr>
+						<th class="radio-label-center">Serial ID</th>
+						<th class="radio-label-center">Serial Name</th>
+						<th class="radio-label-center">Type</th>
+						<th class="radio-label-center">Departments</th>
+					</tr>
+					</thead>
+					<tbody>
+						<?php 
+							require 'php_codes/db.php';
+							$sql="SELECT DISTINCT CS2.SerialID,SerialName,TypeName, 
+									SUBSTRING(
+										(
+											SELECT ', '+CS1.DepartmentID  AS [text()]
+											FROM Categorize_Serials CS1
+											WHERE CS1.SerialID=CS2.SerialID
+											ORDER BY CS1.SerialID
+											FOR XML PATH ('')
+										), 2, 1000) [Departments]
+								FROM Categorize_Serials CS2 Inner JOIN Serial ON CS2.SerialID=Serial.SerialID LEFT Join [Type] ON Serial.TypeID=[Type].TypeID";
+								$query=sqlsrv_query($conn,$sql,array());
+								if(sqlsrv_has_rows($query))
 								{
-									$sID=$row['SerialID'];
-									$sname=$row['SerialName'];
-									$tn=$row['TypeName'];
-									$dept=$row['Departments'];
+									while($row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
+									{
+										$sID=$row['SerialID'];
+										$sname=$row['SerialName'];
+										$tn=$row['TypeName'];
+										$dept=$row['Departments'];
 
-									echo '
-									<tr class="gradeU">
-										<td class="radio-label-center">'.$sID.'</td>
-										<td class="radio-label-center dept_click">'.$sname.'</td>
-										<td class="radio-label-center">'.$tn.'</td>
-										<td class="radio-label-center ">'.$dept.'</td>									
-									</tr>
-								';
+										echo '
+										<tr class="gradeU">
+											<td class="radio-label-center">'.$sID.'</td>
+											<td class="radio-label-center dept_click">'.$sname.'</td>
+											<td class="radio-label-center">'.$tn.'</td>
+											<td class="radio-label-center ">'.$dept.'</td>									
+										</tr>
+									';
+									}
 								}
-							}
-					 ?>
-				</tbody>
-			</table>
-		</div>
+						 ?>
+					</tbody>
+				</table>
+			</div>
 		
 	</div>
 
-	<div class="row">
-		<div class="col-lg-offset-9">
-			<button type="button" name="New_pack" id="New_pack" data-toggle="modal" data-target="#Add_Serial_Modal" class="custom-btn">Add New Serial</button>
+		<div class="">
+			<div class="col-lg-offset-9">
+				<button type="button" name="New_pack" id="New_pack" data-toggle="modal" data-target="#Add_Serial_Modal" class="custom-btn">Add New Serial</button>
+			</div>
 		</div>
 	</div>
 </div>

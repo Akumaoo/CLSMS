@@ -2,34 +2,41 @@
 require 'php_codes/db.php';
 echo '
 <div class="container-fluid">
-	<div class="row">
-		<div class="col-lg-12">
-			<h5 class="tag_style">Subscriptions:</h5>
-			<hr class="theme_hr">
+			<div class="row custom-boxxx">		
+		        <div>
+					<h2 class="custom-sect2 ">College Library Serial Monitoring System</h2><br>
+				</div>
+			</div>
+
+<div class=" custom-panelbox">				
+	<div class="">
+		<div class="">
+			<h4 class="fa fa-handshake-o tag_style"> Manage Subscription:</h4>
+			<h4 class="dividerr"></h4>
 		</div>
 	</div>
-	<div class="alert alert-success alert-dismissible collapse center" id="msg_scs_enter">
+	
+	<div class="alert alert-success alert-dismissible collapse center" id="msg_scs">
 	    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-	    <strong>Successfully Update Subscriptions!</strong>
+	    <strong>Successfully Subscribed!</strong> , Please Reload The Page To Update The Table.
  	 </div>
 
-  	<div class="alert alert-danger alert-dismissible collapse center" id="msg_fail_enter">
+  	<div class="alert alert-danger alert-dismissible collapse center" id="msg_fail">
 	    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 	    <strong>Something Went Wrong!</strong> , Please Check The Values You Entered And Try Again.
-  	</div>	
+  	</div>
   
-	<div class="row custom_table">
+	<div class="custom_table">
 		<div class="col-lg-10 col-lg-offset-1">
 		<table cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover" id="table_subs" ">
 		<thead class="thead_theme">
 			<tr>
 				<th class="radio-label-center">SubscriptionID</th>
-				<th class="radio-label-center">Serial</th>
 				<th class="radio-label-center">Distributor</th>
+				<th class="radio-label-center">Serial</th>
 				<th class="radio-label-center">Frequency</th>
 				<th class="radio-label-center">Cost</th>
 				<th class="radio-label-center">Received</th>
-				<th class="radio-label-center">Subscription Date</th>
 				<th class="radio-label-center">Status</th>
 			</tr>
 		</thead>
@@ -39,14 +46,14 @@ echo '
 </table>
 </div>
 </div>
-	<div class="row">
-		<div class="col-lg-offset-9">
-			<button type="button" name="SN" id="SN" data-toggle="modal" data-target="#add_data_Modal" class="custom-btn">Subscribe Now!</button>
+		<div class="">
+			<div class="col-lg-offset-9">
+				<button type="button" name="SN" id="SN" data-toggle="modal" data-target="#add_data_Modal" class="custom-btn">Subscribe Now!</button>
+			</div>
 		</div>
 	</div>
 <div>';
 include 'Modals/Add_Subscription_Modal.php';
-include 'Modals/Add_Subscription_Modal_secondstep.php';
 ?>
 
 <script type="text/javascript">
@@ -72,7 +79,7 @@ $(function(){
 		url:"php_codes/modify_subs.php",
 		columns:{
 			identifier:[0,"SubscriptionID"],
-			editable:[[1,"SerialName"],[3,"Orders"],[4,"Cost"],[7,"Status"]]
+			editable:[[2,"SerialName"],[3,"Orders"],[4,"Cost"],[5,"NumberOfItemReceived"],[6,"Status"]]
 				},
 			onSuccess:function(data,textStatus,jqXHR)
 			{
@@ -82,56 +89,81 @@ $(function(){
 				}
 				if(data.status=='success')
 				{
-					$("#msg_scs_enter").removeClass('collapse');
+					$("#msg_scs").removeClass('collapse');
 				}
 				else
 				{
-					$("#msg_fail_enter").removeClass('collapse');
+					$("#msg_fail").removeClass('collapse');
 				}
 
 			},onDraw: function() {
 				$('tbody tr td:nth-child(4)>input,tbody tr td:nth-child(5)>input,tbody tr td:nth-child(6)>input').each(function(){
 					$('<input class="tabledit-input form-control input-sm" type="number" style="display: none;" disabled="">').attr({ name: this.name, value: this.value }).insertBefore(this)
 				}).remove()
-				$('tbody tr td:nth-child(8)>input').each(function(){
-					$('<select class="tabledit-input form-control input-sm" style="display: none;" disabled=""><option value="OnGoing">OnGoing</option><option value="Finished">Finished</option><option value="Cancelled">Cancelled</option><option value="Refunded">Refunded</option></select>').attr({ name: this.name, value: this.value }).insertBefore(this)
+				$('tbody tr td:nth-child(7)>input').each(function(){
+					$('<select class="tabledit-input form-control input-sm" style="display: none;" disabled=""><option style="display: none" value="stat">--Status--</option><option value="OnGoing">OnGoing</option><option value="Finished">Finished</option><option value="Cancelled">Cancelled</option><option value="Refunded">Refunded</option></select>').attr({ name: this.name, value: this.value }).insertBefore(this)
 				}).remove()
 	 		 }		
 		
 		});
 	});
 
-	$show_SS=false;
-
-	$('#first_step').on('submit',function(event){
+	$('#subscribe_new_form').on('submit',function(event){
 		event.preventDefault();
+
+		var d = new Date();
+
+		var month = d.getMonth()+1;
+		var day = d.getDate();
+
+		var output_date_today = d.getFullYear() + '/' +
+		    (month<10 ? '0' : '') + month + '/' +
+		    (day<10 ? '0' : '') + day;
+
 	 	if($("#DN").val()=="")
 	 	{
 	 		alert("Disbtributor Name Is Required");
+	 	}
+	 	else if($("#SNf").val()=="")
+	 	{
+	 		alert("Serial Name Is Required");
+	 	}
+	 	else if($("#Freq").val()=="")
+	 	{
+	 		alert("Frequency Is Required");
+	 	}
+	 	else if($("#Cost").val()=="")
+	 	{
+	 		alert("Cost Is Required");
+	 	}
+	 	else if(new Date($('#DOI').val())<=new Date(output_date_today))
+	 	{
+	 		alert("Date Of Issue Is Past The Date Today");
 	 	}
 	 	else if($("#PN").val()=="")
 	 	{
 	 		alert("Package Name Is Required");
 	 	}
+	 	else if($("#Copy").val()=="")
+	 	{
+	 		alert("Number Of Copies Is Required");
+	 	}
 	 	else{
 	 		$.ajax({
-	 			url:"Modals/validate_add_subs.php",
+	 			url:"php_codes/Insert_New_Subscription.php",
 	 			method:"POST",
-	 			data:$("#first_step").serialize(),
+	 			data:$("#subscribe_new_form").serialize(),
 	 			success:function(data)
-	 			{	
-	 				if(data.status!='fail')
-	 				{	$show_SS=true;
-
-	 					$('#Disb_N').val($('#DN').val())
-	 					$('#Pack_N').val($('#PN').val())
- 						$('#add_data_Modal').modal('hide');
- 						
+	 			{
+ 					$("#subscribe_new_form")[0].reset();
+ 					$("#add_data_Modal").modal('hide');
+ 					if(data.status=='success')
+ 					{
+ 						$("#msg_scs").removeClass('collapse');
  					}
  					else
  					{
- 						$("#error").removeClass('collapse');
- 						$("#first_step")[0].reset();
+ 						$("#msg_fail").removeClass('collapse');
  					}
 
 	 			}
@@ -139,29 +171,7 @@ $(function(){
 	 	}
 	});
 
-	  $('#add_data_Modal').on('hidden.bs.modal', function(){
-		 if($show_SS)
-			{
- 				$('#add_data_Modal_next').modal('show');
- 				$show_SS=false;
- 			}else if(!$('#error').hasClass('collapse'))
-			{
- 				$('#error').addClass('collapse');
- 			}
- 		
- 		});
-	  $('#add_data_Modal_next').on('hidden.bs.modal', function(){
-			$("#subscribe_new_form")[0].reset();
- 			if(!$('#msg_fail').hasClass('collapse'))
- 			{
- 				$('#msg_fail').addClass('collapse');
- 			}
- 		});
-
-	 
-	
-
-
 });
+
 </script>
 

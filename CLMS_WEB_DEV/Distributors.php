@@ -1,8 +1,15 @@
 <div class="container-fluid">
-	<div class="row">
-		<div class="col-lg-12">
-			<h5 class="tag_style">Distributors:</h5>
-			<hr class="theme_hr">
+			<div class="row custom-boxxx">		
+		        <div>
+					<h2 class="custom-sect2 ">College Library Serial Monitoring System</h2><br>
+				</div>
+			</div>
+
+<div class=" custom-panelbox">				
+	<div class="">
+		<div class="">
+			<h4 class="fa fa-building tag_style"> Manage Distributors:</h4>
+			<h4 class="dividerr"></h4>
 		</div>
 	</div>
 	
@@ -16,7 +23,7 @@
 	    <strong>Something Went Wrong!</strong> , <span class="failmsg">Please Check The Values You Entered And Try Again.</span>
   	</div>
 
-	<div class="row custom_table">
+	<div class="custom_table">
 
 		<div class="col-lg-10 col-lg-offset-1">
 			<table cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover" id="table_disb">
@@ -38,9 +45,10 @@
 		
 	</div>
 
-	<div class="row">
-		<div class="col-lg-offset-9">
-			<button type="button" name="New_pack" id="New_pack" data-toggle="modal" data-target="#add_Distributor_data_Modal" class="custom-btn">New Distributor</button>
+		<div class="">
+			<div class="col-lg-offset-9">
+				<button type="button" name="New_pack" id="New_pack" data-toggle="modal" data-target="#add_Distributor_data_Modal" class="custom-btn">New Distributor</button>
+			</div>
 		</div>
 	</div>
 </div>
