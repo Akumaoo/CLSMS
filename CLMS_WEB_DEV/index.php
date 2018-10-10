@@ -72,7 +72,9 @@ require 'php_codes/db.php'
 			<div class="custom-boxx centered" id="NotifContainer" >
               <div  id='notifbox'>
 			  <h4>SENT SERIALS</h4>
-			  <hr>               
+			  <hr>     
+        <br>
+                   <?php include 'php_codes/SentNotif.php';?>
               </div>			 
             </div>
           </div>
@@ -82,7 +84,7 @@ require 'php_codes/db.php'
 			  <h4>RECEIVED SERIALS</h4>
 			  <hr>
 			  <br>
-                <?php include 'php_codes/receivenotif.php'?>
+                <?php include 'php_codes/receivenotif.php';?>
              </div>			 
             </div>
           </div>
@@ -92,7 +94,7 @@ require 'php_codes/db.php'
 			  <h4>LATE DELIVERY</h4>
 			  <hr>
 			  <br>
-                <?php include 'php_codes/latenotif.php'?>
+                <?php include 'php_codes/latenotif.php';?>
               </div>
 			 
             </div>
@@ -110,7 +112,7 @@ require 'php_codes/db.php'
             </div>
             <div class="custom-bar-chart">
               <ul class="y-axis">
-                <li><span><?php include 'php_codes/barchart_count.php'?></span></li>
+                <li><span><?php include 'php_codes/barchart_count.php';?></span></li>
                 <li><span></span></li>
                 <li><span></span></li>
                 <li><span></span></li>
@@ -119,19 +121,19 @@ require 'php_codes/db.php'
               </ul>
               <div class="bar">
 			  <div class="title">On Going</div>
-                <?php include 'php_codes/barchart_ongoing.php'?>
+                <?php include 'php_codes/barchart_ongoing.php';?>
               </div>
               <div class="bar ">
                 <div class="title">Cancelled</div>
-                <?php include 'php_codes/barchart_cancelled.php'?>
+                <?php include 'php_codes/barchart_cancelled.php';?>
               </div>
               <div class="bar ">
                 <div class="title">Refunded</div>
-               <?php include 'php_codes/barchart_refunded.php'?>
+               <?php include 'php_codes/barchart_refunded.php';?>
               </div>
               <div class="bar ">
                 <div class="title">Finished</div>
-                <?php include 'php_codes/barchart_finished.php'?>
+                <?php include 'php_codes/barchart_finished.php';?>
               </div>
 
             </div>
@@ -186,13 +188,33 @@ require 'php_codes/db.php'
           {
             location.reload(true);
           }
+
+        }
+      });
+    });
+
+    $('.receive_seen').click(function(){
+      $date=$(this).closest('.receive_tab').find('.date').text();
+      $serial=$(this).closest('.receive_tab').find('.serial_name').text(); 
+      $.ajax({
+        url:'php_codes/update_seen_deleyed.php',
+        method:'POST',
+        data:{date:$date,serial:$serial},
+        success:function(data)
+        {
+          if(data=='success')
+          {
+            location.reload(true);
+
+          }
           else
           {
-            alert('fail');
+            alert(data);
           }
 
         }
       });
+
     });
 
   });

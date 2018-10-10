@@ -4,11 +4,12 @@ require 'db.php';
 $input=filter_input_array(INPUT_POST);
 $PID=$input['PackageID'];
 $RD=$input['ReceiveDate'];
+$ERD=$input['ExpectedReceiveDate'];
 
 
 if($input['action']=='edit')
 {
-	if(isset($RD))
+	if(!empty($RD))
 	{	
 		$list_serials=getListSerials($PID);
 		$list_copy=getListCopy($PID);
@@ -26,8 +27,8 @@ if($input['action']=='edit')
 				$upquery=sqlsrv_query($conn,$upsql,array($freq,'Finished',$serial,'OnGoing'));
 				if($upquery)
 				{
-					$sql="Update Package_Delivery Set ReceiveDate=? Where PackageID=?";
-					$query=sqlsrv_query($conn,$sql,array($RD,$PID),$opt);
+					$sql="Update Package_Delivery Set ReceiveDate=?,ExpectedReceiveDate=? Where PackageID=?";
+					$query=sqlsrv_query($conn,$sql,array($RD,$ERD,$PID));
 				}
 			}
 			else
@@ -36,13 +37,21 @@ if($input['action']=='edit')
 				$upquery=sqlsrv_query($conn,$upsql,array($new_NIR,$serial,'OnGoing'));
 				if($upquery)
 				{
-					$sql="Update Package_Delivery Set ReceiveDate=? Where PackageID=?";
-					$query=sqlsrv_query($conn,$sql,array($RD,$PID),$opt);
+					$sql="Update Package_Delivery Set ReceiveDate=?,ExpectedReceiveDate=? Where PackageID=?";
+					$query=sqlsrv_query($conn,$sql,array($RD,$ERD,$PID));
 
 					
 				}
 			}
 		}
+
+	}
+	else
+	{
+
+		$sql="Update Package_Delivery Set ExpectedReceiveDate=? Where PackageID=?";
+		$query=sqlsrv_query($conn,$sql,array($ERD,$PID));
+
 
 	}
 

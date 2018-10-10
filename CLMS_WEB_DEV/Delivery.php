@@ -73,7 +73,7 @@
 			url:"php_codes/modify_delivery.php",
 			columns:{
 			identifier:[0,"PackageID"],
-			editable:[[3,"ReceiveDate"]]
+			editable:[[3,"ReceiveDate"],[4,"ExpectedReceiveDate"]]
 				},
 			onSuccess:function(data,textStatus,jqXHR)
 			{
@@ -84,6 +84,9 @@
 			},onDraw: function() 
 			{
 				$('tbody tr td:nth-child(4)>input').each(function(){
+					$('<input class="tabledit-input form-control input-sm" type="date" style="display: none;" disabled="">').attr({ name: this.name, value: this.value }).insertBefore(this)
+				}).remove();
+				$('tbody tr td:nth-child(5)>input').each(function(){
 					$('<input class="tabledit-input form-control input-sm" type="date" style="display: none;" disabled="">').attr({ name: this.name, value: this.value }).insertBefore(this)
 				}).remove();
 				$('tbody tr td:nth-child(3)').addClass('PName_click');

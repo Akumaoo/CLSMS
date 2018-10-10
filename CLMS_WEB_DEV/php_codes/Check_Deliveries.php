@@ -5,7 +5,7 @@ $date_today=date("Y/m/d");
 
 //get all deliveries
 $sqltxt="Select PackageID,ExpectedReceiveDate,Package_Phase,PackageName from Package_Delivery WHERE ReceiveDate IS NULL";
-$query=sqlsrv_query($conn,$sqltxt,array(),$opt);
+$query=sqlsrv_query($conn,$sqltxt,array());
 if(sqlsrv_has_rows($query))
 {	
 	while($row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
