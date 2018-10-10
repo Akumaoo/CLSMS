@@ -17,7 +17,7 @@ echo '
 	</div>
 	
 <div class="container custom_table">
-	<div class="">
+	<div class="row">
 		<div class="col-md-10 col-md-offset-1">
 		<table cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover" id="or" ">
 		<thead class="thead_theme">
@@ -34,7 +34,7 @@ echo '
 		</thead>
 		<tbody>';
 
-		$sqltxt='SELECT Department.DepartmentName, "Type".TypeName, Serial.SerialName, Subscription.Orders, Distributor.DistributorName, Subscription.Cost, Subscription.NumberOfItemReceived, Subscription.[Status]
+		$sqltxt='SELECT Department.DepartmentName, "Type".TypeName, Serial.SerialName, Subscription.Orders, Distributor.DistributorName, Subscription.Cost, Subscription.NumberOfItemReceived, Subscription."Status"
 				FROM Distributor
 				JOIN Subscription
 					ON Subscription.DistributorID = Distributor.DistributorID
@@ -81,8 +81,7 @@ echo '
 </table>
 </div>
 </div>
-</div>
-</div>';
+<div>';
 ?>
 
 <script type="text/javascript">
