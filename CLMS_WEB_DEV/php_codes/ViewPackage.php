@@ -194,6 +194,7 @@ include '../Modals/add_serial_pack_modal.php';
  					}
  					else
  					{
+ 						$('#add_delivery_data_Modal').modal('hide');
  						$("#msg_fail").removeClass('collapse');
  					}
 	 			},

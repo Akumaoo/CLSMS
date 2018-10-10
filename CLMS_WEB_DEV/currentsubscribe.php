@@ -29,6 +29,7 @@ echo '
 				<th class="radio-label-center">Frequency</th>
 				<th class="radio-label-center">Cost</th>
 				<th class="radio-label-center">Received</th>
+				<th class="radio-label-center">Subscription Date</th>
 				<th class="radio-label-center">Status</th>
 			</tr>
 		</thead>
@@ -71,7 +72,7 @@ $(function(){
 		url:"php_codes/modify_subs.php",
 		columns:{
 			identifier:[0,"SubscriptionID"],
-			editable:[[1,"SerialName"],[3,"Orders"],[4,"Cost"],[6,"Status"]]
+			editable:[[1,"SerialName"],[3,"Orders"],[4,"Cost"],[7,"Status"]]
 				},
 			onSuccess:function(data,textStatus,jqXHR)
 			{
@@ -92,8 +93,8 @@ $(function(){
 				$('tbody tr td:nth-child(4)>input,tbody tr td:nth-child(5)>input,tbody tr td:nth-child(6)>input').each(function(){
 					$('<input class="tabledit-input form-control input-sm" type="number" style="display: none;" disabled="">').attr({ name: this.name, value: this.value }).insertBefore(this)
 				}).remove()
-				$('tbody tr td:nth-child(7)>input').each(function(){
-					$('<select class="tabledit-input form-control input-sm" style="display: none;" disabled=""><option style="display: none" value="stat">--Status--</option><option value="OnGoing">OnGoing</option><option value="Finished">Finished</option><option value="Cancelled">Cancelled</option><option value="Refunded">Refunded</option></select>').attr({ name: this.name, value: this.value }).insertBefore(this)
+				$('tbody tr td:nth-child(8)>input').each(function(){
+					$('<select class="tabledit-input form-control input-sm" style="display: none;" disabled=""><option value="OnGoing">OnGoing</option><option value="Finished">Finished</option><option value="Cancelled">Cancelled</option><option value="Refunded">Refunded</option></select>').attr({ name: this.name, value: this.value }).insertBefore(this)
 				}).remove()
 	 		 }		
 		

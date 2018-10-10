@@ -37,9 +37,9 @@ if(sqlsrv_has_rows($query))
 				{
 					if(checkNotifSerial($sid[$x]))
 					{
-						$sqlinsert="Insert Into Notification(SerialID,NotificationType,NotificationSeen,Date_Receive_RedFlag) Values(?,?,?,?)";
-						$queryinsert=sqlsrv_query($conn,$sqlinsert,array($sid[$x],'DeleyedDeliver_P2','NotSeen',$date_today));
-					}
+						$sqlinsert="Update Notification SET NotificationType=?,NotificationSeen=?,Date_Receive_RedFlag=? WHERE SerialID=? AND NotificationType!=?";
+						$queryinsert=sqlsrv_query($conn,$sqlinsert,array('DeleyedDeliver_P2','NotSeen',$date_today,$sid[$x],'Received'));
+					}	
 				}
 			}
 		}
@@ -65,16 +65,16 @@ function getSerialID($pack){
 function checkNotifSerial($sid)
 {
 	require 'db.php';
-	$sql="Select SerialID from Notification Where SerialID=?";
-	$query=sqlsrv_query($conn,$sql,array($sid),$opt);
+	$sql="Select SerialID from Notification Where SerialID=? AND NotificationType!=? AND NotificationSeen=?";
+	$query=sqlsrv_query($conn,$sql,array($sid,'Received','Seen'));
 
 	if(sqlsrv_has_rows($query))
 	{
-		return false;
+		return true;
 	}
 	else
 	{
-		return true;
+		return false;
 	}
 }
 

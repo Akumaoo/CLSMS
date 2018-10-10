@@ -118,4 +118,14 @@ $(function(){
       }
      });
     });
+
+      $("#arch").click(function(){
+     $.ajax({
+      url:'Archiving.php',
+      success:function(data){
+        $('.main-chart').html(data)
+      }
+     });
+    });
+
 });

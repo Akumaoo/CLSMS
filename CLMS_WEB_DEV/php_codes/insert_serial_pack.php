@@ -72,7 +72,7 @@ if(!empty($_POST))
 	function CheckDup($sid,$pid)
 	{
 		require 'db.php';
-		$dupsql="Select * from Delivery Where SerialID=? AND PackageID=?";
+		$dupsql="Select * from Delivery Where SerialID=?";
 		$dupquery=sqlsrv_query($conn,$dupsql,array($sid,$pid));
 		if(sqlsrv_has_rows($dupquery))
 		{

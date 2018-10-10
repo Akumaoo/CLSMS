@@ -38,6 +38,8 @@ if(!empty($_POST))
 	
 	$PN=$_POST['PN'];
 
+	$date_today=date('Y/m/d');
+
 function CheckDisbtributor($disb){
 	require 'db.php';
 	$Dname=$disb;
@@ -132,16 +134,23 @@ function CheckDup($sid)
 		$SID=CheckSerial($sn);
 		$PID=CheckPackName($PN);
 		// inserting on subscription table
-		$sqlinsert="Insert Into [Subscription](DistributorID,SerialID,Orders,Cost,NumberOfItemReceived,Status) Values(?,?,?,?,?,?)";
-		$query=sqlsrv_query($conn,$sqlinsert,array($dID,$SID,$orders,$Cost,$NIR,$stat),$opt);
+		$sqlinsert="Insert Into [Subscription](DistributorID,SerialID,Orders,Cost,NumberOfItemReceived,Status,Subscription_Date) Values(?,?,?,?,?,?,?)";
+		$query=sqlsrv_query($conn,$sqlinsert,array($dID,$SID,$orders,$Cost,$NIR,$stat,$date_today));
 
+		if($query)
+		{
 		// inserting on delivery table
 		$sqlinserdel="Insert Into Delivery(SerialID,DateofIssue,IssueNumber,VolumeNumber,PackageID,Copies) Values(?,?,?,?,?,?)";
-		$querydel=sqlsrv_query($conn,$sqlinserdel,array($SID,$DOI,$IN,$VN,$PID,$Scopy),$opt);
+		$querydel=sqlsrv_query($conn,$sqlinserdel,array($SID,$DOI,$IN,$VN,$PID,$Scopy));
 
-		if($query && $querydel)
-		{
-			$scs['status']="success";
+			if($querydel)
+			{
+				$scs['status']="success";
+			}
+			else
+			{
+				$scs['status']='fail';
+			}
 		}
 		else
 		{

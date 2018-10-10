@@ -3,7 +3,7 @@ require '../php_codes/db.php';
 
 
 $table=<<<EOT
- (Select SubscriptionID,DistributorName,SerialName,Orders,Cost,NumberOfItemReceived,Status From Distributor Inner Join Subscription ON Distributor.DistributorID=Subscription.DistributorID Inner Join Serial ON Subscription.SerialID=Serial.SerialID) temp
+ (Select SubscriptionID,DistributorName,SerialName,Orders,Cost,NumberOfItemReceived,Subscription_Date,Status From Distributor Inner Join Subscription ON Distributor.DistributorID=Subscription.DistributorID Inner Join Serial ON Subscription.SerialID=Serial.SerialID) temp
 EOT;
 
 $primary_key='SubscriptionID';
@@ -15,7 +15,8 @@ $columns=array(
 	array('db'=>'Orders','dt'=>3),
 	array('db'=>'Cost','dt'=>4),
 	array('db'=>'NumberOfItemReceived','dt'=>5),
-	array('db'=>'Status','dt'=>6)
+	array('db'=>'Subscription_Date','dt'=>6),
+	array('db'=>'Status','dt'=>7)
 );
 
 require( 'ssp.php' );
