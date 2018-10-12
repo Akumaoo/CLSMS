@@ -10,11 +10,19 @@ if(isset($_POST['P_Name']))
 $name=$_POST['P_Name'];
 
 echo '
+
 <div class="container-fluid">
-	<div class="row">
-		<div class="col-lg-12">
-			<h5 class="tag_style">Package '.$name.':</h5>
-			<hr class="theme_hr">
+			<div class="row custom-boxxx">		
+		        <div>
+					<h2 class="custom-sect2 ">College Library Serial Monitoring System</h2><br>
+				</div>
+			</div>
+
+<div class="custom-panelbox">
+	<div class="">
+		<div class="">
+			<h4 class="tag_style">Package '.$name.':</h4>
+			<h4 class="dividerr"></h4>
 		</div>
 	</div>
 
@@ -26,7 +34,7 @@ echo '
 	    <strong>Something Went Wrong!</strong> , Please Check The Values You Entered And Try Again.
   	</div>
 
-	<div class="row custom_table">
+	<div class=" custom_table">
 
 		<div class="col-lg-10 col-lg-offset-1">
 			<table cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover" id="table_pack">
@@ -101,130 +109,16 @@ $querygetid=sqlsrv_query($conn,$getpid,array($name),$opt);
 		</div>
 		
 	</div>
-	<div class="row">
+	<div class="">
 		<div class="col-lg-offset-9">
 			<button type="button" name="New_pack" id="New_pack" data-toggle="modal" data-target="#add_delivery_data_Modal" class="custom-btn">Add New Serial!</button>
 		</div>
 	</div>
+</div>
 </div>';
 
 include '../Modals/add_serial_pack_modal.php';
 }
 
  ?>
- <script>
- 	$(function(){
- 		if( ! $.fn.DataTable.isDataTable("#table_pack")){
-		$('#table_pack').DataTable({			
-		// "processing":true,
-		// "serverSide":true,
-		"ordering":true,
-		"searching":true,
-		"pageLength":100
-		// "ajax":"php_codes/serverside_currentSubs.php",
-			});
-
-
-		}
-
-		$('#table_pack').Tabledit({
-		url:"php_codes/modify_delivery_pack.php",
-		columns:{
-		identifier:[0,"DeliveryID"],
-		editable:[[3,"DateofIssue"],[4,"IssueNumber"],[5,"VolumeNumber"],[6,'Copies']]
-			},
-		onSuccess:function(data,textStatus,jqXHR)
-		{
-			if(data.action=='delete')
-			{
-				$("#"+data.DeliveryID).remove();			
-			}
-			else if(data.status=='success')
-			{
-				$('#msg_scs').removeClass('collapse');
-			}
-		},onDraw: function() {
-			$('tbody tr td:nth-child(4)>input').each(function(){
-				$('<input class="tabledit-input form-control input-sm" type="date" style="display: none;" disabled="">').attr({ name: this.name, value: this.value }).insertBefore(this)
-			}).remove()
- 		 }
-	
-		});
-
-	
-		$('#create_new_delivery').on('submit',function(event){
-		event.preventDefault();
-
-		var d = new Date();
-
-		var month = d.getMonth()+1;
-		var day = d.getDate();
-
-		var output_date_today = d.getFullYear() + '/' +
-		    (month<10 ? '0' : '') + month + '/' +
-		    (day<10 ? '0' : '') + day;
-
-
-	 	if($("#SN").val()=="")
-	 	{
-	 		alert("Serial Name Is Required");
-	 	}
-	 	else if(new Date($('#DOI').val())<=new Date(output_date_today))
-	 	{
-	 		alert("Date of Issue Is Past The Date Today");
-	 	}
-	 	else if($("#Copy").val()=="")
-	 	{
-	 		alert('Number of Copies Is Required');
-	 	}
-	 	else{
-	 		$.ajax({
-	 			url:"php_codes/insert_serial_pack.php",
-	 			method:"POST",
-	 			data:$("#create_new_delivery").serialize(),
-	 			success:function(data)
-	 			{
- 					$("#create_new_delivery")[0].reset();
- 					if(data.status=='success')
- 					{
- 						$("#msg_scs_modal").removeClass('collapse');
- 						$('#save_btn').addClass('collapse');
- 						$('#retry').removeClass('collapse');
-
- 					}
- 					else
- 					{
- 						$('#add_delivery_data_Modal').modal('hide');
- 						$("#msg_fail").removeClass('collapse');
- 					}
-	 			},
-	 			error:function(){
-	 				$("#create_new_delivery")[0].reset();
- 					$("#add_delivery_data_Modal").modal('hide');
-	 				$("#msg_fail").removeClass('collapse');
-	 			}
-	 		});
-	 	}
-	});
-
-	$('#btn_yes').click(function(){
-		$("#msg_scs_modal").addClass('collapse');
-		$("#create_new_delivery")[0].reset();
-		$('#save_btn').removeClass('collapse');
- 		$('#retry').addClass('collapse');
-	});
-
-	$('#btn_no').click(function(){
-		$("#create_new_delivery")[0].reset();
-		$('#add_delivery_data_Modal').modal('hide');
-	});
-
-	$('#add_delivery_data_Modal').on('hidden.bs.modal', function(){
- 			if(!$('#msg_fail_modal').hasClass('collapse'))
- 			{
- 				$('#msg_fail_modal').addClass('collapse');
- 			}
- 	});
-
- 	});
- </script>
+ <script type="text/javascript" src="Js/View_pack_main.js"></script>

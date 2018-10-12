@@ -21,7 +21,7 @@ if(sqlsrv_has_rows($query))
 			{				
 				$phase2_date=date("Y/m/d",strtotime($ERD.'+ 6 month'));
 				$sqlupdate="Update Package_Delivery Set Package_Phase=?,ExpectedReceiveDate=? Where PackageID=?";
-				$queryupdate=sqlsrv_query($conn,$sqlupdate,array('Phase2',$phase2_date,$PID),$opt);
+				$queryupdate=sqlsrv_query($conn,$sqlupdate,array('Phase2',$phase2_date,$PID));
 
 				$sid=getSerialID($PID);
 				for($x=0;$x<count($sid);$x++)

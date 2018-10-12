@@ -27,6 +27,7 @@ if(isset($_POST['submit'])){
             $_SESSION['current_user'] = $dbusername;
             $_SESSION['Role']=$dbrole;
             $_SESSION['Avatar']=$avat;
+            $_SESSION['Dept']=$dbdepartment;
             header ("Location:index.php");        
     }
       

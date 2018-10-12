@@ -139,7 +139,14 @@
               </a>
           </li>
 
-            <!-- javascript:void(0) so that if yung page na ireredirect nung link is null or nonexistent magiistay sya sa page also its good combination for ajax para maremove din yung # sa url :))) -->
+          <li>
+            <a href="javascript:void(0)" id="MS">
+              <i class="fa fa-book"></i>
+              <span>List Of Serials</span>
+            </a>
+          </li>
+
+          <li>
 
         </ul>
         <!-- sidebar menu end-->

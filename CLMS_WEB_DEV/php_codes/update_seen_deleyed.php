@@ -41,12 +41,12 @@ if(!empty($_POST))
 	}
 	else if(!empty($_POST['date']))
 	{
-		// $ser=$_POST['serial'];
-		// $date=strtotime($_POST['date']);
-		// $newdate=date('Y-m-d',$date);
+		$ser=$_POST['serial'];
+		$date=strtotime($_POST['date']);
+		$newdate=date('Y-m-d',$date);
 
-		$ser='DUMMY';
-		$newdate='2018-10-11';
+		// $ser='DUMMY';
+		// $newdate='2018-10-11';
 
 
 		function getSerialID($sna){

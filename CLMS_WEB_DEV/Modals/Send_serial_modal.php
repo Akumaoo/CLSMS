@@ -1,5 +1,3 @@
-
-
 <div id="Send_Serial_Modal" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">

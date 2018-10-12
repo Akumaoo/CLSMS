@@ -1,5 +1,5 @@
 <?php
-$serverName = "ACER\SQLEXPRESS";
+$serverName = "DESKTOP-QERUPN0\SQLEXPRESS";
 $connectionInfo = array( "Database"=>"CLSMS");
 $conn = sqlsrv_connect( $serverName, $connectionInfo);
 
@@ -13,7 +13,7 @@ if(!$conn)
 
 $sql_details=array(
 	'db'=>'CLSMS',
-	'host'=>'ACER\SQLEXPRESS'
+	'host'=>'DESKTOP-QERUPN0\SQLEXPRESS'
 );
 
 ?>
