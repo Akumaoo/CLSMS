@@ -2032,12 +2032,13 @@ ul li {
 
 /* PROFILE PAGE CONF */
 .profile-pic img {
-	width: 130px;
-	height: 130px;
-	border-radius: 50%;
+	width: 150px;
+	height: 150px;
+	border-radius: 60%;
 	-webkit-border-radius: 50%;
 	border: 10px solid #f1f2f7;
 	margin-top: 20px;
+    border-color: black;
 }
 
 .profile-text h6 {
