@@ -1,7 +1,8 @@
 ***OnGoing:***
 -Dashboard
+-User Tab
 -Serial Tab 
-
+-Sending Serials ADDING SERIALS
 
 
 
@@ -14,8 +15,6 @@
 
 
 ***FINISHED:***
-(DONE!!!)-User Tab
-(DONE!!!)-Sending Serials ADDING SERIALS
 (DONE!!!)-SSP for Subscription,Deliveries,SendSerials
 (DONE!!)-Serial Type Tab
 (DONE!!!)-Department Tab

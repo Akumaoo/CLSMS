@@ -74,4 +74,4 @@
    	  include "Modals/New_Type_Modal.php";
  ?>
 
-<script type="text/javascript" src="Js/Type_main.js"></script>
+<script type="text/javascript" src="Js/Type_main.js?v=2"></script>

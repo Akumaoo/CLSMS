@@ -58,5 +58,5 @@ echo '
 </div>';
 include 'Modals/Verify_Archiving_Modal.php';
 ?>
-<script type="text/javascript" src="Js/Archive_main.js"></script>
+<script type="text/javascript" src="Js/Archive_main.js?v=2"></script>
 

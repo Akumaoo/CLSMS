@@ -34,6 +34,7 @@
 					<th class="radio-label-center">Name Of Incharge</th>
 					<th class="radio-label-center">Contact Number</th>
 					<th class="radio-label-center">Email</th>
+					<th class="radio-label-center">Distributor Type</th>
 
 
 				</tr>
@@ -56,4 +57,4 @@
 include 'Modals/New_Distributor_Modal.php'
  ?>
 
-<script type="text/javascript" src="Js/Distributors_main.js"></script>
+<script type="text/javascript" src="Js/Distributors_main.js?v=0.06"></script>

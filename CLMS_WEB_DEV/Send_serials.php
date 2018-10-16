@@ -56,5 +56,5 @@
 <?php 
 	include 'Modals/Send_serial_modal.php';
 ?>
-<script type="text/javascript" src="Js/Send_serial_main.js"></script>
+<script type="text/javascript" src="Js/Send_serial_main.js?v=2"></script>
 

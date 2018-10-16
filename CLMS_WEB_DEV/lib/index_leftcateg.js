@@ -40,7 +40,7 @@ $(function(){
     // END OF ADDING TAB
     $("#CS").click(function(){
      $.ajax({
-      url:'currentsubscribe.php',
+      url:'Request.php',
       success:function(data){
         $('.main-chart').html(data)
       }
@@ -77,6 +77,15 @@ $(function(){
      $("#MS").click(function(){
      $.ajax({
       url:'manage_serials.php',
+      success:function(data){
+        $('.main-chart').html(data)
+      }
+     });
+    });
+
+      $("#MS_staff").click(function(){
+     $.ajax({
+      url:'RBAC/manage_serials.php',
       success:function(data){
         $('.main-chart').html(data)
       }

@@ -1,80 +1,74 @@
 <?php 
-require 'php_codes/db.php';
+require 'db.php';
 
 $date_today=date("Y/m/d");
 
 //get all deliveries
-$sqltxt="Select PackageID,ExpectedReceiveDate,Package_Phase,PackageName from Package_Delivery WHERE ReceiveDate IS NULL";
-$query=sqlsrv_query($conn,$sqltxt,array());
+$sqltxt="Select * from Subscription Where InitialDeliveryDate IS NOT NULL AND IDD_Phase!=?";
+$query=sqlsrv_query($conn,$sqltxt,array('Complete'));
 if(sqlsrv_has_rows($query))
 {	
 	while($row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
 	{
-		$PID=$row["PackageID"];
-		$ERD=$row['ExpectedReceiveDate']->format("Y/m/d");
-		$pack_phase=$row['Package_Phase'];
-		$pack_name=$row['PackageName'];
-
+		$SubID=$row["SubscriptionID"];
+		$ERD=$row['InitialDeliveryDate']->format("Y/m/d");
+		$phase=$row['IDD_Phase'];
+		$sid=$row['SerialID'];
 		if($ERD<$date_today)
 		{
-			if($pack_phase=="Phase1")
+			if($phase=="Phase1")
 			{				
 				$phase2_date=date("Y/m/d",strtotime($ERD.'+ 6 month'));
-				$sqlupdate="Update Package_Delivery Set Package_Phase=?,ExpectedReceiveDate=? Where PackageID=?";
-				$queryupdate=sqlsrv_query($conn,$sqlupdate,array('Phase2',$phase2_date,$PID));
+				$sqlupdate="Update Subscription Set IDD_Phase=?,InitialDeliveryDate=? Where SubscriptionID=?";
+				$queryupdate=sqlsrv_query($conn,$sqlupdate,array('Phase2',$phase2_date,$SubID));
 
-				$sid=getSerialID($PID);
-				for($x=0;$x<count($sid);$x++)
-				{
-					$sqlinsert="Insert Into Notification(SerialID,NotificationType,NotificationSeen,Date_Receive_RedFlag) Values(?,?,?,?)";
-					$queryinsert=sqlsrv_query($conn,$sqlinsert,array($sid[$x],'DeleyedDeliver_P1','NotSeen',$date_today));
-				}
+				$sqlinsert="Insert Into Notification(SerialID,NotificationType,NotificationSeen,Date_Receive_RedFlag) Values(?,?,?,?)";
+				$queryinsert=sqlsrv_query($conn,$sqlinsert,array($sid,'DeleyedDeliver_P1','NotSeen',$date_today));
+
 			}
 			else
-			{
-				$sid=getSerialID($PID);
-				for($x=0;$x<count($sid);$x++)
+			{	
+				if(checkNotifSerial($sid))
 				{
-					if(checkNotifSerial($sid[$x]))
+					if(checkNotifSerial_P2($sid,$date_today))
 					{
-						$sqlinsert="Update Notification SET NotificationType=?,NotificationSeen=?,Date_Receive_RedFlag=? WHERE SerialID=? AND NotificationType!=?";
-						$queryinsert=sqlsrv_query($conn,$sqlinsert,array('DeleyedDeliver_P2','NotSeen',$date_today,$sid[$x],'Received'));
-					}	
-				}
+						$sqlinsert="Insert Into Notification(SerialID,NotificationType,NotificationSeen,Date_Receive_RedFlag) Values(?,?,?,?)";
+						$queryinsert=sqlsrv_query($conn,$sqlinsert,array($sid,'DeleyedDeliver_P2','NotSeen',$date_today));
+					}
+				}	
 			}
 		}
 	}
 }
-function getSerialID($pack){
-	require 'db.php';
-	$sql="Select SerialID from Delivery Where PackageID=?";
-	$query=sqlsrv_query($conn,$sql,array($pack));
-	$id=array();
-	$x=0;
-	if(sqlsrv_has_rows($query))
-	{
-		
-		while($row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
-		{
-			$id[$x]=$row['SerialID'];
-			$x++;
-		}
-	}
-	return $id;
-}
+
 function checkNotifSerial($sid)
 {
 	require 'db.php';
-	$sql="Select SerialID from Notification Where SerialID=? AND NotificationType!=? AND NotificationSeen=?";
-	$query=sqlsrv_query($conn,$sql,array($sid,'Received','Seen'));
+	$sql="Select * from Notification Where SerialID=? AND NotificationType=? AND NotificationSeen=?";
+	$query=sqlsrv_query($conn,$sql,array($sid,'DeleyedDeliver_P2','NotSeen'));
 
 	if(sqlsrv_has_rows($query))
 	{
-		return true;
+		return false;
 	}
 	else
 	{
+		return true;
+	}
+}
+function checkNotifSerial_P2($si,$d)
+{
+	require 'db.php';
+	$sql2="Select * from Notification Where SerialID=? AND NotificationType=? AND NotificationSeen=? AND Date_Receive_RedFlag=?";
+	$query2=sqlsrv_query($conn,$sql2,array($si,'DeleyedDeliver_P2','Seen',$d));
+
+	if(sqlsrv_has_rows($query2))
+	{
 		return false;
+	}
+	else
+	{
+		return true;
 	}
 }
 

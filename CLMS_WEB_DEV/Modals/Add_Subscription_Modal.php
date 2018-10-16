@@ -19,18 +19,9 @@
 				 				<div class="form-group form-group-center">
 				 					<label for="DN" class="control-label col-lg-3">Distributor Name</label>
 				 					<div class="col-lg-6">
-				 						<input type="text" class="form-control" name="DN" id="DN">
+				 						<input type="text" class="form-control" name="DN" id="DN" required>
 				 					</div>
-				 				</div>
-								<hr class="theme_hr">
-
-				 				<div class="form-group form-group-center">
-				 					<label for="PN" class="control-label col-lg-3">Package Name</label>
-				 					<div class="col-lg-6">
-				 						<input type="text" class="form-control" name="PN" id="PN">
-				 					</div>
-				 					<a href="javascript:void(0)" id="c_pack">Create New Package?</a>
-				 				</div>				 				
+				 				</div>	 				
 
 				 				<div class="form-group form-group-center">
 				 					<div class="col-lg-offset-8">
@@ -47,29 +38,3 @@
 	</div>
 </div>
 
-<script>
-$(function(){
-	$open_cpack=false;
-	$("#c_pack").click(function(){
-     $.ajax({
-      url:'Delivery.php',
-      success:function(data){
-      	$open_cpack=true;
-      	$("#subscribe_new_form")[0].reset();
- 		$("#add_data_Modal").modal('hide');
- 		$('#add_data_Modal').on('hidden.bs.modal', function () {
- 			if($open_cpack)
- 			{	
- 				$('#CS').removeClass('active');
- 				$('#Deli').addClass('active');
- 				$('.main-chart').html(data)
- 			}
-
-		});
- 		
-      }
-     });     
-    });
-
-});
-</script>

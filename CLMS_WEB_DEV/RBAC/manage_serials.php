@@ -2,6 +2,11 @@
 			<div class="row custom-boxxx">		
 		        <div>
 					<h2 class="custom-sect2 ">College Library Serial Monitoring System</h2><br>
+					<?php 
+					session_start();
+					$dept=$_SESSION['Dept'];
+					echo '<strong id="dept" hidden>'.$dept.'</strong>';
+					 ?>
 				</div>
 			</div>
 
@@ -32,7 +37,6 @@
 					<th class="radio-label-center">Serial ID</th>
 					<th class="radio-label-center">Serial Name</th>
 					<th class="radio-label-center">Type</th>
-					<th class="radio-label-center">Departments</th>
 				</tr>
 				</thead>
 				<tbody>
@@ -42,14 +46,6 @@
 		</div>
 		
 	</div>
-
-		<div class="">
-			<div class="col-lg-offset-9">
-				<button type="button" name="New_pack" id="New_pack" data-toggle="modal" data-target="#Add_Serial_Modal" class="custom-btn">Add New Serial</button>
-			</div>
-		</div>
-		
 </div>
 </div>
-
-<script src="Js/manage_serials_RBAC.js?v=2" type="text/javascript"></script>';
+<script src="Js/manage_serials_RBAC_staff.js?v=2" type="text/javascript"></script>'

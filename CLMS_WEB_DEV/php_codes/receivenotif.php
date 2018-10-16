@@ -1,7 +1,7 @@
   <?php
 
-    $receive_sqltxt="Select top 5 Max([Serial].[SerialName]) as 'SerialName',Max([Notification].[Date_Receive_RedFlag]) as 'Date_Receive_RedFlag',Max([ReceiveSerial].[DepartmentID]) as 'DepartmentID' from [Serial] inner Join [Notification] ON [Serial].[SerialID]=[Notification].[SerialID] left join [ReceiveSerial] ON [Notification].[SerialID]=[ReceiveSerial].[SerialID] WHERE [NotificationType]=? AND [NotificationSeen]=? AND ReceiveSerial.[Status]=? Group by NotificationID";
-    $receive_query=sqlsrv_query($conn,$receive_sqltxt,array('Received','NotSeen','Received'));
+    $receive_sqltxt="Select TOP 5 SerialName,Date_Receive_RedFlag,DepartmentID from ReceiveSerial Inner Join Notification ON ReceiveSerial.SerialID=Notification.SerialID inner join Serial On Notification.SerialID=Serial.SerialID Where Status=? AND RS_Seen=? AND NotificationType=? AND NotificationSeen=? And RS_Type IS NULL";
+    $receive_query=sqlsrv_query($conn,$receive_sqltxt,array('Received','Seen','Received','NotSeen'));
 
     if(sqlsrv_has_rows($receive_query))
     {
@@ -22,7 +22,7 @@
                   <p>
                     <muted class="date">'.$receive_RSDATE.'</muted>
                     <br/>
-                    <strong>'.$receive_Dept.'</strong> received the <strong class="serial_name">'.$receive_sname.'</strong>.<br/>
+                    <strong class="rec_dept">'.$receive_Dept.'</strong> received the <strong class="serial_name">'.$receive_sname.'</strong>.<br/>
                   </p>
                 </div>
               </div>

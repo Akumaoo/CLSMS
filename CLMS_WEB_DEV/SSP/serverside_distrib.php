@@ -12,7 +12,9 @@ $columns=array(
 	array('db'=>'DistributorName','dt'=>1),
 	array('db'=>'NameOfIncharge','dt'=>2),
 	array('db'=>'ContactNumber','dt'=>3),
-	array('db'=>'Email','dt'=>4)
+	array('db'=>'Email','dt'=>4),
+	array('db'=>'Distributor_Type','dt'=>5)
+
 );
 
 require( 'ssp.php' );

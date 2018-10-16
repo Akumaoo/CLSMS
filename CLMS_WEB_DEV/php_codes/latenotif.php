@@ -1,7 +1,7 @@
   <?php
   // GET ADDITIONAL INFO ON DELAYED NOTIF
 
-  $delivery_sqltxt="Select top 5 MAX(DistributorName) AS 'DistributorName',PackageName,MAX(ReceiveDate) as 'ReceiveDate',MAX(ExpectedReceiveDate) as 'ExpectedReceiveDate',MAX(Date_Receive_RedFlag) as 'Date_Receive_RedFlag',Max(NotificationType) as 'NotificationType' from Notification inner join Subscription on Notification.SerialID=Subscription.SerialID inner join Distributor on Subscription.DistributorID=Distributor.DistributorID inner join Delivery on Subscription.SerialID=Delivery.SerialID inner join Package_Delivery on Delivery.PackageID= Package_Delivery.PackageID WHERE [Notification].[NotificationSeen]=? AND NotificationType!=?  AND Status=? group by PackageName ";
+  $delivery_sqltxt="Select top 5 DistributorName,SerialName,Date_Receive_RedFlag,IDD_Phase,Date_Receive_RedFlag,NotificationType from Notification inner join Serial ON Notification.SerialID=Serial.SerialID Inner Join Subscription on Serial.SerialID=Subscription.SerialID inner join Distributor on Subscription.DistributorID=Distributor.DistributorID WHERE [Notification].[NotificationSeen]=? AND NotificationType!=?  AND Status=? AND IDD_Phase IS NOT NULL";
 
   $delivery_query=sqlsrv_query($conn,$delivery_sqltxt,array('NotSeen','Received','OnGoing'));
  
@@ -10,7 +10,7 @@
 
       if($delivery_row!=null)
       {
-        $delivery_sname=$delivery_row['PackageName'];
+        $delivery_sname=$delivery_row['SerialName'];
         $delivery_DisbName=$delivery_row['DistributorName'];
         $delivery_ERD_deleyed=$delivery_row['Date_Receive_RedFlag']->format('M-d-Y');
         $NotifType=$delivery_row['NotificationType'];
@@ -25,7 +25,7 @@
               <div class="details">
                 <p>
                   <muted>'.$delivery_ERD_deleyed.'</muted>
-                  <br/>
+                  <br/><span hidden class="Type">DeleyedDeliver_P2</span>
                  <strong>'.$delivery_DisbName.'</strong> is already late in deliverying <strong class="pack_name">'.$delivery_sname.'</strong>.<br/>
                 </p>
               </div>
@@ -42,7 +42,7 @@
               <div class="details">
                 <p>
                   <muted>'.$delivery_ERD_deleyed.'</muted>
-                  <br/>
+                  <br/><span hidden class="Type">DeleyedDeliver_P1</span>
                  <strong>'.$delivery_DisbName.'</strong> is already late in deliverying <strong class="pack_name">'.$delivery_sname.'</strong>.<br/>
                 </p>
               </div>

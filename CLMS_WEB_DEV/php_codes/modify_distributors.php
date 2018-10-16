@@ -7,13 +7,17 @@ $name=$input['DistributorName'];
 $noi=$input['NameOfIncharge'];
 $contact=$input['ContactNumber'];
 $mail=$input['Email'];
+$DT=$input['Distributor_Type'];
 
 if($input['action']=='edit')
 {
 	if($name!="" && $noi!="" && $contact!="")
 	{
-		$updatesql="Update Distributor SET DistributorName=?,NameOfIncharge=?,ContactNumber=?,Email=? WHERE DistributorID=?";
-		$queryup=sqlsrv_query($conn,$updatesql,array($name,$noi,$contact,$mail,$id),$opt);
+		if($DT!='stat')
+		{
+			$updatesql="Update Distributor SET DistributorName=?,NameOfIncharge=?,ContactNumber=?,Email=?,Distributor_Type=? WHERE DistributorID=?";
+			$queryup=sqlsrv_query($conn,$updatesql,array($name,$noi,$contact,$mail,$DT,$id));
+		}
 	}
 }
 else if($input['action']=='delete')

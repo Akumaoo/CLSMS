@@ -11,28 +11,20 @@
 			<h4 class="fa fa-truck tag_style "> Manage Deliveries:</h4>
 			<h4 class="dividerr"></h4>
 		</div>
-		
-		<div class="alert alert-success alert-dismissible collapse center" id="msg_scs">
-			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-	    <strong>Successfully Added Delivery!</strong> , Please Reload The Page To Update The Table.
-		</div>
-
-		<div class="alert alert-danger alert-dismissible collapse center" id="msg_fail">
-			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-			<strong>Something Went Wrong!</strong> , Please Check The Values You Entered And Try Again.
-		</div>
 
 	<div class="custom_table" >
 		<div class="col-lg-10 col-lg-offset-1">
 			<table cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover" id="table_deli">
 				<thead class="thead_theme">
 				<tr>
-					<th class="radio-label-center">Package ID</th>
+					<th class="radio-label-center">Delivery ID</th>
 					<th class="radio-label-center">Distributor Name</th>
-					<th class="radio-label-center">Package Name</th>
+					<th class="radio-label-center">Serial Name</th>
+					<th class="radio-label-center">Date of Issue</th>
+					<th class="radio-label-center">Volume Number</th>
+					<th class="radio-label-center">Issue Number</th>
+					<th class="radio-label-center">Copies</th>
 					<th class="radio-label-center">Receive Date</th>
-					<th class="radio-label-center">Expected Receive Date</th>
-					<th class="radio-label-center">Package Phase</th>
 				</tr>
 				</thead>
 				<tbody>
@@ -41,19 +33,17 @@
 		</div>
 	</div>
 
-		<div class="">
+		<div>
 			<div class="col-lg-offset-9">
-				<button type="button" name="New_pack" id="New_pack" data-toggle="modal" data-target="#add_package_data_Modal" class="custom-btn">Create Package!</button>
+				<button type="button" name="deliv_rec" id="deliv_rec" data-toggle="modal" data-target="#receive_deliv_modal" class="custom-btn">Receive Delivery</button>
 			</div>
 		</div>
 	</div>
 
 </div>
 </div>
-	
-
-
 <?php 
-		include 'Modals/Create_Package_Modal.php';
-?>
-<script type="text/javascript" src="Js/Delivery_main.js"></script>
+include 'Modals/Receive_Ser_Deliv_Modal.php';
+ ?>
+
+<script type="text/javascript" src="Js/Delivery_main.js?v=16"></script>

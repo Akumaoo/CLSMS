@@ -140,7 +140,7 @@
           </li>
 
           <li>
-            <a href="javascript:void(0)" id="MS">
+            <a href="javascript:void(0)" id="MS_staff">
               <i class="fa fa-book"></i>
               <span>List Of Serials</span>
             </a>

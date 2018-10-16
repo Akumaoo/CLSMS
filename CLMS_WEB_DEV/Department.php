@@ -68,4 +68,4 @@
 include 'Modals/New_Department_modal.php'
  ?>
 
-<script type="text/javascript" src="Js/dept_main.js" ></script>
+<script type="text/javascript" src="Js/dept_main.js?v=2" ></script>

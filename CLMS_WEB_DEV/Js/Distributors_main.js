@@ -15,7 +15,7 @@ $(function(){
 			url:"php_codes/modify_distributors.php",
 			columns:{
 			identifier:[0,"DistributorID"],
-			editable:[[1,"DistributorName"],[2,"NameOfIncharge"],[3,"ContactNumber"],[4,"Email"]]
+			editable:[[1,"DistributorName"],[2,"NameOfIncharge"],[3,"ContactNumber"],[4,"Email"],[5,'Distributor_Type']]
 				},
 			onSuccess:function(data,textStatus,jqXHR)
 			{
@@ -26,6 +26,9 @@ $(function(){
 			},onDraw: function() {
 				$('tbody tr td:nth-child(4)>input').each(function(){
 					$('<input class="tabledit-input form-control input-sm" type="number" style="display: none;" disabled="">').attr({ name: this.name, value: this.value }).insertBefore(this)
+				}).remove()
+				$('tbody tr td:nth-child(6)>input').each(function(){
+					$('<select class="tabledit-input form-control input-sm" style="display: none;" disabled=""><option value="stat" disabled selected>---Select Type---</option><option value="POST-PAID">POST-PAID</option><option value="PRE-PAID">PRE-PAID</option></select>').attr({ name: this.name, value: this.value }).insertBefore(this)
 				}).remove()
 	 		 }
 		

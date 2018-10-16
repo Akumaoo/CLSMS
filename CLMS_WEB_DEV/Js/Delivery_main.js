@@ -11,39 +11,21 @@ $(function(){
 	}
 	$('#table_deli').on('draw.dt', function() {
 		$('#table_deli').Tabledit({
-			url:"php_codes/modify_delivery.php",
+			url:"php_codes/modify_delivery_pack.php",
 			columns:{
-			identifier:[0,"PackageID"],
-			editable:[[3,"ReceiveDate"],[4,"ExpectedReceiveDate"]]
+			identifier:[0,"DeliveryID"],
+			editable:[]
 				},
 			onSuccess:function(data,textStatus,jqXHR)
 			{
 				if(data.action=='delete')
 				{
-					$("#"+data.PackageID).remove();			
+					$("#"+data.DeliveryID).remove();			
 				}
 			},onDraw: function() 
 			{
-				$('tbody tr td:nth-child(4)>input').each(function(){
-					$('<input class="tabledit-input form-control input-sm" type="date" style="display: none;" disabled="">').attr({ name: this.name, value: this.value }).insertBefore(this)
-				}).remove();
-				$('tbody tr td:nth-child(5)>input').each(function(){
-					$('<input class="tabledit-input form-control input-sm" type="date" style="display: none;" disabled="">').attr({ name: this.name, value: this.value }).insertBefore(this)
-				}).remove();
-				$('tbody tr td:nth-child(3)').addClass('PName_click');
-
-				$(".PName_click").click(function(){
-					var Package_Name=$(this).text();
-					$.ajax({
-					type:'POST',
-					url:'php_codes/ViewPackage.php',
-					data:{P_Name:Package_Name},
-					success:function(data){
-						$('.main-chart').html(data)
-					}
-					});
-				});
-	 		 }
+				$('.tabledit-edit-button').remove();
+	 		}
 		
 		});
 
@@ -54,57 +36,42 @@ $(function(){
 		}
 	});
 
-	$('#create_new_package').on('submit',function(event){
+	$('#receive_del_form').on('submit',function(event){
 		event.preventDefault();
 
-		var d = new Date();
+ 		$.ajax({
+ 			url:"php_codes/insert_serial_pack.php",
+ 			method:"POST",
+ 			data:$("#receive_del_form").serialize(),
+ 			success:function(data)
+ 			{
+				$("#receive_del_form")[0].reset();
+				if(data.status=='success')
+				{
+					if(!$("#msg_fail_rec").hasClass('collapse'))
+					{
+						$("#msg_fail_rec").addClass('collapse');
+					}
+					$('#retry').removeClass('collapse');
+					$('#save_btn').addClass('collapse');
 
-		var month = d.getMonth()+1;
-		var day = d.getDate();
-
-		var output_date_today = d.getFullYear() + '/' +
-		    (month<10 ? '0' : '') + month + '/' +
-		    (day<10 ? '0' : '') + day;
-
-
-	 	if($("#Pname").val()=="")
-	 	{
-	 		alert("Package Name Is Required");
-	 	}
-	 	else if($("#ERD").val()=="")
-	 	{
-	 		alert("Expected Receive Date Is Required");
-	 	}
-	 	else if(new Date($('#ERD').val())<=new Date(output_date_today))
-	 	{
-	 		alert("Expected Receive Date Is Past The Date Today");
-	 	}
-	 	else if($("#Dname").val()=="")
-	 	{
-	 		alert('Distributor Name Is Required');
-	 	}
-	 	else{
-	 		$.ajax({
-	 			url:"php_codes/Insert_new_Package.php",
-	 			method:"POST",
-	 			data:$("#create_new_package").serialize(),
-	 			success:function(data)
-	 			{
- 					$("#create_new_package")[0].reset();
- 					$("#add_package_data_Modal").modal('hide');
- 					if(data.status=='success')
- 					{
- 						$("#msg_scs").removeClass('collapse');
- 					}
- 					else
- 					{
- 						$("#msg_fail").removeClass('collapse');
- 					}
-	 			}
-	 		});
-	 	}
+					$("#msg_scs_rec").removeClass('collapse');
+				}
+				else
+				{
+					$("#msg_fail_rec").removeClass('collapse');
+				}
+ 			}
+ 		});
+	 	
 	});
 
-	
-
+	$('#btn_yes,#btn_no').click(function(){
+		$('#msg_scs_rec').addClass('collapse');
+		$('#retry').addClass('collapse');
+		$('#save_btn').removeClass('collapse');
+	});
+	$('#btn_no').click(function(){
+		$('#receive_deliv_modal').modal('hide');
+	});
 });

@@ -3,41 +3,18 @@ require 'db.php';
 
 if(!empty($_POST))
 {
-	$distname=$_POST["Disb"];
-	$sn=$_POST["Serial"];
-	$orders=$_POST["Freq"];
-	$Cost=$_POST["Cost"];
-	$NIR=0;
-	$stat="OnGoing";
-	$Scopy=$_POST['Copy'];
-	//check if value are null
-	if(!$_POST['DOI'])
-	{
-		$DOI=NULL;
-	}
-	else
-	{
-		$DOI=$_POST['DOI'];
-	}
-	if($_POST['IN']==0)
-	{
-		$IN=NULL;
-	}
-	else
-	{
-		$IN=$_POST['IN'];
-	}
-	if($_POST['VN']==0)
-	{
-		$VN=NULL;
-	}
-	else
-	{
-		$VN=$_POST['VN'];
-	}
-	
-	$PN=$_POST['PN'];
+	$distname=$_POST['dname'];
+	$type=$_POST['type'];
+	$sn=$_POST['sname'];
+	$freq=$_POST['freq'];
+	$cost=$_POST['cost'];
 
+	// $distname="UMX";
+	// $type="POST-PAID";
+	// $sn="DUMMY";
+	// $freq=6;
+	// $cost=6;
+	
 	$date_today=date('Y/m/d');
 
 function CheckDisbtributor($disb){
@@ -77,42 +54,6 @@ function CheckSerial($ser)
 		return "NotValid";
 	}
 }
-function CheckPackName($pn)
-{
-	require 'db.php';
-	$sql="Select PackageID FROM Package_Delivery Where PackageName=?";
-	$query=sqlsrv_query($conn,$sql,array($pn),$opt);
-	if(sqlsrv_has_rows($query))
-	{
-		while($row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
-		{
-			$id=$row['PackageID'];
-			return $id;
-		}
-	}
-	else
-	{
-		return 'NotValid';
-	}
-}
-function CheckPackDistributor($pn2)
-{
-	require 'db.php';
-	$cpd="Select DistributorID From Package_Delivery Where PackageName=?";
-	$cpdquery=sqlsrv_query($conn,$cpd,array($pn2),$opt);
-	if(sqlsrv_has_rows($cpdquery))
-	{
-		while($row=sqlsrv_fetch_array($cpdquery,SQLSRV_FETCH_ASSOC))
-		{
-			$Disb_id=$row['DistributorID'];
-			return $Disb_id;
-		}
-	}
-	else
-	{
-		return 'NotValid';
-	}
-}
 function CheckDup($sid)
 {
 	require 'db.php';
@@ -128,22 +69,19 @@ function CheckDup($sid)
 	}
 }
 
-	if((CheckDisbtributor($distname)!="NotValid" && CheckSerial($sn)!="NotValid" && CheckPackName($PN)!="NotValid" && (CheckPackDistributor($PN)==CheckDisbtributor($distname)) && !CheckDup(CheckSerial($sn))))
+	if((CheckDisbtributor($distname)!="NotValid" && CheckSerial($sn)!="NotValid" && !CheckDup(CheckSerial($sn))))
 	{
 		$dID=CheckDisbtributor($distname);
 		$SID=CheckSerial($sn);
-		$PID=CheckPackName($PN);
-		// inserting on subscription table
-		$sqlinsert="Insert Into [Subscription](DistributorID,SerialID,Orders,Cost,NumberOfItemReceived,Status,Subscription_Date) Values(?,?,?,?,?,?,?)";
-		$query=sqlsrv_query($conn,$sqlinsert,array($dID,$SID,$orders,$Cost,$NIR,$stat,$date_today));
 
-		if($query)
+		if($type=="PRE-PAID")
 		{
-		// inserting on delivery table
-		$sqlinserdel="Insert Into Delivery(SerialID,DateofIssue,IssueNumber,VolumeNumber,PackageID,Copies) Values(?,?,?,?,?,?)";
-		$querydel=sqlsrv_query($conn,$sqlinserdel,array($SID,$DOI,$IN,$VN,$PID,$Scopy));
+		
+			// inserting on subscription table
+			$sqlinsert="Insert Into [Subscription](DistributorID,SerialID,Orders,Cost,NumberOfItemReceived,Status) Values(?,?,?,?,?,?)";
+			$query=sqlsrv_query($conn,$sqlinsert,array($dID,$SID,$freq,$cost,0,'OnGoing'));
 
-			if($querydel)
+			if($query)
 			{
 				$scs['status']="success";
 			}
@@ -154,7 +92,29 @@ function CheckDup($sid)
 		}
 		else
 		{
-			$scs['status']='fail';
+			$SED=$_POST['SED'];
+			$RT=$_POST['RT'];
+			// $SED='2018-10-10';
+			// $RT='Local';
+			if($RT=='Local')
+			{
+				$ERD=date("Y/m/d",strtotime($date_today.'+ 4 month'));
+			}
+			else if($RT=='International')
+			{
+				$ERD=date("Y/m/d",strtotime($date_today.'+ 6 month'));	
+			}
+			$sqlinsert="Insert Into Subscription(DistributorID,SerialID,Orders,Cost,NumberOfItemReceived,Status,IDD_Phase,InitialDeliveryDate,Subscription_Date,Subscription_End_Date) Values(?,?,?,?,?,?,?,?,?,?)";
+			$query=sqlsrv_query($conn,$sqlinsert,array($dID,$SID,$freq,$cost,0,'OnGoing','Phase1',$ERD,$date_today,$SED));
+
+			if($query)
+			{
+				$scs['status']="success";
+			}
+			else
+			{
+				$scs['status']='fail';
+			}	
 		}
 		 
 	}
@@ -162,6 +122,7 @@ function CheckDup($sid)
 	{
 		$scs['status']='fail';
 	}
+
 header('Content-type: application/json');
 echo json_encode($scs);
 }
