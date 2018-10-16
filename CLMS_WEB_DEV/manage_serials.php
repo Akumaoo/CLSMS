@@ -14,12 +14,10 @@
 	</div>
 	
 	<div class="alert alert-success alert-dismissible collapse center" id="msg_scs">
-	    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 	    <strong>Successfully Added Serial!</strong> , Please Reload The Page To Update The Table.
  	 </div>
 
   	<div class="alert alert-danger alert-dismissible collapse center" id="msg_fail">
-	    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 	    <strong>Something Went Wrong!</strong> , Please Check The Values You Entered And Try Again.
   	</div>
 
@@ -51,5 +49,5 @@
 		
 </div>
 </div>
-
-<script src="Js/manage_serials_RBAC.js?v=2" type="text/javascript"></script>';
+<?php include 'Modals/Add_Serial_Modal.php';?>
+<script src="Js/manage_serials_RBAC.js?v=69" type="text/javascript"></script>';

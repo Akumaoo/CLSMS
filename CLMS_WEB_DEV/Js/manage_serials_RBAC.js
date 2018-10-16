@@ -42,9 +42,27 @@ $('#table_MS').on('draw.dt', function() {
 						}).remove()
 						}
 						});
+
+				$('.tabledit-edit-button').remove();
 	 		 }
 		
 		});
+
+		$('tbody tr td:nth-child(2)').addClass('ser_click');
+
+		$(".ser_click").click(function(){
+			var serial_ID=$(this).text();
+			$.ajax({
+			type:'POST',
+			url:'php_codes/View_dept_serial.php',
+			data:{S_ID:serial_ID},
+			success:function(data){
+				$('.main-chart').html(data)
+			}
+			});
+
+		});	
+
 		if($('tbody>tr>td:nth-child(1)').hasClass('dataTables_empty'))
 		{
 			$('.tabledit-toolbar-column').remove();
@@ -52,37 +70,38 @@ $('#table_MS').on('draw.dt', function() {
 		}
 	});
 
-	$('#create_new_package').on('submit',function(event){
+	$('#Add_Serial').on('submit',function(event){
 		event.preventDefault();
+		 var deptlist=[];
+		 $.each($('input[name="dept"]:checked'),function(){
+		 	deptlist.push($(this).val());
+		 });
 
-	 	if($("#Pname").val()=="")
+		 var sName=$('#serialname').val();
+		 var type=$('#type option:selected').val();
+
+	 	if($("#serialname").val()=="")
 	 	{
-	 		alert("Package Name Is Required");
+	 		alert("Serial Name Is Required");
 	 	}
-	 	else if($("#ERD").val()=="")
+	 	else if(deptlist.length==0)
 	 	{
-	 		alert("Expected Receive Date Is Required");
-	 	}
-	 	else if(new Date($('#ERD').val())<=new Date(output_date_today))
-	 	{
-	 		alert("Expected Receive Date Is Past The Date Today");
-	 	}
-	 	else if($("#Dname").val()=="")
-	 	{
-	 		alert('Distributor Name Is Required');
+	 		alert("Please Choose Atleast One Department");
 	 	}
 	 	else{
 	 		$.ajax({
-	 			url:"php_codes/Insert_new_Package.php",
+	 			url:"php_codes/Insert_new_serial.php",
 	 			method:"POST",
-	 			data:$("#create_new_package").serialize(),
+	 			data:{sername:sName,depts:deptlist,stype:type},
 	 			success:function(data)
 	 			{
- 					$("#create_new_package")[0].reset();
- 					$("#add_package_data_Modal").modal('hide');
+	 				$('#Add_Serial_Modal').modal('hide');
+	 				
+ 					$("#Add_Serial")[0].reset();
  					if(data.status=='success')
  					{
  						$("#msg_scs").removeClass('collapse');
+
  					}
  					else
  					{
@@ -93,17 +112,11 @@ $('#table_MS').on('draw.dt', function() {
 	 	}
 	});
 
-	$(".dept_click").click(function(){
-		var serial_ID=$(this).text();
-		$.ajax({
-		type:'POST',
-		url:'php_codes/View_dept_serial.php',
-		data:{S_ID:serial_ID},
-		success:function(data){
-			$('.main-chart').html(data)
+	 $('#Add_Serial_Modal').on('hidden.bs.modal', function(){
+		if(!$('#msg_fail').hasClass('collapse'))
+		{
+			$('#msg_fail').addClass('collapse');
 		}
-		});
-	});
-
+	 });
 
 });

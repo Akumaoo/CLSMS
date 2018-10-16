@@ -82,6 +82,14 @@
 	 			data:{sername:sName,depts:deptlist},
 	 			success:function(data)
 	 			{
+	 				if(!$('#msg_fail').hasClass('collapse'))
+	 				{
+	 					$('#msg_fail').addClass('collapse');
+	 				}
+	 				else if($('#msg_warn').hasClass('collapse'))
+	 				{
+	 					$('#msg_warn').addClass('collapse');
+	 				}
  					$("#Send_Serial")[0].reset();
  					$("#Send_Serial_Modal").modal('hide');
  					if(data.fail_enter==0)

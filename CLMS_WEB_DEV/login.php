@@ -21,6 +21,8 @@ if(isset($_POST['submit'])){
          $dbrole=$row['Role'];
          $avat=$row['Avatar'];
         $dbdepartment=$row['DepartmentID'];
+        $fn=$row['FirstName'];
+        $ln=$row['LastName'];
             
         }      
             
@@ -28,6 +30,8 @@ if(isset($_POST['submit'])){
             $_SESSION['Role']=$dbrole;
             $_SESSION['Avatar']=$avat;
             $_SESSION['Dept']=$dbdepartment;
+            $_SESSION['FirstName']=$fn;
+            $_SESSION['LastName']=$ln;
             header ("Location:index.php");        
     }
       

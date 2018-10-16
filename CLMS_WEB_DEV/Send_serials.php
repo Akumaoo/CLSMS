@@ -14,13 +14,15 @@
 	</div>
 	
 	<div class="alert alert-success alert-dismissible collapse center" id="msg_scs">
-	    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 	    <strong>Successfully Send Serial!</strong> , Please Reload The Page To Update The Table.
  	 </div>
 
   	<div class="alert alert-danger alert-dismissible collapse center" id="msg_fail">
-	    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 	    <strong>Something Went Wrong!</strong> , Please Check The Values You Entered And Try Again.
+  	</div>
+
+  	<div class="alert alert-warning alert-dismissible collapse center" id="msg_warn">
+	    <strong class="warn_val"></strong>
   	</div>
 
 	<div class="custom_table">

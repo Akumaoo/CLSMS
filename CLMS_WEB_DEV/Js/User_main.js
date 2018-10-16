@@ -89,10 +89,6 @@ $(function(){
 	 	{
 	 		alert('User Role Is Required');
 	 	}
-	 	else if($("#dept").val()=="stat")
-	 	{
-	 		alert('Department Is Required');
-	 	}
 	 	else if($("#ava").val()=="")
 	 	{
 	 		alert('Avatar Is Required');

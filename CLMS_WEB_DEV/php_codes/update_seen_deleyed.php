@@ -4,8 +4,8 @@ if(!empty($_POST))
 {
 	require 'db.php';
 
-	$_POST['pn']='DUMMY';
-	$_POST['type']='DeleyedDeliver_P2';
+	// $_POST['pn']='DUMMY';
+	// $_POST['type']='DeleyedDeliver_P2';
 	if(!empty($_POST['pn']))
 	{
 		function GetNotID($siD,$t)
@@ -57,7 +57,6 @@ if(!empty($_POST))
 		// $newdate='2018-10-11';
 		// $dept="ELEM";
 
-
 		function getSerialID($sna){
 			require 'db.php';
 			$sql="Select SerialID from Serial Where SerialName=?";
@@ -66,13 +65,16 @@ if(!empty($_POST))
 			$id=$row['SerialID'];
 			return $id;
 		}
-		$sqlup="Update ReceiveSerial Set RS_Type=? Where DepartmentID=? AND Status=? AND RS_Type IS NULL";
-		$upquery=sqlsrv_query($conn,$sqlup,array('Old',$dept,'Received'));
+
+		$sid=getSerialID($ser);
+
+		$sqlup="Update ReceiveSerial Set RS_Type=? Where DepartmentID=? AND Status=? AND RS_Type IS NULL AND SerialID=?";
+		$upquery=sqlsrv_query($conn,$sqlup,array('Old',$dept,'Received',$sid));
 
 		if($upquery)
 		{
 
-			$sid=getSerialID($ser);
+		
 
 			$getRSsql="Select NotificationID From Notification Where SerialID=? AND NotificationType=? AND Date_Receive_Redflag=?";
 			$getRSquery=sqlsrv_query($conn,$getRSsql,array($sid,'Received',$newdate));

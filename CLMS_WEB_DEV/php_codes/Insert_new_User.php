@@ -9,7 +9,15 @@ if(!empty($_POST))
 	$usern=$_POST['username'];
 	$pass=md5($_POST['pass1']);
 	$role=$_POST['role'];
-	$dept=$_POST['dept'];
+	if($_POST['dept']=='stat')
+	{
+		$dept=NULL;
+
+	}
+	else
+	{
+		$dept=$_POST['dept'];
+	}
 
 	// all about photo
 	// $avaname='asdsa';

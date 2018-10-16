@@ -87,4 +87,4 @@
 <?php 
 		include 'Modals/New_user_Modal.php';
 ?>
-<script type="text/javascript" src="Js/User_main.js?v=2"></script>
+<script type="text/javascript" src="Js/User_main.js?v=66"></script>

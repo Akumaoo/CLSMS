@@ -19,8 +19,8 @@ $primary_key='SerialID';
 
 $columns=array(
 	array('db'=>'SerialID','dt'=>0),
-	array('db'=>'SerialName','dt'=>2),
-	array('db'=>'TypeName','dt'=>1),
+	array('db'=>'SerialName','dt'=>1),
+	array('db'=>'TypeName','dt'=>2),
 	array('db'=>'Departments','dt'=>3)
 
 );

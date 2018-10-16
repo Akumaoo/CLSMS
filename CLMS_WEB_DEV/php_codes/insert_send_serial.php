@@ -45,6 +45,20 @@ if(!empty($_POST))
 		
 		
 	}
+	function checkCateg($sid,$dept)
+	{
+		require 'db.php';
+		$sql="Select * from Categorize_Serials Where SerialID=? AND DepartmentID=?";
+		$query=sqlsrv_query($conn,$sql,array($sid,$dept));
+		if(sqlsrv_has_rows($query))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 
 	if(GetSerialID($SN)!='NotValid')
 	{
@@ -54,13 +68,20 @@ if(!empty($_POST))
 		for($y=0;$y<count($dept_list);$y++)
 		{
 			if(CheckDup($dept_list[$y],$serial_id))
-			{
-				$insertsql="Insert Into ReceiveSerial(DepartmentID,SerialID,Status,DateReceiveNotif_Give,ControlNumber,Rs_Seen,Staff_Comment) Values(?,?,?,?,?,?,?)";
-				$insertquery=sqlsrv_query($conn,$insertsql,array($dept_list[$y],$serial_id,'NotReceived',$date_today,NULL,'NotSeen',NULL));
-				
-				if($insertquery)
+			{	
+				if(checkCateg($serial_id,$dept_list[$y]))
 				{
-					$scs['status']++;
+					$insertsql="Insert Into ReceiveSerial(DepartmentID,SerialID,Status,DateReceiveNotif_Give,ControlNumber,Rs_Seen,Staff_Comment) Values(?,?,?,?,?,?,?)";
+					$insertquery=sqlsrv_query($conn,$insertsql,array($dept_list[$y],$serial_id,'NotReceived',$date_today,NULL,'NotSeen',NULL));
+					
+					if($insertquery)
+					{
+						$scs['status']++;
+					}
+				}
+				else
+				{
+					$scs['fail_enter']++;
 				}
 			}
 			else

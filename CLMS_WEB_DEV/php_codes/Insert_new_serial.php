@@ -3,33 +3,68 @@ require 'db.php';
 
 if(!empty($_POST))
 {
-	$serialname=$_POST['serialname'];
-	$catid = $_POST['CategoryID'];
-	$deptid = $_POST['DepartmentID'];
-	$type=$_POST['type'];
-	$departmentid=$_POST['DepartmentID'];
-	$checkbox1=$_POST['dept']
-	$chk="";
-	for ($j=0; $j < count($_POST['dept']);$j++) 
-{
-    $insert="INSERT INTO Categorize_Serials (CategoryID, DepartmentID, DepartmentName) VALUES ?,?,'".$_POST['lol'][$j]."'");
-}	$queryinsert1=sqlsrv_query($conn,$insert. array($catid, $deptid, '".$_POST['dept'][$j]."'));
+	$serialname=$_POST['sername'];
+	$dept=$_POST['depts'];
+	$type=$_POST['stype'];
+// $serialname='NEW';
+// $dept=array('ELEM','SHS');
+// $type='Magazine';
 
-		
-\
+	function checkSer($n)
 	{
-		$insertsql="Insert INTO Distributor(DistributorName,NameOfIncharge,ContactNumber,Email) VALUES(?,?,?,?)";
-		$queryinsert=sqlsrv_query($conn,$insertsql,array($name,$NOI,$contact,$mail),$opt);
-		if($queryinsert)
+		require 'db.php';
+		$sql="Select * from Serial Where SerialName=?";
+		$query=sqlsrv_query($conn,$sql,array($n));
+		if(sqlsrv_has_rows($query))
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+	function getTID($tn)
+	{
+		require 'db.php';
+		$sql="Select TypeID from [Type] Where TypeName=?";
+		$query=sqlsrv_query($conn,$sql,array($tn));
+		$row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
+		$id=$row['TypeID'];
+		return $id;
+	}
+	function GetNewSID($sn)
+	{
+		require 'db.php';
+		$sql="Select SerialID from Serial Where SerialName=?";
+		$query=sqlsrv_query($conn,$sql,array($sn));
+		$row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
+		$id=$row['SerialID'];
+		return $id;
+	}
+
+	if(checkSer($serialname))
+	{
+		$TID=getTID($type);
+		$sqlins="Insert Into Serial(TypeID,SerialName) VALUES(?,?)";
+		$query=sqlsrv_query($conn,$sqlins,array($TID,$serialname));
+		if($query)
+		{
+			$new_SID=GetNewSID($serialname);
+			for($x=0;$x<count($dept);$x++)
 			{
-				$scs['status']="success";
+				$sqlindept="Insert Into Categorize_Serials(DepartmentID,SerialID) VALUES(?,?)";
+				$querydept=sqlsrv_query($conn,$sqlindept,array($dept[$x],$new_SID));
 			}
-			else
-			{
-				$scs['status']='fail';
-			}
-		 header('Content-type: application/json');
-		echo json_encode($scs);
+
+			$scs['status']='success';
+		}
+		else
+		{
+			$scs['status']='fail';
+		}
+	header('Content-type: application/json');
+	echo json_encode($scs);
 	}
 }
  ?>
