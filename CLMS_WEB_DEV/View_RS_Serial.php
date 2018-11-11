@@ -1,9 +1,9 @@
 <?php 
 require 'php_codes/db.php';
-if(isset($_POST['send_ID']))
+if(isset($_POST['RSID']))
 {
-	$RSid=$_POST['send_ID'];
-	$Sname=$_POST['send_name'];
+	$RSid=$_POST['RSID'];
+	$Sname=$_POST['sername'];
 
 	$sql="Select * from ReceiveSerial Where ReceivedSerialID=?";
 	$query=sqlsrv_query($conn,$sql,array($RSid));
@@ -11,7 +11,7 @@ if(isset($_POST['send_ID']))
 	{
 		$Dept=$row['DepartmentID'];
 		$Stat=$row['Status'];
-		$seen=$row['RS_Seen'];
+		$seen=$row['Staff_Seen'];
 		$Contno=$row['ControlNumber'];
 		$comment=$row['Staff_Comment'];
 		$DS=$row['DateReceiveNotif_Give']->format('Y/m/d');

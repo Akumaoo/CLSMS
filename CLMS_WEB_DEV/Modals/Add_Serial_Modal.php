@@ -25,38 +25,19 @@
 				 					<label for="type" class="control-label col-lg-3">Type</label>
 				 					<div class="col-lg-6">
 				 						<select name="type" id="type">
-				 						<?php require "php_codes/db.php";
-				 						$sql="SELECT TypeName FROM [Type]";
-				 						$query = sqlsrv_query($conn, $sql, array());
-				 						if (sqlsrv_has_rows($query))
-				 							{
-				 								while ($row = sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC)){
-				 									$name = $row['TypeName'];
-				 										echo '<option value="'.$name.'">'.$name.'</option>';
-				 								}
-				 							}
-				 						?>
-				 						
-				 							
+				 						<option value="Journal">Journal</option>
+				 						<option value="Magazine">Magazine</option>
 				 						</select>
 				 					</div>
 				 				</div>
 
-				 				<div class="form-group ">
-				 					<label for="department" class="control-label col-lg-3">Departments</label>
+				 				<div class="form-group form-group-center">
+				 					<label for="type" class="control-label col-lg-3">Type</label>
 				 					<div class="col-lg-6">
-				 						<?php require "php_codes/db.php";
-				 						$sql="SELECT * FROM Department";
-				 						$query = sqlsrv_query($conn, $sql, array());
-				 						if (sqlsrv_has_rows($query))
-				 							{
-				 								echo "<ul>";
-				 								while ($row = sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC)){
-				 										echo "<label><input type='checkbox' name='dept' value='".$row['DepartmentID']."'>".$row['DepartmentName'];
-				 								}
-				 								echo "</label></ul>";
-				 							}
-				 						?>			
+				 						<select name="orig" id="orig">
+				 						<option value="Local">Local</option>
+				 						<option value="International">International</option>
+				 						</select>
 				 					</div>
 				 				</div>
 

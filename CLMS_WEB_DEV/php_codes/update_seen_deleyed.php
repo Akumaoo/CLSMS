@@ -46,47 +46,65 @@ if(!empty($_POST))
 
 	
 	}
-	else if(!empty($_POST['date']))
-	{
-		$ser=$_POST['serial'];
-		$date=strtotime($_POST['date']);
-		$newdate=date('Y-m-d',$date);
-		$dept=$_POST['dept'];
+	else if(!empty($_POST['type']))
+	{	
+		$type=$_POST['type'];
 
-		// $ser='DUMMY';
-		// $newdate='2018-10-11';
-		// $dept="ELEM";
-
-		function getSerialID($sna){
-			require 'db.php';
-			$sql="Select SerialID from Serial Where SerialName=?";
-			$query=sqlsrv_query($conn,$sql,array($sna));
-			$row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
-			$id=$row['SerialID'];
-			return $id;
-		}
-
-		$sid=getSerialID($ser);
-
-		$sqlup="Update ReceiveSerial Set RS_Type=? Where DepartmentID=? AND Status=? AND RS_Type IS NULL AND SerialID=?";
-		$upquery=sqlsrv_query($conn,$sqlup,array('Old',$dept,'Received',$sid));
-
-		if($upquery)
+		if($type=='per dept')
 		{
+			$dept=$_POST['dept'];
+			// $dept="SEAIDITE";
 
-		
-
-			$getRSsql="Select NotificationID From Notification Where SerialID=? AND NotificationType=? AND Date_Receive_Redflag=?";
-			$getRSquery=sqlsrv_query($conn,$getRSsql,array($sid,'Received',$newdate));
-			$rows=sqlsrv_fetch_array($getRSquery,SQLSRV_FETCH_ASSOC);
-			$RSID=$rows['NotificationID'];
-
-			$updsql="Update Notification Set NotificationSeen=? Where NotificationID=?";
-			$queryup=sqlsrv_query($conn,$updsql,array('Seen',$RSID));
-			if($queryup)
-			{
-				$msg='success';
+			function getRSID_List($dept){
+				require 'db.php';
+				$rs_list=[];
+				$inc=0;
+				$sql="Select  ReceivedSerialID,DepartmentID,SerialName,TypeName,ReceiveSerial.Status,Subscription.Status from ReceiveSerial Inner Join Serial ON ReceiveSerial.SerialID=Serial.SerialID
+					Inner Join Subscription On Serial.SerialID=Subscription.SerialID WHERE ReceiveSerial.Status=? AND Subscription.Status=? AND DepartmentID=? AND Admin_Seen IS NULL";
+				$query=sqlsrv_query($conn,$sql,array('Received','OnGoing',$dept));
+				while($row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
+				{
+					$rs_list[$inc]=$row['ReceivedSerialID'];
+					$inc++;
+				}
+				return $rs_list;
 			}
+			$rsID_list=getRSID_List($dept);
+
+			for($x=0;$x<count($rsID_list);$x++)
+			{
+				$sqlup="Update ReceiveSerial Set Admin_Seen=? Where ReceivedSerialID=?";
+				$upquery=sqlsrv_query($conn,$sqlup,array('Seen',$rsID_list[$x]));
+
+			}
+			$msg='success';
+		}
+		else
+		{
+			function getRSID_List($dept){
+				require 'db.php';
+				$rs_list=[];
+				$inc=0;
+				$sql="Select  ReceivedSerialID,DepartmentID,SerialName,TypeName,ReceiveSerial.Status,Subscription.Status from ReceiveSerial Inner Join Serial ON ReceiveSerial.SerialID=Serial.SerialID
+					Inner Join Subscription On Serial.SerialID=Subscription.SerialID WHERE ReceiveSerial.Status=? AND Subscription.Status=? AND Admin_Seen IS NULL";
+				$query=sqlsrv_query($conn,$sql,array('Received','OnGoing'));
+				while($row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
+				{
+					$rs_list[$inc]=$row['ReceivedSerialID'];
+					$inc++;
+				}
+				return $rs_list;
+			}
+			$rsID_list=getRSID_List($dept);
+
+			for($x=0;$x<count($rsID_list);$x++)
+			{
+				$sqlup="Update ReceiveSerial Set Admin_Seen=? Where ReceivedSerialID=?";
+				$upquery=sqlsrv_query($conn,$sqlup,array('Seen',$rsID_list[$x]));
+
+			}
+			$msg='success';
+
 		}
 
 	}

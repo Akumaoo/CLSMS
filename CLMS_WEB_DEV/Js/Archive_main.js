@@ -30,4 +30,66 @@ $(function(){
 	});
 
 
+
+	$('#arch').closest('li.sub-menu').find('a.dcjq-parent').addClass('active');
+ 	$('#arch').closest('li.sub-menu ul.sub').css('display', 'block');
+ 	$('#arch').addClass('active');
+
+ 	$('#btn_yes').click(function(){
+		$.ajax({
+			method:'POST',
+			url:'php_codes/Archive_Data.php',
+			data:{data_type:'Archive_datas'},
+			success:function(data){
+
+				$('#Verfiy_Modal').modal('hide');
+
+				if(data=='complete_archive')
+				{
+					if(!$('#msg_fail_archive').hasClass('collapse'))
+					{
+						$('#msg_fail_archive').addClass('collapse');
+					}
+					else if(!$('#msg_warning_archive').hasClass('collapse'))
+					{
+						$('#msg_warning_archive').addClass('collapse');
+					}
+
+					$('#msg_scs_archive').removeClass('collapse');
+				}
+				else if(data=='error_archive')
+				{
+					if(!$('#msg_scs_archive').hasClass('collapse'))
+					{
+						$('#msg_scs_archive').addClass('collapse');
+					}
+					else if(!$('#msg_warning_archive').hasClass('collapse'))
+					{
+						$('#msg_warning_archive').addClass('collapse');
+					}
+
+					$('#msg_fail_archive').removeClass('collapse');
+				}
+				else
+				{
+					if(!$('#msg_scs_archive').hasClass('collapse'))
+					{
+						$('#msg_scs_archive').addClass('collapse');
+					}
+					else if(!$('#msg_fail_archive').hasClass('collapse'))
+					{
+						$('#msg_fail_archive').addClass('collapse');
+					}
+
+					$('#msg_warning_archive').removeClass('collapse');
+				}
+			}
+		});
+	});
+
+	$('#btn_no').click(function() {
+		$('#Verfiy_Modal').modal('hide');
+	});
+
+
 });

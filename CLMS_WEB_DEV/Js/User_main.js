@@ -1,13 +1,16 @@
 $(function(){
-
+	$table="";
 	if( !$.fn.DataTable.isDataTable("#table_user")){
-		$('#table_user').DataTable({			
+	$table=$('#table_user').DataTable({			
+		"processing":true,
+		"serverSide":true,
 		"ordering":true,
 		"searching":true,
-		"pageLength":100
-		});
+		"ajax":"SSP/serverside_users.php"
+			});
 	}
 
+$('#table_user').on('draw.dt', function() {
 	$('#table_user').Tabledit({
 		url:"php_codes/modify_user.php",
 		columns:{
@@ -18,37 +21,36 @@ $(function(){
 		{
 			if(data.action=='delete')
 			{
-				$("#"+data.UserID).remove();			
-			}
-		},onDraw: function() 
-		{		
-			function getdepts(){
-				$val=[];				
-				$.ajax({
-					url:'php_codes/get_depts.php',
-					method:"POST",
-					success:function(data){
-						$val=data;
-					},
-					async:false
-					});
-				return $val;
-			}
-			$return_depts=getdepts();
-			$option="";
-			for($x=0;$x<$return_depts.length;$x++)
-			{	
-				$option+='<option value="'+$return_depts[$x]+'">'+$return_depts[$x]+'</option>';
-			}
+				if(!$('#msg_scs').hasClass('collapse'))
+				{
+					$('#msg_scs').addClass('collapse');
+				}
+				else if(!$('#msg_fail').hasClass('collapse'))
+				{
+					$('#msg_fail').addClass('collapse');
+				}
 
-			$('tbody tr td:nth-child(7)>input').each(function(){		 					
-
-			$('<select class="tabledit-input form-control input-sm" style="display: none;" disabled=""><option style="display: none" value="stat">--Status--</option>'+$option+'</select>').attr({ name: this.name, value: this.value }).insertBefore(this)				
-			}).remove()
-
+				$('#msg_scs_remove').removeClass('collapse');
+				$("#"+data.UserID).remove();
+				$table.ajax.reload(null,false);	
+			}
+		},
+		onDraw:function(){
 			$('button.tabledit-edit-button').remove();
- 		}
+		}
 	
+	});
+
+	if($('tbody>tr>td:nth-child(1)').hasClass('dataTables_empty'))
+	{
+		$('.tabledit-toolbar-column').remove();
+		$('tbody>tr>td:nth-child(2)').remove();
+	}
+		
+
+	$('thead>tr>th:nth-child(8)').addClass('collapse');
+	$('tbody>tr>td:nth-child(8)').addClass('collapse');
+
 	});
 	
 	$('#Add_User').on('submit',function(event){
@@ -107,13 +109,31 @@ $(function(){
  					$("#add_user_modal").modal('hide');
  					if(data.status=='success')
  					{
+ 						if(!$('#msg_scs_remove').hasClass('collapse'))
+						{
+							$('#msg_scs_remove').addClass('collapse');
+						}
+						else if(!$('#msg_fail').hasClass('collapse'))
+						{
+							$('#msg_fail').addClass('collapse');
+						}
+
  						$("#msg_scs").removeClass('collapse');
+ 						$table.ajax.reload(null,false);
 
  					}
  					else
  					{
+ 						if(!$('#msg_scs_remove').hasClass('collapse'))
+						{
+							$('#msg_scs_remove').addClass('collapse');
+						}
+						else if(!$('#msg_scs').hasClass('collapse'))
+						{
+							$('#msg_scs').addClass('collapse');
+						}
+
  						$("#msg_fail").removeClass('collapse');
- 						alert(data.status);
  					}
 	 			}
 	 		});
@@ -121,5 +141,101 @@ $(function(){
 	});
 
 	
+	$('#MU').closest('li.sub-menu').find('a.dcjq-parent').addClass('active');
+ 	$('#MU').closest('li.sub-menu ul.sub').css('display', 'block');
+ 	$('#MU').addClass('active');
+
+
+	$('#cog_action').click(function(){
+
+ 		$x=0;
+ 		$('button.tabledit-edit-button').each(function(){
+ 			
+ 			if($(this).hasClass('active'))
+ 			{
+ 				$x++;
+ 			}
+
+ 		}); 		
+
+ 		if($('thead>tr>th:nth-child(8)').hasClass('collapse'))
+ 		{
+ 			$('thead>tr>th:nth-child(8)').removeClass('collapse');
+			$('tbody>tr>td:nth-child(8)').removeClass('collapse');
+			
+ 		}
+ 		else
+ 		{
+ 			// DELETE BTN
+		$('button.tabledit-delete-button').each(function(){
+				if($(this).hasClass('active'))
+				{
+					$(this).removeClass('active');
+				}
+		});
+		$('button.tabledit-confirm-button').each(function(){
+ 					if($(this).css('display')!='none')
+ 					{
+ 						$(this).css('display','none');
+ 					}
+ 		});
+
+ 			if($x!=0)
+ 			{
+ 				$('input.tabledit-input').each(function(){
+ 					$(this).css('display','none');
+ 					$(this).closest('td.tabledit-edit-mode').find('span.tabledit-span').css('display', 'inline');
+ 				});
+ 				$('select.tabledit-input').each(function(){
+ 					$(this).css('display','none');
+ 					$(this).closest('td.tabledit-edit-mode').find('span.tabledit-span').css('display', 'inline');
+ 				});
+
+ 				$('button.tabledit-edit-button').each(function(){
+ 					if($(this).hasClass('active'))
+ 					{
+ 						$(this).removeClass('active');
+ 					}
+ 				});
+ 			
+
+ 				$('button.tabledit-save-button').each(function(){
+ 					if($(this).css('display')!='none')
+ 					{
+ 						$(this).css('display','none');
+ 					}
+ 				});
+ 				
+ 				$('button.tabledit-restore-button').each(function(){
+ 					if($(this).css('display')!='none')
+ 					{
+ 						$(this).css('display','none');
+ 					}
+ 				});
+
+ 				$x=0;
+ 			}
+ 			
+
+ 			$('thead>tr>th:nth-child(8)').addClass('collapse');
+			$('tbody>tr>td:nth-child(8)').addClass('collapse');
+ 		}
+
+ 	});
+
+
+ 	$('#role').on('change',function(){
+ 		if($(this).val()=='Admin')
+ 		{
+ 			$('#Dept_select').addClass('collapse');
+ 		}
+ 		else
+ 		{
+ 			if($('#Dept_select').hasClass('collapse'))
+ 			{
+ 				$('#Dept_select').removeClass('collapse');
+ 			}
+ 		}
+ 	});
 
 });

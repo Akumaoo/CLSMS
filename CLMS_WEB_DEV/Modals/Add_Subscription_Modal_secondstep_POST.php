@@ -17,8 +17,37 @@
 					 	 </div>
 
 					  	<div class="alert alert-danger alert-dismissible collapse center" id="msg_fail_POST">
-						    <strong>Something Went Wrong!</strong> , Please Check The Values You Entered And Try Again.
+						    <strong>Invalid Serial Name!</strong> , Please Check The Values You Entered And Try Again.
 					  	</div>
+					  	
+						<div class="form-group form-group-center collapse" id="retry_POST">
+							<div class="row">
+								<div class="col-lg-12">
+									<h4 style="margin-left:20px;">Continue?</h4>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-lg-3 col-lg-offset-3">
+									<button class=" custom-btn" type="button" id="btn_yes_POST">Yes</button>
+								</div>
+								<div class="col-lg-offset-5">
+									<button class=" custom-btn" type="button" id="btn_no_POST">No</button>
+								</div>
+							</div>
+						</div>
+
+					  	<div class="collapse" id="prev-data-POST">
+
+					  	<div class="form-group form-group-center">
+							<label for="SNf" class="control-label col-lg-6">Total Subscribed: <strong id="total_insert">0</strong></label>	
+						</div>
+
+						<div class="form-group form-group-center">
+							<label for="SNf" class="control-label col-lg-6">Previous Serial: <strong id="prev_insert"></strong></label>
+						</div>
+
+						</div>
+						
 
 						<div class="form-group form-group-center">
 							<label for="SNf" class="control-label col-lg-3">Serial Name</label>
@@ -42,22 +71,38 @@
 						</div>
 
 						<div class="form-group form-group-center">
+							<label for="SSD_POST" class="control-label col-lg-3">Subscription Start Date</label>
+							<div class="col-lg-6">
+								<input type="date" class="form-control" name="SSD_POST" id="SSD_POST" required>
+							</div>
+						</div>
+
+						<div class="form-group form-group-center">
 							<label for="SED_POST" class="control-label col-lg-3">Subscription End Date</label>
 							<div class="col-lg-6">
 								<input type="date" class="form-control" name="SED_POST" id="SED_POST" required>
 							</div>
 						</div>
 
-						<div class="form-group form-group-center">
-							<label for="RT" class="control-label col-lg-3">Region Type</label>
-							<div class="col-lg-6">
-								<select name="RT" id="RT">
-									<option value="stat" disabled selected>---Select---</option>
-									<option value="Local">Local</option>
-									<option value="International">International</option>
-								</select>
-							</div>
-						</div>	
+
+		 				<div class="form-group ">
+		 					<label for="department" class="control-label col-lg-3">Departments</label>
+		 					<div class="col-lg-6">
+		 						<?php require "php_codes/db.php";
+		 						$sql="SELECT * FROM Department";
+		 						$query = sqlsrv_query($conn, $sql, array());
+		 						if (sqlsrv_has_rows($query))
+		 							{
+		 								$depts="<li><input type='checkbox' value='SA' class='SA'>Select All</li>";
+		 								echo "<ul>";
+		 								while ($row = sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC)){
+		 										$depts.="<li><input type='checkbox' name='dept' value='".$row['DepartmentID']."'>".$row['DepartmentID']."</li>";
+		 								}
+		 								echo $depts."</ul>";
+		 							}
+		 						?>			
+		 					</div>
+		 				</div>
 
 						<div class="form-group form-group-center" id="save_btn_POST">
 							<div class="col-lg-offset-8">
@@ -65,21 +110,6 @@
 							</div>
 						</div>
 
-						<div class="form-group form-group-center collapse" id="retry_POST">
-							<div class="row">
-								<div class="col-lg-12">
-									<h4 style="margin-left:20px;">Continue?</h4>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-lg-3 col-lg-offset-3">
-									<button class=" custom-btn" type="button" id="btn_yes_POST">Yes</button>
-								</div>
-								<div class="col-lg-offset-5">
-									<button class=" custom-btn" type="button" id="btn_no_POST">No</button>
-								</div>
-							</div>
-						</div>
 					</form>
 					</div>
 			 		</div>

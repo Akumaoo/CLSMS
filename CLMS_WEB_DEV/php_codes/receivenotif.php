@@ -1,15 +1,16 @@
   <?php
 
-    $receive_sqltxt="Select TOP 5 SerialName,Date_Receive_RedFlag,DepartmentID from ReceiveSerial Inner Join Notification ON ReceiveSerial.SerialID=Notification.SerialID inner join Serial On Notification.SerialID=Serial.SerialID Where Status=? AND RS_Seen=? AND NotificationType=? AND NotificationSeen=? And RS_Type IS NULL";
-    $receive_query=sqlsrv_query($conn,$receive_sqltxt,array('Received','Seen','Received','NotSeen'));
+    $receive_sqltxt="Select TOP 5 Count(Subq.DepartmentID) AS NumRec,Subq.DepartmentID,DateReceiveNotif_Receive from
+(Select ReceiveSerial.DepartmentID,DateReceiveNotif_Receive from ReceiveSerial inner join Subscription on ReceiveSerial.SerialID=Subscription.SerialID Where Subscription.Status=? AND ReceiveSerial.Status=? AND Admin_Seen IS NULL) AS Subq Group By DepartmentID,DateReceiveNotif_Receive";
+    $receive_query=sqlsrv_query($conn,$receive_sqltxt,array('OnGoing','Received'));
 
     if(sqlsrv_has_rows($receive_query))
     {
       while($receive_row=sqlsrv_fetch_array($receive_query,SQLSRV_FETCH_ASSOC))
       {
 
-          $receive_sname=$receive_row['SerialName'];
-          $receive_RSDATE=$receive_row['Date_Receive_RedFlag']->format('M-d-Y');
+          $rec_num=$receive_row['NumRec'];
+          $receive_RSDATE=$receive_row['DateReceiveNotif_Receive']->format('M-d-Y');
           $receive_Dept=$receive_row['DepartmentID'];
 
           //SETTING VALUE OF COURSENAME
@@ -22,9 +23,13 @@
                   <p>
                     <muted class="date">'.$receive_RSDATE.'</muted>
                     <br/>
-                    <strong class="rec_dept">'.$receive_Dept.'</strong> received the <strong class="serial_name">'.$receive_sname.'</strong>.<br/>
+                    <strong class="rec_dept">'.$receive_Dept.'</strong> received <strong>'.$rec_num.' Serials</strong>.<br/>
                   </p>
                 </div>
+
+                <form id="hidden_form" action="Received_Serials.php" method="POST">
+                  <input type="hidden" name="dept" value="'.$receive_Dept.'">
+                </form>
               </div>
             ';
         

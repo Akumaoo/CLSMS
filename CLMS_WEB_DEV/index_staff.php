@@ -1,7 +1,3 @@
-  <section id="main-content">
-    <section class="wrapper">
-  	<div class="main-chart">
-
   		 <div class="row custom-box">
   		   <div class="col-md-12 profile-text">      
           <h1>College Library Serial Monitoring System</h1>
@@ -162,5 +158,11 @@
       </div>
     </div>
     <?php include 'Modals/Receive_Modal.php' ?>
-  </section>
-</section>
+    <script>
+      $(function(){
+
+    $("#MS_staff").click(function(){
+   alert('hel');
+    });
+});
+    </script>

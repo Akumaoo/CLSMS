@@ -6,7 +6,6 @@ if(!empty($_POST))
 	$name=$_POST['Dname'];
 	$NOI=$_POST['NOI'];
 	$contact=$_POST['CN'];
-	$type=$_POST['type'];
 
 	if(!$_POST['mail'])
 	{
@@ -33,8 +32,8 @@ if(!empty($_POST))
 
 	if(CheckDup($name))
 	{
-		$insertsql="Insert INTO Distributor(DistributorName,NameOfIncharge,ContactNumber,Email,Distributor_Type) VALUES(?,?,?,?,?)";
-		$queryinsert=sqlsrv_query($conn,$insertsql,array($name,$NOI,$contact,$mail,$type));
+		$insertsql="Insert INTO Distributor(DistributorName,NameOfIncharge,ContactNumber,Email) VALUES(?,?,?,?)";
+		$queryinsert=sqlsrv_query($conn,$insertsql,array($name,$NOI,$contact,$mail));
 		if($queryinsert)
 			{
 				$scs['status']="success";

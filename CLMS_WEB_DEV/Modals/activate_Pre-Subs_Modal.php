@@ -25,22 +25,20 @@
 						</div>
 
 						<div class="form-group form-group-center">
+							<label for="SSD_Pre_activate" class="control-label col-lg-3">Subscription Start Date</label>
+							<div class="col-lg-6">
+								<input type="date" class="form-control" name="SSD_Pre_activate" id="SSD_Pre_activate" required>
+							</div>
+						</div>
+
+						<div class="form-group form-group-center">
 							<label for="SED_Pre_activate" class="control-label col-lg-3">Subscription End Date</label>
 							<div class="col-lg-6">
 								<input type="date" class="form-control" name="SED_Pre_activate" id="SED_Pre_activate" required>
 							</div>
 						</div>
 
-						<div class="form-group form-group-center">
-							<label for="RT" class="control-label col-lg-3">Region Type</label>
-							<div class="col-lg-6">
-								<select name="RT" id="RT">
-									<option value="stat" disabled selected>---Select---</option>
-									<option value="Local">Local</option>
-									<option value="International">International</option>
-								</select>
-							</div>
-						</div>
+					
 						</div>	
 
 						<div class="form-group form-group-center" id="save_btn_Pre_activate">
@@ -63,11 +61,6 @@
 						</div>
 
 						<div class="form-group form-group-center collapse" id="retry_Pre_activate_finish">
-							<div class="row">
-								<div class="col-lg-12">
-									<h4 style="margin-left:20px;">Continue?</h4>
-								</div>
-							</div>
 							<div class="row">
 								<div class="col-lg-3 col-lg-offset-3">
 									<button class=" custom-btn" type="button" id="btn_yes_Pre_activate_finish_btn">Finish</button>

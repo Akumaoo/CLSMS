@@ -1,5 +1,7 @@
 <?php
 require 'php_codes/db.php';
+require 'php_codes/admin_verify.php';
+include 'Includes/header.php';
 echo '
 <div class="container-fluid">
 			<div class="row custom-boxxx">		
@@ -11,7 +13,8 @@ echo '
 <div class=" custom-panelbox">
 	<div class="">
 		<div class="">
-			<h4 class="fa fa-archive tag_style">Archiving:</h4>
+			<h5 class="fa fa-archive tag_style">Archiving:</h5>
+			<a href="javascript:void(0)" id="archive_btn"  style="font-size: 13px;margin-left: 10px;">Archive Now</a>
 			<h4 class="dividerr"></h4>
 		</div>
 	</div>
@@ -29,6 +32,8 @@ echo '
   	</div>	
   
 	<div class=" custom_table">
+		<div class="container-fluid">
+		<div class="row">
 		<div class="col-lg-10 col-lg-offset-1">
 		<table cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover" id="table_subs" ">
 		<thead class="thead_theme">
@@ -49,14 +54,15 @@ echo '
 </table>
 </div>
 </div>
-	<div class="">
-		<div class="col-lg-offset-9">
-			<button type="button" id="archive_btn" data-toggle="modal" class="custom-btn">Archive Now!</button>
-		</div>
-	</div>
+</div>
+
+</div>
 </div>
 </div>';
 include 'Modals/Verify_Archiving_Modal.php';
+include 'Includes/footer.php';
 ?>
+</body>
+</html>
 <script type="text/javascript" src="Js/Archive_main.js?v=2"></script>
 

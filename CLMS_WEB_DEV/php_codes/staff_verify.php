@@ -1,0 +1,14 @@
+<?php 
+session_start();
+if(!isset($_SESSION['current_user']))
+{
+  header('location:login.php');
+}
+else
+{
+	if($_SESSION['Role']!='Staff')
+	{
+		header('location:index.php');
+	}
+}
+ ?>

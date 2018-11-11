@@ -4,7 +4,7 @@ require 'db.php';
 if(!empty($_POST))
 {
 	$serialname=$_POST['sername'];
-	$dept=$_POST['depts'];
+	$orig=$_POST['origin'];
 	$type=$_POST['stype'];
 // $serialname='NEW';
 // $dept=array('ELEM','SHS');
@@ -24,15 +24,6 @@ if(!empty($_POST))
 			return true;
 		}
 	}
-	function getTID($tn)
-	{
-		require 'db.php';
-		$sql="Select TypeID from [Type] Where TypeName=?";
-		$query=sqlsrv_query($conn,$sql,array($tn));
-		$row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
-		$id=$row['TypeID'];
-		return $id;
-	}
 	function GetNewSID($sn)
 	{
 		require 'db.php';
@@ -45,17 +36,10 @@ if(!empty($_POST))
 
 	if(checkSer($serialname))
 	{
-		$TID=getTID($type);
-		$sqlins="Insert Into Serial(TypeID,SerialName) VALUES(?,?)";
-		$query=sqlsrv_query($conn,$sqlins,array($TID,$serialname));
+		$sqlins="Insert Into Serial(TypeName,SerialName,Origin) VALUES(?,?,?)";
+		$query=sqlsrv_query($conn,$sqlins,array($type,$serialname,$orig));
 		if($query)
 		{
-			$new_SID=GetNewSID($serialname);
-			for($x=0;$x<count($dept);$x++)
-			{
-				$sqlindept="Insert Into Categorize_Serials(DepartmentID,SerialID) VALUES(?,?)";
-				$querydept=sqlsrv_query($conn,$sqlindept,array($dept[$x],$new_SID));
-			}
 
 			$scs['status']='success';
 		}

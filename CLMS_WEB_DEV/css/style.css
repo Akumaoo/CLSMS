@@ -2193,7 +2193,7 @@ ul.my-friends li .friends-pic {
 	margin: -3px 0;
 	padding: 30px 20px 35px;
 	min-height:160px;
-	max-height:160px !important;
+	max-height:160px;
 	text-align: center;
 }
 .servicetitle hr {

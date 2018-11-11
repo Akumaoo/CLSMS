@@ -3,11 +3,12 @@ require 'db.php';
 
 $input=filter_input_array(INPUT_POST);
 $id=$input['DepartmentID'];
-$name=$input['DepartmentName'];
+
 
 
 if($input['action']=='edit')
 {
+	$name=$input['DepartmentName'];
 	$updatesql="Update Department SET DepartmentName=? WHERE DepartmentID=?";
 	$queryup=sqlsrv_query($conn,$updatesql,array($name,$id));
 }

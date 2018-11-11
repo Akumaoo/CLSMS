@@ -1,9 +1,9 @@
 $(function(){
-
+	$table="";
 	if( !$.fn.DataTable.isDataTable("#table_subs")){
 		$rID=$('span#rid').text();
 		$dept=$('strong#disbn').text();
-		$('#table_subs').DataTable({			
+		$table=$('#table_subs').DataTable({			
 			"processing":true,
 			"serverSide":true,
 			"ordering":true,
@@ -25,29 +25,49 @@ $(function(){
 		url:"php_codes/modify_subs.php",
 		columns:{
 			identifier:[0,"SubscriptionID"],
-			editable:[[2,"Orders"],[3,"Cost"],[5,"Status"]]
+			editable:[[2,"Orders"],[3,"Cost"],[4,"Status"]]
 				},
 			onSuccess:function(data,textStatus,jqXHR)
 			{
 				if(data.action=='delete')
 				{
+					
 					$("#"+data.SubscriptionID).remove();			
 				}
-				if(data.status=='success')
+				else if(data.status=='success')
 				{
+					if(!$('#msg_fail_enter').hasClass('collapse'))
+					{
+						$('#msg_fail_enter').addClass('collapse');
+					}
+					else if(!$('#msg_deliv_enter').hasClass('collapse'))
+					{
+						$('#msg_deliv_enter').addClass('collapse');
+					}
+
 					$("#msg_scs_enter").removeClass('collapse');
+					$table.ajax.reload(null,false);
 				}
 				else
 				{
+					if(!$('#msg_scs_enter').hasClass('collapse'))
+					{
+						$('#msg_scs_enter').addClass('collapse');
+					}
+					else if(!$('#msg_deliv_enter').hasClass('collapse'))
+					{
+						$('#msg_deliv_enter').addClass('collapse');
+					}
+
 					$("#msg_fail_enter").removeClass('collapse');
 				}
 
 			},onDraw: function() {
-				$('tbody tr td:nth-child(3)>input,tbody tr td:nth-child(4)>input,tbody tr td:nth-child(5)>input').each(function(){
+				$('tbody tr td:nth-child(3)>input,tbody tr td:nth-child(4)>input').each(function(){
 					$('<input class="tabledit-input form-control input-sm" type="number" style="display: none;" disabled="">').attr({ name: this.name, value: this.value }).insertBefore(this)
 				}).remove()
-				$('tbody tr td:nth-child(6)>input').each(function(){
-					$('<select class="tabledit-input form-control input-sm" style="display: none;" disabled=""><option value="OnGoing">OnGoing</option><option value="Finished">Finished</option><option value="Cancelled">Cancelled</option><option value="Refunded">Refunded</option></select>').attr({ name: this.name, value: this.value }).insertBefore(this)
+				$('tbody tr td:nth-child(5)>input').each(function(){
+					$('<select class="tabledit-input form-control input-sm" style="display:none;width:90px" disabled=""><option value="OnGoing">OnGoing</option><option value="Finished">Finished</option><option value="Cancelled">Cancelled</option><option value="Refunded">Refunded</option></select>').attr({ name: this.name, value: this.value }).insertBefore(this)
 				}).remove()
 	 		 }		
 		
@@ -58,6 +78,60 @@ $(function(){
 			$('.tabledit-toolbar-column').remove();
 			$('tbody>tr>td:nth-child(2)').remove();
 		}
+
+		$('thead>tr>th:nth-child(9)').addClass('collapse');
+		$('tbody>tr>td:nth-child(9)').addClass('collapse');
+
+		// modify action buttons
+		if($('span#rid').text()!="")
+		{
+			$('.btn-group').append('<button type="button" class="tabledit-deliv-button btn btn-sm btn-default" style="float: none;"><span class="fa fa-truck"></span></button>');
+		}
+
+		$('.tabledit-deliv-button').click(function(){
+
+	   		$sname=$(this).closest('tr').find('td').eq(1).text();
+	   		$('#Serial_Name').html($sname);
+	   		$('#sn_rec').val($sname);
+
+	   		$.ajax({
+	   			url:'php_codes/get_categorized_depts.php',
+	   			method:'POST',
+	   			data:{sname:$sname},
+	   			success:function(data){
+	   				$('#dept_list_categ').html(data);
+
+	   				$('.SA').change(function() {
+						if($(this).is(':checked'))
+						{
+							$('input[type="checkbox"]').each(function(){
+								$(this).prop('checked',true);
+							});
+
+						}
+					});
+	   			}
+	   		});
+	   		$('#receive_deliv_modal').modal('show');
+
+	  	 });
+
+		$('tbody tr td:nth-child(2)').addClass('ser_click');
+
+		$(".ser_click").click(function(){
+			var serial_ID=$(this).text();
+			$.ajax({
+			type:'POST',
+			url:'php_codes/View_dept_serial.php',
+			data:{S_ID:serial_ID},
+			success:function(data){
+				$('.main-chart').html(data)
+			}
+			});
+
+		});	
+		
+
 	});
 
 		$inc=0;
@@ -93,20 +167,17 @@ $(function(){
 
 			$('#subscribe_new_form_Pre_activate').on('submit',function(event){
 				event.preventDefault();
-				if($('#RT option:selected').val()=='stat')
-				{
-					alert('Please Choose Region Type');
-				}
-				else
-				{
-					$RT=$('#RT option:selected').val();
+
 					$SED=$('#SED_Pre_activate').val();
+					$SSD=$('#SSD_Pre_activate').val();
 					$sub=$sub_list[$inc];
+					$sn=$('strong#ser_name').text();
+					// alert($SED+$SSD+$sub+$sn);
 
 					$.ajax({
 						url:'php_codes/activate_subs.php',
 						method:'POST',
-						data:{RT:$RT,SED:$SED,SUB:$sub},
+						data:{SED:$SED,SSD:$SSD,SUB:$sub,sn:$sn},
 						success:function(data){
 							if(data.status='success')
 							{
@@ -129,8 +200,7 @@ $(function(){
 								$('#subscribe_new_form_Pre_activate')[0].reset();
 							}
 						}
-					});
-				}
+					});		
 			});
 			$('#btn_yes_Pre_activate').click(function(){
 				$('#msg_scs_Pre_activate').addClass('collapse');
@@ -143,11 +213,12 @@ $(function(){
 			$('#btn_yes_Pre_activate_finish_btn').click(function(){
 				$('#add_data_Modal_activate').modal('hide');		
 				$('#Activate_btn').addClass('collapse');
+				location.reload();
 				
 			});
 
 			 $('#add_data_Modal_activate').on('hidden.bs.modal', function(){
-			 	if($refresh)
+			 	if($refresh && $('#retry_Pre_activate').hasClass('collapse'))
 			 	{
 			 		 $('#save_btn_Pre_activate').removeClass('collapse');
 			 		 $('#hide').removeClass('collapse');
@@ -160,6 +231,160 @@ $(function(){
  		
  		});
 	
+
+	$('#receive_del_form').on('submit',function(event){
+		event.preventDefault();
+
+		$depts=[];
+		$sn=$('#sn_rec').val();
+		$DOI=$('#DOI_rec').val();
+		$VN=$('#VN_rec').val();
+		$IN=$('#IN_rec').val();
+		$DR=$('#DR_rec').val();
+
+
+
+		$('input[type="checkbox"]:checked').each(function(){
+			if($(this).val()!='SA')
+			{
+				$depts.push($(this).val());
+			}
+		});
+
+		if($depts.length==0)
+		{
+			alert('Please Select Atleast One Department');
+		}
+		else
+		{
+
+	 		$.ajax({
+	 			url:"php_codes/insert_serial_pack.php",
+	 			method:"POST",
+	 			data:{sn:$sn,DOI:$DOI,VN:$VN,IN:$IN,DR:$DR,depts:$depts},
+	 			success:function(data)
+	 			{
+					$("#receive_del_form")[0].reset();
+					if(data.status=='success')
+					{
+						if(!$('#msg_scs_enter').hasClass('collapse'))
+						{
+							$('#msg_scs_enter').addClass('collapse');
+						}
+						else if(!$('#msg_fail_enter').hasClass('collapse'))
+						{
+							$('#msg_fail_enter').addClass('collapse');
+						}
+
+						$('#msg_deliv_enter').removeClass('collapse');
+						$('#receive_deliv_modal').modal('hide');
+						
+					}
+					else
+					{
+						if(!$('#msg_scs_enter').hasClass('collapse'))
+						{
+							$('#msg_scs_enter').addClass('collapse');
+						}
+						else if(!$('#msg_deliv_enter').hasClass('collapse'))
+						{
+							$('#msg_deliv_enter').addClass('collapse');
+						}
+
+						$('#msg_fail_enter').removeClass('collapse');
+						
+					}
+	 			}
+	 		});
+ 		}
+	 	
+	});
+
+	if($('span#rid').text()!="")
+	{
+		$('#Activate_btn').addClass('collapse');
+
+	}
+
+
+	$('#cog_action').click(function(){
+
+ 		$x=0;
+ 		$('button.tabledit-edit-button').each(function(){
+ 			
+ 			if($(this).hasClass('active'))
+ 			{
+ 				$x++;
+ 			}
+
+ 		}); 		
+
+ 		if($('thead>tr>th:nth-child(9)').hasClass('collapse'))
+ 		{
+ 			$('thead>tr>th:nth-child(9)').removeClass('collapse');
+			$('tbody>tr>td:nth-child(9)').removeClass('collapse');
+			
+ 		}
+ 		else
+ 		{
+ 			// DELETE BTN
+		$('button.tabledit-delete-button').each(function(){
+				if($(this).hasClass('active'))
+				{
+					$(this).removeClass('active');
+				}
+		});
+		$('button.tabledit-confirm-button').each(function(){
+ 					if($(this).css('display')!='none')
+ 					{
+ 						$(this).css('display','none');
+ 					}
+ 		});
+
+ 			if($x!=0)
+ 			{
+ 				$('input.tabledit-input').each(function(){
+ 					$(this).css('display','none');
+ 					$(this).closest('td.tabledit-edit-mode').find('span.tabledit-span').css('display', 'inline');
+ 				});
+ 				$('select.tabledit-input').each(function(){
+ 					$(this).css('display','none');
+ 					$(this).closest('td.tabledit-edit-mode').find('span.tabledit-span').css('display', 'inline');
+ 				});
+
+ 				$('button.tabledit-edit-button').each(function(){
+ 					if($(this).hasClass('active'))
+ 					{
+ 						$(this).removeClass('active');
+ 					}
+ 				});
+ 			
+
+ 				$('button.tabledit-save-button').each(function(){
+ 					if($(this).css('display')!='none')
+ 					{
+ 						$(this).css('display','none');
+ 					}
+ 				});
+ 				
+ 				$('button.tabledit-restore-button').each(function(){
+ 					if($(this).css('display')!='none')
+ 					{
+ 						$(this).css('display','none');
+ 					}
+ 				});
+
+ 				$x=0;
+ 			}
+ 			
+
+ 			$('thead>tr>th:nth-child(9)').addClass('collapse');
+			$('tbody>tr>td:nth-child(9)').addClass('collapse');
+ 		}
+ 	});
+
+ 	$('#table_subs_wrapper').removeClass('form-inline');
+
 
 
 });

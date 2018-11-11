@@ -32,37 +32,3 @@
 		</div>
 	</div>
 </div>
-
-<script>
-$(function(){
-
-	$('#btn_yes').click(function(){
-		$.ajax({
-			method:'POST',
-			url:'php_codes/Archive_Data.php',
-			data:{data_type:'Archive_datas'},
-			success:function(data){
-
-				$('#Verfiy_Modal').modal('hide');
-
-				if(data=='complete_archive')
-				{
-					$('#msg_scs_archive').removeClass('collapse');
-				}
-				else if(data=='error_archive')
-				{
-					$('#msg_fail_archive').removeClass('collapse');
-				}
-				else
-				{
-					$('#msg_warning_archive').removeClass('collapse');
-				}
-			}
-		});
-	});
-
-	$('#btn_no').click(function() {
-		$('#Verfiy_Modal').modal('hide');
-	});
-});
-</script>

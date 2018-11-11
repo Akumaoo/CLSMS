@@ -1,0 +1,32 @@
+1st Week
+Monday-Wednesday:
+*Database Revise					(DONE!!)
+*Revise Subscription/Deliveries				(DONE!!)
+
+Thursday-Saturday:
+*Revising Serials					(DONE!!)	
+*Revise Sending Serials					(DONE!!)
+
+2nd Week
+Monday-Wednesday:
+*User Profile
+*Fix Action Buttons					(DONE!!)
+
+Thursday-Saturday:
+*Fix Notifications[ADMIN]					(DONE!!!)
+*Fix Notifications[STAFF]					(PARTLY DONE!!!)
+*Dashboard						(Started!)
+
+3rd Week
+Monday-Wednesday:
+*Reports Generation					(STARTED!)
+*Staff UI/Reports					(LATE!!)
+
+Thursday-Saturday:
+*Review Changes						(LATE!!)
+*Empty Database/Debug/Find Bugs				(LATE!!)
+
+4th Week 
+*Finalizing/Check To Clients
+*Paperworks
+*Prepare for Final Presentation And Testing

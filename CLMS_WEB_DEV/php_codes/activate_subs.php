@@ -46,23 +46,43 @@ if(!empty($_POST['disb']))
 header('Content-type: application/json');
 echo json_encode($data);
 }
-else if(!empty($_POST['RT']))
+else if(!empty($_POST['SED']))
 {
-	$RT=$_POST['RT'];
+	function getSType($sid)
+	{
+		require 'db.php';
+		$sql="Select Origin from Serial Where SerialName=?";
+		$query=sqlsrv_query($conn,$sql,array($sid));
+		$row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
+		$stype=$row['Origin'];
+		return $stype;
+	}
+
 	$SED=$_POST['SED'];
+	$SSD=$_POST['SSD'];
 	$sub=$_POST['SUB'];
-	$today_date=date('Y/m/d');
+	$snam=$_POST['sn'];
+
+	// $SED='2018-11-30';
+	// $SSD='2018-11-30';
+	// $sub='1234';
+	// $snam='Dummy';
+
+	$RT=getSType($snam);
+
+
+	// $today_date=date('Y/m/d');
 	if($RT=='Local')
 	{
-		$ERD=date("Y/m/d",strtotime($today_date.'+ 4 month'));
+		$ERD=date("Y/m/d",strtotime($SSD.'+ 4 month'));
 	}
 	else if($RT=='International')
 	{
-		$ERD=date("Y/m/d",strtotime($today_date.'+ 6 month'));	
+		$ERD=date("Y/m/d",strtotime($SSD.'+ 6 month'));	
 	}
 
 	$sql="Update Subscription SET IDD_Phase=?,InitialDeliveryDate=?,Subscription_Date=?,Subscription_End_Date=? WHERE SubscriptionID=?";
-	$query=sqlsrv_query($conn,$sql,array('Phase1',$ERD,$today_date,$SED,$sub));
+	$query=sqlsrv_query($conn,$sql,array('Phase1',$ERD,$SSD,$SED,$sub));
 	if($query)
 	{
 		$scs['status']='success';

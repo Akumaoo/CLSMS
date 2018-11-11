@@ -1,9 +1,10 @@
   <?php
   // GET ADDITIONAL INFO ON DELAYED NOTIF
 
-  $delivery_sqltxt="Select TOP 5 DepartmentID,DateReceiveNotif_Give,SerialID from ReceiveSerial Where [Status]=? ";
+  $delivery_sqltxt="Select TOP 5 Count(Subq.DepartmentID) AS NumRec,Subq.DepartmentID,DateReceiveNotif_Give,Staff_Seen from
+(Select ReceiveSerial.DepartmentID,DateReceiveNotif_Give,Staff_Seen from ReceiveSerial inner join Subscription on ReceiveSerial.SerialID=Subscription.SerialID Where Subscription.Status=? AND ReceiveSerial.Status=? AND Admin_Seen IS NULL) AS Subq Group By DepartmentID,DateReceiveNotif_Give,Staff_Seen";
 
-  $delivery_query=sqlsrv_query($conn,$delivery_sqltxt,array('NotReceived'));
+  $delivery_query=sqlsrv_query($conn,$delivery_sqltxt,array('OnGoing','NotReceived'));
   
 
   if(sqlsrv_has_rows($delivery_query))
@@ -12,26 +13,35 @@
     {
         $dept=$receive_row['DepartmentID'];
         $Date=$receive_row['DateReceiveNotif_Give']->format('M-d-Y');
-        $serialID=$receive_row['SerialID'];
+        $num_rec=$receive_row['NumRec'];
+        $ss=$receive_row['Staff_Seen'];
 
-        $snamesql="Select SerialName from Serial Where SerialID=?";
-        $query=sqlsrv_query($conn,$snamesql,array($serialID));
-        $rows=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
-        $sname=$rows['SerialName'];
-
-        //SETTING VALUE OF COURSENAME
            echo '
-            <div class="receive_tab">
+            <div class="pending_tab">
               <div class="thumb">
-                <span> <img src="img/receive.png"  height="35" width="35"> </span>
-              </div>
+              ';
+              if(is_null($ss))
+              {
+                echo '<a href="javascript:void(0)" class="pending_click"><span> <img src="img/alert.png"  height="35" width="35"> </span></a>';
+              }
+              else
+              {
+                echo '<a href="javascript:void(0)" class="pending_click"><span> <img src="img/receive.png"  height="35" width="35"> </span></a>';
+              }
+             
+        echo' </div>
               <div>
                 <p>
-                  <muted class="date">'.$Date.'</muted>
+                  <muted>'.$Date.'</muted>
                   <br/>
-                  <strong>'.$sname.'</strong> is not yet received (<strong>'.$dept.')</strong>.<br/>
+                  <strong>'.$dept.'</strong> has <strong>'.$num_rec.'</strong> pending serials.<br/>
                 </p>
               </div>
+
+             <form id="pending_form" action="Pending_Serials.php" method="POST">
+                <input type="hidden" name="dept" value="'.$dept.'">
+                <input type="hidden" name="date" value="'.$Date.'">
+              </form>
             </div>
           ';
       

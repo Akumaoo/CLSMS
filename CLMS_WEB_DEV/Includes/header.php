@@ -1,12 +1,3 @@
-<?php 
-session_start();
-if(!isset($_SESSION['current_user']))
-{
-  header('location:login.php');
-}
-
- ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -24,12 +15,14 @@ if(!isset($_SESSION['current_user']))
   <link href="lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
   <link rel="stylesheet" type="text/css" href="css/zabuto_calendar.css">
   <link rel="stylesheet" type="text/css" href="lib/gritter/css/jquery.gritter.css" />
+
   <!-- Custom styles for this template -->
   <link href="css/style.css" rel="stylesheet">
   <link href="css/style-responsive.css" rel="stylesheet">
 
   <!--Override CSS-->
     <link href="css/custom.css" rel="stylesheet">
+    <link href="css/morris.css" rel="stylesheet">
     <link rel="stylesheet" href="Datatable/css/dataTables.bootstrap.min.css">
 
 </head>
@@ -57,3 +50,7 @@ if(!isset($_SESSION['current_user']))
     <!--sidebar start-->
     <?php include 'Includes/left-sidebar.php';?>
     <!--sidebar end-->
+
+<section id="main-content">
+  <section class="wrapper">
+    <div class="main-chart">

@@ -4,7 +4,7 @@ require '../php_codes/db.php';
 $deptID=$_POST['dept'];
 
 $table=<<<EOT
- (Select Categorize_Serials.SerialID,SerialName,TypeName,DepartmentID  From [Type] Inner Join Serial On [Type].TypeID=Serial.TypeID Inner Join Categorize_Serials On Serial.SerialID=Categorize_Serials.SerialID) temp
+ (SELECT * from Serial) temp
 EOT;
 
 $primary_key='SerialID';
@@ -12,7 +12,8 @@ $primary_key='SerialID';
 $columns=array(
 	array('db'=>'SerialID','dt'=>0),
 	array('db'=>'SerialName','dt'=>1),
-	array('db'=>'TypeName','dt'=>2)
+	array('db'=>'TypeName','dt'=>2),
+	array('db'=>'Origin','dt'=>3)
 
 );
 

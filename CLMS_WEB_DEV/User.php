@@ -1,3 +1,7 @@
+<?php 
+require 'php_codes/admin_verify.php';
+include 'Includes/header.php';
+ ?>
 <div class="container-fluid">
 			<div class="row custom-boxxx">		
 		        <div>
@@ -8,24 +12,29 @@
 <div class="custom-panelbox">
 	<div class="">
 		<div class="">
-			<h4 class="fa fa-user-plus tag_style">Manage Users:</h4>
+			<h5 class="fa fa-user-plus tag_style">Manage Users:</h5>
+			<a href="javascript:void(0)" data-toggle="modal" data-target="#add_user_modal"  style="font-size: 13px;margin-left: 10px;">Add User</a>
 			<h4 class="dividerr"></h4>
 		</div>
 	</div>
 	
 	<div class="alert alert-success alert-dismissible collapse center" id="msg_scs">
-	    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-	    <strong>Successfully Added User!</strong> , Please Reload The Page To Update The Table.
+	    <strong>Successfully Added User!</strong>
  	 </div>
+ 	  	<div class="alert alert-success alert-dismissible collapse center" id="msg_scs_remove">
+    	<strong>Successfully Removed User!</strong>
+ 	</div>
 
   	<div class="alert alert-danger alert-dismissible collapse center" id="msg_fail">
-	    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 	    <strong>Something Went Wrong!</strong> , Please Check The Values You Entered And Try Again.
   	</div>
 
 	<div class=" custom_table">
-
+		
+		<div class="container-fluid">
+		<div class="row">
 		<div class="col-lg-10 col-lg-offset-1">
+			<span class="fa fa-cog fa-lg cog_action" id="cog_action"></span>
 			<table cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover" id="table_user">
 				<thead class="thead_theme">
 				<tr>
@@ -39,52 +48,19 @@
 				</tr>
 				</thead>
 				<tbody>
-					<?php 
-						require 'php_codes/db.php';
-						$sql="Select * from [User]";
-						$query=sqlsrv_query($conn,$sql,array());
-						if(sqlsrv_has_rows($query))
-						{
-							while($row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
-							{
-								$id=$row['UserID'];
-								$username=$row['UserName'];
-								$FN=$row['FirstName'];
-								$LN=$row['LastName'];
-								$Email=$row['Email'];
-								$role=$row['Role'];
-								$dept=$row['DepartmentID'];
-
-								echo '
-									<tr class="gradeU">
-										<td class="radio-label-center">'.$id.'</td>
-										<td class="radio-label-center">'.$username.'</td>
-										<td class="radio-label-center">'.$FN.'</td>
-										<td class="radio-label-center">'.$LN.'</td>
-										<td class="radio-label-center">'.$Email.'</td>
-										<td class="radio-label-center">'.$role.'</td>
-										<td class="radio-label-center">'.$dept.'</td>																	
-									</tr>
-								';
-
-							}							
-						}
-
-					 ?>
 				</tbody>
 			</table>
 		</div>
-		
-	</div>
-
-	<div class="">
-		<div class="col-lg-offset-9">
-			<button type="button" name="New_pack" id="New_pack" data-toggle="modal" data-target="#add_user_modal" class="custom-btn">Add User!</button>
 		</div>
+		</div>
+		
 	</div>
 </div>
 </div>
 <?php 
 		include 'Modals/New_user_Modal.php';
+		include 'Includes/footer.php';
 ?>
-<script type="text/javascript" src="Js/User_main.js?v=66"></script>
+</body>
+</html>
+<script type="text/javascript" src="Js/User_main.js?v=632263"></script>

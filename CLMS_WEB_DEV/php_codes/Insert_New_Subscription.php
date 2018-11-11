@@ -8,14 +8,16 @@ if(!empty($_POST))
 	$sn=$_POST['sname'];
 	$freq=$_POST['freq'];
 	$cost=$_POST['cost'];
+	$dept_list=$_POST['depts'];
 
 	// $distname="UMX";
-	// $type="POST-PAID";
+	// $type="Auto-Activate";
 	// $sn="DUMMY";
 	// $freq=6;
 	// $cost=6;
+	// $dept_list=array('HS','ELEM');
 	
-	$date_today=date('Y/m/d');
+	// $date_today=date('Y/m/d');
 
 function CheckDisbtributor($disb){
 	require 'db.php';
@@ -68,21 +70,49 @@ function CheckDup($sid)
 		return false;
 	}
 }
+function getStype($sid)
+{
+	require 'db.php';
+	$sql="Select Origin from Serial Where SerialID=?";
+	$query=sqlsrv_query($conn,$sql,array($sid));
+	$row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
+	$type=$row['Origin'];
+	return $type;
+}
+function getNewSubID()
+{
+	require 'db.php';
+	$sql="Select Max(SubscriptionID) AS SubscriptionID from Subscription";
+	$query=sqlsrv_query($conn,$sql,array());
+	$row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
+	$nid=$row['SubscriptionID'];
+	return $nid;
+}
+
 
 	if((CheckDisbtributor($distname)!="NotValid" && CheckSerial($sn)!="NotValid" && !CheckDup(CheckSerial($sn))))
 	{
 		$dID=CheckDisbtributor($distname);
 		$SID=CheckSerial($sn);
+		
 
-		if($type=="PRE-PAID")
+		if($type=="Manual-Activate")
 		{
 		
 			// inserting on subscription table
-			$sqlinsert="Insert Into [Subscription](DistributorID,SerialID,Orders,Cost,NumberOfItemReceived,Status) Values(?,?,?,?,?,?)";
-			$query=sqlsrv_query($conn,$sqlinsert,array($dID,$SID,$freq,$cost,0,'OnGoing'));
+			$sqlinsert="Insert Into [Subscription](DistributorID,SerialID,Frequency,Cost,Status) Values(?,?,?,?,?)";
+			$query=sqlsrv_query($conn,$sqlinsert,array($dID,$SID,$freq,$cost,'OnGoing'));
 
 			if($query)
 			{
+				$new_SubID=getNewSubID();
+
+				for($x=0;$x<count($dept_list);$x++)
+				{
+					$dept=$dept_list[$x];
+					$sqlins="Insert Into Categorize_Serials(SubscriptionID,DepartmentID,NumberOfItemReceived,Usage_Stat) VALUES(?,?,?,?)";
+					$insquery=sqlsrv_query($conn,$sqlins,array($new_SubID,$dept,0,0));
+				}
 				$scs['status']="success";
 			}
 			else
@@ -93,22 +123,35 @@ function CheckDup($sid)
 		else
 		{
 			$SED=$_POST['SED'];
-			$RT=$_POST['RT'];
+			$SSD=$_POST['SSD'];
+			$RT=getStype($SID);
 			// $SED='2018-10-10';
 			// $RT='Local';
+
+			
+
 			if($RT=='Local')
 			{
-				$ERD=date("Y/m/d",strtotime($date_today.'+ 4 month'));
+				$ERD=date("Y/m/d",strtotime($SSD.'+ 4 month'));
 			}
 			else if($RT=='International')
 			{
-				$ERD=date("Y/m/d",strtotime($date_today.'+ 6 month'));	
+				$ERD=date("Y/m/d",strtotime($SSD.'+ 6 month'));	
 			}
-			$sqlinsert="Insert Into Subscription(DistributorID,SerialID,Orders,Cost,NumberOfItemReceived,Status,IDD_Phase,InitialDeliveryDate,Subscription_Date,Subscription_End_Date) Values(?,?,?,?,?,?,?,?,?,?)";
-			$query=sqlsrv_query($conn,$sqlinsert,array($dID,$SID,$freq,$cost,0,'OnGoing','Phase1',$ERD,$date_today,$SED));
+			$sqlinsert="Insert Into Subscription(DistributorID,SerialID,Frequency,Cost,Status,IDD_Phase,InitialDeliveryDate,Subscription_Date,Subscription_End_Date) Values(?,?,?,?,?,?,?,?,?)";
+			$query=sqlsrv_query($conn,$sqlinsert,array($dID,$SID,$freq,$cost,'OnGoing','Phase1',$ERD,$SSD,$SED));
 
 			if($query)
 			{
+				$new_SubID=getNewSubID();
+
+				for($x=0;$x<count($dept_list);$x++)
+				{
+					$dept=$dept_list[$x];
+					$sqlins="Insert Into Categorize_Serials(SubscriptionID,DepartmentID,NumberOfItemReceived,Usage_Stat) VALUES(?,?,?,?)";
+					$insquery=sqlsrv_query($conn,$sqlins,array($new_SubID,$dept,0,0));
+				}
+
 				$scs['status']="success";
 			}
 			else

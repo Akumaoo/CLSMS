@@ -3,52 +3,39 @@ require 'db.php';
 
 if(!empty($_POST))
 {
-	$SN=$_POST['sn_rec'];
-	// $SN='Disney Princess';
+	$SN=$_POST['sn'];
+	// $SN='DUMMY';
 
-	if(!$_POST['DOI_rec'])
+	if(!$_POST['DOI'])
 	{
 		$DOI=NULL;
 	}
 	else
 	{
-		$DOI=$_POST['DOI_rec'];
+		$DOI=$_POST['DOI'];
 	}
-	if($_POST['IN_rec']==0)
+	if($_POST['IN']==0)
 	{
 		$IN=NULL;
 	}
 	else
 	{
-		$IN=$_POST['IN_rec'];
+		$IN=$_POST['IN'];
 	}
-	if($_POST['VN_rec']==0)
+	if($_POST['VN']==0)
 	{
 		$VN=NULL;
 	}
 	else
 	{
-		$VN=$_POST['VN_rec'];
+		$VN=$_POST['VN'];
 	}
-	$cop=$_POST['copy_rec'];
-	$RD=$_POST['DR_rec'];
-	// $cop=2;
-	// $RD='2018-10-16';
+	$RD=$_POST['DR'];
+	$depts_list=$_POST['depts'];
+	
+	// $RD=date('Y/m/d');
+	// $depts_list=array('ELEM');
 
-	function checkONgoing($sid)
-	{
-		require 'db.php';
-		$sql="Select * from Subscription Where SerialID=? And Status=?";
-		$query=sqlsrv_query($conn,$sql,array($sid,'OnGoing'));
-		if(sqlsrv_has_rows($query))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
 
 	function GetSerialID($sn)
 	{
@@ -69,20 +56,7 @@ if(!empty($_POST))
 		}
 	}
 
-	function CheckDup($sid,$rd)
-	{
-		require 'db.php';
-		$dupsql="Select * from Delivery Where SerialID=? AND Receive_Date=?";
-		$dupquery=sqlsrv_query($conn,$dupsql,array($sid,$rd),$opt);
-		if(sqlsrv_num_rows($dupquery)>0)
-		{
-			return false;
-		}
-		else
-		{
-			return true;
-		}
-	}
+
 	function subsID($sid)
 	{
 		require 'db.php';
@@ -92,32 +66,25 @@ if(!empty($_POST))
 		$id=$row['SubscriptionID'];
 		return $id;
 	}
-	function getPrevCop($subs)
-	{
-		require 'db.php';
-		$sql="Select NumberOfItemReceived from Subscription Where SubscriptionID=?";
-		$query=sqlsrv_query($conn,$sql,array($subs));
-		$row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
-		$id=$row['NumberOfItemReceived'];
-		return $id;
-	}
+
 	function getFreq($s)
 	{
 		require 'db.php';
-		$sql="Select Orders from Subscription Where SubscriptionID=?";
+		$sql="Select Frequency from Subscription Where SubscriptionID=?";
 		$query=sqlsrv_query($conn,$sql,array($s));
 		$row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
-		$freq=$row['Orders'];
+		$freq=$row['Frequency'];
 		return $freq;
 	}
+
 	function checkPhase($n)
 	{
 		require 'db.php';
 		$sql="Select IDD_Phase from Subscription Where SubscriptionID=?";
 		$query=sqlsrv_query($conn,$sql,array($n));
 		$row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
-		$freq=$row['IDD_Phase'];
-		if(!is_null($freq))
+		$IDDP=$row['IDD_Phase'];
+		if(!is_null($IDDP))
 		{
 			return true;
 		}
@@ -128,68 +95,122 @@ if(!empty($_POST))
 		
 	}
 
+	function checkDeliv()
+	{
+		require 'db.php';
+		$date_today=date('Y/m/d');
+		$delID="";
+
+		$sql="Select * from Delivery Where Receive_Date=?";
+		$query=sqlsrv_query($conn,$sql,array($date_today));
+		if(sqlsrv_has_rows($query))
+		{
+			$row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
+			$delID=$row['DeliveryID'];
+			return $delID;
+		}
+		else
+		{
+			$sqlins="Insert Into Delivery(Receive_Date) Values(?)";
+			$insquery=sqlsrv_query($conn,$sqlins,array($date_today));
+			if($insquery)
+			{
+				$sqlget="Select Max(DeliveryID) as NewDel from Delivery";
+				$getquery=sqlsrv_query($conn,$sqlget,array());
+				$rows=sqlsrv_fetch_array($getquery,SQLSRV_FETCH_ASSOC);
+				$delID=$rows['NewDel'];
+			}
+			return $delID;
+		}
+	}
+
+
+	function checkFinished($sub){
+		require 'db.php';
+
+		$sql="Select Sum(NumberOfItemReceived) AS Total_NIR from Categorize_Serials Where SubscriptionID=?";
+		$sqlquery=sqlsrv_query($conn,$sql,array($sub));
+		$row=sqlsrv_fetch_array($sqlquery,SQLSRV_FETCH_ASSOC);
+		$Total_NIR=$row['Total_NIR'];
+
+		$sqlcount="Select Count(*) AS DeptCount from Categorize_Serials Where SubscriptionID=?";
+		$querycount=sqlsrv_query($conn,$sqlcount,array($sub));
+		$row=sqlsrv_fetch_array($querycount,SQLSRV_FETCH_ASSOC);
+		$deptCount=$row['DeptCount'];
+
+		$getfreqtxt="Select Frequency from Subscription Where SubscriptionID=?";
+		$queryfreq=sqlsrv_query($conn,$getfreqtxt,array($sub));
+		$row=sqlsrv_fetch_array($queryfreq,SQLSRV_FETCH_ASSOC);
+		$freq=$row['Frequency'];
+
+		$sum_finish=$freq*$deptCount;
+
+		if($Total_NIR==$sum_finish)
+		{
+			return 'Finished';
+		}
+		else
+		{
+			return 'Not-Finish';
+		}
+
+	}
+
 	if(GetSerialID($SN)!='NotValid')
 	{
 		$serial_id=GetSerialID($SN);
 		$sub_id=subsID($serial_id);
-		$prev_cop=getPrevCop($sub_id);
-		$new_copy=$cop+$prev_cop;
 		$order=getFreq($sub_id);
+		$date_today=date('Y/m/d');
 
-
-		if(CheckDup($serial_id,$RD) && checkONgoing($serial_id))
-		{
 			if(checkPhase($sub_id))
 			{
-				if($new_copy<$order)
+				$delID=checkDeliv();
+				// $scs['del']=$delID.",".$sub_id.",".$DOI.",".$IN.",".$VN;
+				$insertsql="Insert Into Delivery_Subs(DeliveryID,SubscriptionID,DateofIssue,IssueNumber,VolumeNumber) VALUES(?,?,?,?,?)";
+				$insertquery=sqlsrv_query($conn,$insertsql,array($delID,$sub_id,$DOI,$IN,$VN));
+
+				if($insertquery)
 				{
-					$sqlup="Update Subscription Set NumberOfItemReceived=?,IDD_Phase=? Where SubscriptionID=?";
-					$upquery=sqlsrv_query($conn,$sqlup,array($new_copy,'Complete',$sub_id));
-
-					if($upquery)
+					for($x=0;$x<count($depts_list);$x++)
 					{
-						$insertsql="Insert Into Delivery(SerialID,DateofIssue,IssueNumber,VolumeNumber,Copies,Receive_Date) Values(?,?,?,?,?,?)";
-						$insertquery=sqlsrv_query($conn,$insertsql,array($serial_id,$DOI,$IN,$VN,$cop,$RD));
-
-						if($insertquery)
-						{
-							$scs['status']="success";
-						}
-						else
-						{
-							$scs['status']='fail';
-						}
+						// SENDING SERIAL PROCESS
+						$sendsertxt="Insert Into ReceiveSerial(DepartmentID,SerialID,Status,DateReceiveNotif_Give) VALUES (?,?,?,?)";
+						$sendserquery=sqlsrv_query($conn,$sendsertxt,array($depts_list[$x],$serial_id,'NotReceived',$date_today));
+						
 					}
-				}
-				else
-				{
-					$sqlup2="Update Subscription Set NumberOfItemReceived=?,IDD_Phase=?,Status=? Where SubscriptionID=?";
-					$upquery2=sqlsrv_query($conn,$sqlup2,array($order,'Complete','Finished',$sub_id));
 
-					if($upquery2)
+					if(checkFinished($sub_id)=='Finished')
 					{
-						$insertsql2="Insert Into Delivery(SerialID,DateofIssue,IssueNumber,VolumeNumber,Copies,Receive_Date) Values(?,?,?,?,?,?)";
-						$insertquery2=sqlsrv_query($conn,$insertsql2,array($serial_id,$DOI,$IN,$VN,$cop,$RD));
-
-						if($insertquery2)
-						{
-							$scs['status']="success";
-						}
-						else
-						{
-							$scs['status']='fail';
-						}
+						$sqlup="Update Subscription Set IDD_Phase=?,Status=? Where SubscriptionID=?";
+						$upquery=sqlsrv_query($conn,$sqlup,array('Complete','Finished',$sub_id));
 					}
+					else
+					{
+						$sqlup="Update Subscription Set IDD_Phase=? Where SubscriptionID=?";
+						$upquery=sqlsrv_query($conn,$sqlup,array('Complete',$sub_id));
+					}	
+					// ($upquery && $sendserquery && $sqlupCSquery)
+					if(($upquery && $sendserquery))
+					{
+						$scs['status']='success';
+					}
+					else
+					{
+						$scs['status']='fail';
+					}
+
 				}
+
 			}
 			else
 			{
-				$scs['status']='fail';
-			}
 
-			header('Content-type: application/json');
-			echo json_encode($scs);
-		}
+				$scs['status']='fail';
+			}		
 	}
+
+	header('Content-type: application/json');
+	echo json_encode($scs);
 }
  ?>

@@ -1,3 +1,8 @@
+<?php 
+require 'php_codes/admin_verify.php';
+include 'Includes/header.php';
+
+ ?>
 <div class="container-fluid">
 			<div class="row custom-boxxx">		
 		        <div>
@@ -9,6 +14,7 @@
 	<div class="">
 		<div class="">
 			<h4 class="fa fa-truck tag_style "> Manage Subscription:</h4>
+			<a href="javascript:void(0)" id="subs"  style="font-size: 13px;margin-left: 10px;">Subscribe Now!</a>
 			<h4 class="dividerr"></h4>
 		</div>
 
@@ -28,17 +34,15 @@
 	</div>
 	</div>
 
-	<div class="">
-		<div class="col-lg-offset-9">
-			<button type="button" name="SN" id="SN" data-toggle="modal" data-target="#add_data_Modal" class="custom-btn">Subscribe Now!</button>
-		</div>
-	</div>
-
 </div>
 </div>
 <?php 
 	include 'Modals/Add_Subscription_Modal.php';
+	include 'Modals/Add_Subscription_Modal_Firststep.php';
 	include 'Modals/Add_Subscription_Modal_secondstep.php';
 	include 'Modals/Add_Subscription_Modal_secondstep_POST.php';
+	include 'Includes/footer.php';
  ?>
+</body>
+</html>
 <script type="text/javascript" src="Js/request_main.js?v=0.666"></script>

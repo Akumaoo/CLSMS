@@ -4,7 +4,7 @@
 	{
 		 require 'php_codes/db.php';
 		 
-		$sqltxt="Select Count(*) CountA From Subscription ";
+		$sqltxt="Select Count(*) CountA From Subscription WHERE Archive IS NULL";
 		$query=sqlsrv_query($conn,$sqltxt,array());
 			while($rows=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
 		{
@@ -16,7 +16,7 @@
 	Function ongoingtotal()
 	{
 		 require 'php_codes/db.php';
-		$sqltxt1="Select Count(*) CountB From Subscription where Subscription.Status ='OnGoing'";
+		$sqltxt1="Select Count(*) CountB From Subscription where Subscription.Status ='OnGoing' AND Archive IS NULL";
 		$query=sqlsrv_query($conn,$sqltxt1,array());
 			while($rows=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
 		{

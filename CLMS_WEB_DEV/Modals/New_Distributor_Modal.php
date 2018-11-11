@@ -38,22 +38,11 @@
 				 						<input type="Email" class="form-control" name="mail" id="mail">
 				 					</div>
 				 				</div>
-
-				 				<div class="form-group form-group-center">
-				 					<label for="type" class="control-label col-lg-3">Distributor Type</label>
-				 					<div class="col-lg-6">
-				 						<select name="type" id="type">
-				 							<option value="POST-PAID">POST-PAID</option>
-				 							<option value="PRE-PAID">PRE-PAID</option>
-				 						</select>
-				 					</div>
-				 				</div>
-
 				 				
 
 				 				<div class="form-group form-group-center">
 				 					<div class="col-lg-offset-8">
-				 						<button class="btn custom-btn" type="submit" id="btn_insert" value="save" name="save">Save</button>
+				 						<button class="custom-btn" type="submit" id="btn_insert" value="save" name="save">Save</button>
 				 					</div>
 				 				</div>
 				 			</form>

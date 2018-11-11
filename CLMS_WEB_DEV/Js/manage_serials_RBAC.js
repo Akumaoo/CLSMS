@@ -1,7 +1,7 @@
 $(function(){
-
+	$table="";
 	if(!$.fn.DataTable.isDataTable("#table_MS")){
-	$('#table_MS').DataTable({			
+	$table=$('#table_MS').DataTable({			
 	"processing":true,
 	"serverSide":true,
 	"ordering":true,
@@ -16,83 +16,88 @@ $('#table_MS').on('draw.dt', function() {
 			url:"php_codes/modify_serials.php",
 			columns:{
 			identifier:[0,"SerialID"],
-			editable:[[1,"SerialName"],[2,"TypeName"]]
+			editable:[[2,"TypeName"],[3,'Origin']]
 				},
 			onSuccess:function(data,textStatus,jqXHR)
 			{
 				if(data.action=='delete')
 				{
-					$("#"+data.SerialID).remove();		
+					if(!$('#msg_scs').hasClass('collapse'))
+				{
+					$('#msg_scs').addClass('collapse');
+				}
+				else if(!$('#msg_scs_update').hasClass('collapse'))
+				{
+					$('#msg_scs_update').addClass('collapse');
+				}
+				else if(!$('#msg_fail').hasClass('collapse'))
+				{
+					$('#msg_fail').addClass('collapse');
+				}
+				$('#msg_scs_remove').removeClass('collapse');
+					$("#"+data.SerialID).remove();	
+				$table.ajax.reload(null,false);		
 
 				}
-				if(data.status=='success')
+				else if(data.status=='success')
 				{
-					$("#msg_scs").removeClass('collapse');
-				}
-				else
-				{
-					$("#msg_fail").removeClass('collapse');
+					if(!$('#msg_scs').hasClass('collapse'))
+					{
+						$('#msg_scs').addClass('collapse');
+					}
+					else if(!$('#msg_scs_remove').hasClass('collapse'))
+					{
+						$('#msg_scs_remove').addClass('collapse');
+					}
+					else if(!$('#msg_fail').hasClass('collapse'))
+					{
+						$('#msg_fail').addClass('collapse');
+					}
+
+					$("#msg_scs_update").removeClass('collapse');
+					$table.ajax.reload(null,false);
+				
 				}
 			},onDraw: function() {
-						$.ajax({
-						url:'php_codes/get_types.php',
-						success:function(data){
-						$('tbody tr td:nth-child(3)>input').each(function(){
-							$('<select class="tabledit-input form-control input-sm" style="display: none;" disabled=""><option style="display: none" value="stat">--Status--</option>'+data).attr({ name: this.name, value: this.value }).insertBefore(this)		
-						}).remove()
-						}
-						});
-
-				$('.tabledit-edit-button').remove();
+	
+				$('tbody tr td:nth-child(3)>input').each(function(){
+					$('<select class="tabledit-input form-control input-sm" style="display: none;" disabled=""><option style="display: none" value="stat">--Type--</option><option value="Magazine">Magazine</option><option value="Journal">Journal</option>').attr({ name: this.name, value: this.value }).insertBefore(this)		
+				}).remove();
+				$('tbody tr td:nth-child(4)>input').each(function(){
+					$('<select class="tabledit-input form-control input-sm" style="display: none;" disabled=""><option style="display: none" value="stat">--Origin--</option><option value="Local">Local</option><option value="International">International</option>').attr({ name: this.name, value: this.value }).insertBefore(this)		
+				}).remove();
 	 		 }
 		
 		});
 
-		$('tbody tr td:nth-child(2)').addClass('ser_click');
-
-		$(".ser_click").click(function(){
-			var serial_ID=$(this).text();
-			$.ajax({
-			type:'POST',
-			url:'php_codes/View_dept_serial.php',
-			data:{S_ID:serial_ID},
-			success:function(data){
-				$('.main-chart').html(data)
-			}
-			});
-
-		});	
+		
 
 		if($('tbody>tr>td:nth-child(1)').hasClass('dataTables_empty'))
 		{
 			$('.tabledit-toolbar-column').remove();
 			$('tbody>tr>td:nth-child(2)').remove();
 		}
+
+		$('thead>tr>th:nth-child(5)').addClass('collapse');
+		$('tbody>tr>td:nth-child(5)').addClass('collapse');
 	});
 
 	$('#Add_Serial').on('submit',function(event){
 		event.preventDefault();
-		 var deptlist=[];
-		 $.each($('input[name="dept"]:checked'),function(){
-		 	deptlist.push($(this).val());
-		 });
 
 		 var sName=$('#serialname').val();
 		 var type=$('#type option:selected').val();
+		 var orig=$('#orig option:selected').val();
 
 	 	if($("#serialname").val()=="")
 	 	{
 	 		alert("Serial Name Is Required");
 	 	}
-	 	else if(deptlist.length==0)
-	 	{
-	 		alert("Please Choose Atleast One Department");
-	 	}
 	 	else{
 	 		$.ajax({
 	 			url:"php_codes/Insert_new_serial.php",
 	 			method:"POST",
-	 			data:{sername:sName,depts:deptlist,stype:type},
+	 			data:{sername:sName,origin:orig,stype:type},
 	 			success:function(data)
 	 			{
 	 				$('#Add_Serial_Modal').modal('hide');
@@ -100,11 +105,38 @@ $('#table_MS').on('draw.dt', function() {
  					$("#Add_Serial")[0].reset();
  					if(data.status=='success')
  					{
+ 						if(!$('#msg_scs_remove').hasClass('collapse'))
+						{
+							$('#msg_scs_remove').addClass('collapse');
+						}
+						else if(!$('#msg_scs_update').hasClass('collapse'))
+						{
+							$('#msg_scs_update').addClass('collapse');
+						}
+						else if(!$('#msg_fail').hasClass('collapse'))
+						{
+							$('#msg_fail').addClass('collapse');
+						}
+
  						$("#msg_scs").removeClass('collapse');
+ 						$table.ajax.reload(null,false);
 
  					}
  					else
  					{
+ 						if(!$('#msg_scs_remove').hasClass('collapse'))
+						{
+							$('#msg_scs_remove').addClass('collapse');
+						}
+						else if(!$('#msg_scs_update').hasClass('collapse'))
+						{
+							$('#msg_scs_update').addClass('collapse');
+						}
+						else if(!$('#msg_scs').hasClass('collapse'))
+						{
+							$('#msg_scs').addClass('collapse');
+						}
+
  						$("#msg_fail").removeClass('collapse');
  					}
 	 			}
@@ -118,5 +150,88 @@ $('#table_MS').on('draw.dt', function() {
 			$('#msg_fail').addClass('collapse');
 		}
 	 });
+
+	
+ 	$('#MS').closest('li.sub-menu').find('a.dcjq-parent').addClass('active');
+ 	$('#MS').closest('li.sub-menu ul.sub').css('display', 'block');
+ 	$('#MS').addClass('active');
+
+ 	$('#cog_action').click(function(){
+
+ 		$x=0;
+ 		$('button.tabledit-edit-button').each(function(){
+ 			
+ 			if($(this).hasClass('active'))
+ 			{
+ 				$x++;
+ 			}
+
+ 		}); 		
+
+ 		if($('thead>tr>th:nth-child(5)').hasClass('collapse'))
+ 		{
+ 			$('thead>tr>th:nth-child(5)').removeClass('collapse');
+			$('tbody>tr>td:nth-child(5)').removeClass('collapse');
+			
+ 		}
+ 		else
+ 		{
+ 			// DELETE BTN
+		$('button.tabledit-delete-button').each(function(){
+				if($(this).hasClass('active'))
+				{
+					$(this).removeClass('active');
+				}
+		});
+		$('button.tabledit-confirm-button').each(function(){
+ 					if($(this).css('display')!='none')
+ 					{
+ 						$(this).css('display','none');
+ 					}
+ 		});
+
+ 			if($x!=0)
+ 			{
+ 				$('input.tabledit-input').each(function(){
+ 					$(this).css('display','none');
+ 					$(this).closest('td.tabledit-edit-mode').find('span.tabledit-span').css('display', 'inline');
+ 				});
+ 				$('select.tabledit-input').each(function(){
+ 					$(this).css('display','none');
+ 					$(this).closest('td.tabledit-edit-mode').find('span.tabledit-span').css('display', 'inline');
+ 				});
+
+ 				$('button.tabledit-edit-button').each(function(){
+ 					if($(this).hasClass('active'))
+ 					{
+ 						$(this).removeClass('active');
+ 					}
+ 				});
+ 			
+
+ 				$('button.tabledit-save-button').each(function(){
+ 					if($(this).css('display')!='none')
+ 					{
+ 						$(this).css('display','none');
+ 					}
+ 				});
+ 				
+ 				$('button.tabledit-restore-button').each(function(){
+ 					if($(this).css('display')!='none')
+ 					{
+ 						$(this).css('display','none');
+ 					}
+ 				});
+
+ 				$x=0;
+ 			}
+ 			
+
+ 			$('thead>tr>th:nth-child(5)').addClass('collapse');
+			$('tbody>tr>td:nth-child(5)').addClass('collapse');
+ 		}
+ 	});
+
+ 	$('#table_MS_wrapper').removeClass('form-inline');
 
 });

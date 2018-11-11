@@ -3,6 +3,9 @@
     
     </footer> -->
     <!--footer end-->
+    </div>
+  </section>
+  </section>
   </section>
   <!-- js placed at the end of the document so the pages load faster -->
   <script src="lib/jquery/jquery.min.js"></script>
@@ -19,7 +22,9 @@
   <script type="text/javascript" src="Datatable/js/jquery.dataTables.min.js"></script>
   <script type="text/javascript" src="Datatable/js/dataTables.bootstrap.min.js"></script>
   <script type="text/javascript" src="TableEdit/jquery.tabledit.min.js"></script>
+  <script type="text/javascript" src="lib/morris/morris.js"></script>
+  <script type="text/javascript" src="lib/raphael/raphael.min.js"></script>
   
   <!--custom scripts-->
    <script type="text/javascript" src="lib/custom_js.js"></script>
-   <script type="text/javascript" src='lib/index_leftcateg.js'></script>
+    <script type="text/javascript" src='lib/index_leftcateg.js'></script>

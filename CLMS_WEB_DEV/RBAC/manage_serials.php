@@ -48,4 +48,4 @@
 	</div>
 </div>
 </div>
-<script src="Js/manage_serials_RBAC_staff.js?v=2" type="text/javascript"></script>'
+<script src="Js/manage_serials_RBAC_staff.js?v=32" type="text/javascript"></script>'

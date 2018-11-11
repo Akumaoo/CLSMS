@@ -1,41 +1,17 @@
-  <section id="main-content">
-    <section class="wrapper">
-  	<div class="main-chart">
-      <?php   
+       <?php   
         require 'php_codes/db.php';
 
             // Journals
-            function JgetElem()
+            function JgetElem($dept)
             {   require 'php_codes/db.php';
-                $sql="Select  Max(ReceivedSerialID) AS ReceivedSerialID from ReceiveSerial Left Join Categorize_Serials ON ReceiveSerial.SerialID=Categorize_Serials.SerialID Inner Join Serial On Categorize_Serials.SerialID=Serial.SerialID Left JOin [Type] ON Serial.TypeID=[Type].TypeID Where ReceiveSerial.DepartmentID=? AND Status=? AND TypeName=? Group By ReceivedSerialID";
-                $query=sqlsrv_query($conn,$sql,array('ELEM','Received','Journal'),$opt);
+                $sql="Select  Max(ReceivedSerialID) AS ReceivedSerialID from ReceiveSerial Left Join Categorize_Serials ON ReceiveSerial.DepartmentID=Categorize_Serials.DepartmentID Inner Join Subscription ON Categorize_Serials.SubscriptionID=Subscription.SubscriptionID Inner Join Serial On Subscription.SerialID=Serial.SerialID Where ReceiveSerial.DepartmentID=? AND ReceiveSerial.Status=? AND TypeName=? Group By ReceivedSerialID";
+                $query=sqlsrv_query($conn,$sql,array($dept,'Received','Journal'),$opt);
                 $row=sqlsrv_num_rows($query);
                 return $row;
             }
-             function JgetJH()
+             function JgetCOl()
             {   require 'php_codes/db.php';
-                $sql="Select  Max(ReceivedSerialID) AS ReceivedSerialID from ReceiveSerial Left Join Categorize_Serials ON ReceiveSerial.SerialID=Categorize_Serials.SerialID Inner Join Serial On Categorize_Serials.SerialID=Serial.SerialID Left JOin [Type] ON Serial.TypeID=[Type].TypeID Where ReceiveSerial.DepartmentID=? AND Status=? AND TypeName=? Group By ReceivedSerialID";
-                 $query=sqlsrv_query($conn,$sql,array('JHS','Received','Journal'),$opt);
-                $row=sqlsrv_num_rows($query);
-                return $row;
-            }
-            function JgetSH()
-            {   require 'php_codes/db.php';
-                $sql="Select  Max(ReceivedSerialID) AS ReceivedSerialID from ReceiveSerial Left Join Categorize_Serials ON ReceiveSerial.SerialID=Categorize_Serials.SerialID Inner Join Serial On Categorize_Serials.SerialID=Serial.SerialID Left JOin [Type] ON Serial.TypeID=[Type].TypeID Where ReceiveSerial.DepartmentID=? AND Status=? AND TypeName=? Group By ReceivedSerialID";
-                 $query=sqlsrv_query($conn,$sql,array('SHS','Received','Journal'),$opt);
-                $row=sqlsrv_num_rows($query);
-                return $row;
-            }
-             function JgetHS()
-            {   require 'php_codes/db.php';
-                $sql="Select  Max(ReceivedSerialID) AS ReceivedSerialID from ReceiveSerial Left Join Categorize_Serials ON ReceiveSerial.SerialID=Categorize_Serials.SerialID Inner Join Serial On Categorize_Serials.SerialID=Serial.SerialID Left JOin [Type] ON Serial.TypeID=[Type].TypeID Where ReceiveSerial.DepartmentID=? AND Status=? AND TypeName=? Group By ReceivedSerialID";
-                 $query=sqlsrv_query($conn,$sql,array('HS','Received','Journal'),$opt);
-                $row=sqlsrv_num_rows($query);
-                return $row;
-            }
-              function JgetCOl()
-            {   require 'php_codes/db.php';
-                $sql="Select Max(ReceivedSerialID) AS ReceivedSerialID from ReceiveSerial Left Join Categorize_Serials ON ReceiveSerial.SerialID=Categorize_Serials.SerialID Inner Join Serial On Categorize_Serials.SerialID=Serial.SerialID Left JOin [Type] ON Serial.TypeID=[Type].TypeID Where (ReceiveSerial.DepartmentID!=? AND ReceiveSerial.DepartmentID!=? AND ReceiveSerial.DepartmentID!=? AND ReceiveSerial.DepartmentID!=?) AND Status=? AND TypeName=? Group By ReceivedSerialID";
+                $sql="Select  Max(ReceivedSerialID) AS ReceivedSerialID from ReceiveSerial Left Join Categorize_Serials ON ReceiveSerial.DepartmentID=Categorize_Serials.DepartmentID Inner Join Subscription ON Categorize_Serials.SubscriptionID=Subscription.SubscriptionID Inner Join Serial On Subscription.SerialID=Serial.SerialID Where (ReceiveSerial.DepartmentID!=? AND ReceiveSerial.DepartmentID!=? AND ReceiveSerial.DepartmentID!=? AND ReceiveSerial.DepartmentID!=?) AND ReceiveSerial.Status=? AND TypeName=? Group By ReceivedSerialID";
                  $query=sqlsrv_query($conn,$sql,array('ELEM','JSH','SHS','HS','Received','Journal'),$opt);
                 $row=sqlsrv_num_rows($query);
                 return $row;
@@ -43,42 +19,21 @@
 
             // MAGAZINE
 
-            function  MgetElem()
+
+            function  MgetElem($dept)
             {   require 'php_codes/db.php';
-                $sql="Select  Max(ReceivedSerialID) AS ReceivedSerialID from ReceiveSerial Left Join Categorize_Serials ON ReceiveSerial.SerialID=Categorize_Serials.SerialID Inner Join Serial On Categorize_Serials.SerialID=Serial.SerialID Left JOin [Type] ON Serial.TypeID=[Type].TypeID Where ReceiveSerial.DepartmentID=? AND Status=? AND TypeName=? Group By ReceivedSerialID";
-                $query=sqlsrv_query($conn,$sql,array('ELEM','Received','Magazine'),$opt);
+                $sql="Select  Max(ReceivedSerialID) AS ReceivedSerialID from ReceiveSerial Left Join Categorize_Serials ON ReceiveSerial.DepartmentID=Categorize_Serials.DepartmentID Inner Join Subscription ON Categorize_Serials.SubscriptionID=Subscription.SubscriptionID Inner Join Serial On Subscription.SerialID=Serial.SerialID Where ReceiveSerial.DepartmentID=? AND ReceiveSerial.Status=? AND TypeName=? Group By ReceivedSerialID";
+                $query=sqlsrv_query($conn,$sql,array($dept,'Received','Magazine'),$opt);
                 $row=sqlsrv_num_rows($query);
                 return $row;
             }
-             function  MgetJH()
+             function  MgetCOl()
             {   require 'php_codes/db.php';
-                $sql="Select  Max(ReceivedSerialID) AS ReceivedSerialID from ReceiveSerial Left Join Categorize_Serials ON ReceiveSerial.SerialID=Categorize_Serials.SerialID Inner Join Serial On Categorize_Serials.SerialID=Serial.SerialID Left JOin [Type] ON Serial.TypeID=[Type].TypeID Where ReceiveSerial.DepartmentID=? AND Status=? AND TypeName=? Group By ReceivedSerialID";
-                 $query=sqlsrv_query($conn,$sql,array('JHS','Received','Magazine'),$opt);
-                $row=sqlsrv_num_rows($query);
-                return $row;
-            }
-            function  MgetSH()
-            {   require 'php_codes/db.php';
-                $sql="Select  Max(ReceivedSerialID) AS ReceivedSerialID from ReceiveSerial Left Join Categorize_Serials ON ReceiveSerial.SerialID=Categorize_Serials.SerialID Inner Join Serial On Categorize_Serials.SerialID=Serial.SerialID Left JOin [Type] ON Serial.TypeID=[Type].TypeID Where ReceiveSerial.DepartmentID=? AND Status=? AND TypeName=? Group By ReceivedSerialID";
-                 $query=sqlsrv_query($conn,$sql,array('SHS','Received','Magazine'),$opt);
-                $row=sqlsrv_num_rows($query);
-                return $row;
-            }
-             function MgetHS()
-            {   require 'php_codes/db.php';
-                $sql="Select  Max(ReceivedSerialID) AS ReceivedSerialID from ReceiveSerial Left Join Categorize_Serials ON ReceiveSerial.SerialID=Categorize_Serials.SerialID Inner Join Serial On Categorize_Serials.SerialID=Serial.SerialID Left JOin [Type] ON Serial.TypeID=[Type].TypeID Where ReceiveSerial.DepartmentID=? AND Status=? AND TypeName=? Group By ReceivedSerialID";
-                 $query=sqlsrv_query($conn,$sql,array('HS','Received','Magazine'),$opt);
-                $row=sqlsrv_num_rows($query);
-                return $row;
-            }
-              function  MgetCOl()
-            {   require 'php_codes/db.php';
-                $sql="Select Max(ReceivedSerialID) AS ReceivedSerialID from ReceiveSerial Left Join Categorize_Serials ON ReceiveSerial.SerialID=Categorize_Serials.SerialID Inner Join Serial On Categorize_Serials.SerialID=Serial.SerialID Left JOin [Type] ON Serial.TypeID=[Type].TypeID Where (ReceiveSerial.DepartmentID!=? AND ReceiveSerial.DepartmentID!=? AND ReceiveSerial.DepartmentID!=? AND ReceiveSerial.DepartmentID!=?) AND Status=? AND TypeName=? Group By ReceivedSerialID";
+                $sql="Select  Max(ReceivedSerialID) AS ReceivedSerialID from ReceiveSerial Left Join Categorize_Serials ON ReceiveSerial.DepartmentID=Categorize_Serials.DepartmentID Inner Join Subscription ON Categorize_Serials.SubscriptionID=Subscription.SubscriptionID Inner Join Serial On Subscription.SerialID=Serial.SerialID Where (ReceiveSerial.DepartmentID!=? AND ReceiveSerial.DepartmentID!=? AND ReceiveSerial.DepartmentID!=? AND ReceiveSerial.DepartmentID!=?) AND ReceiveSerial.Status=? AND TypeName=? Group By ReceivedSerialID";
                  $query=sqlsrv_query($conn,$sql,array('ELEM','JSH','SHS','HS','Received','Magazine'),$opt);
                 $row=sqlsrv_num_rows($query);
                 return $row;
             }
-        
        ?>
         <div class="row custom-box">
          <div class="col-md-12 profile-text">      
@@ -88,21 +43,29 @@
          </div>
         </div>
 
-  		    <div class="row custom-box">
+  		  <div class="row custom-box" style="max-height: 100%;">
+          
+          <div class="container-fluid">
+            <div class="row">
+               <div class="col-md-12 profile-text centered">
+                  <h4><strong id="dept_branch">Total Received Serials</strong></h4>  
+               </div>
+            </div>
+          </div>
 
          <div>
             <div class="col-md-2 profile-text mt mb centered">    
               <div><h3 class="custom-pos mt">Journals</h3></div>
               <div class="right-divider hidden-sm hidden-xs ">
-                    <h4 ><?php echo JgetElem(); ?></h4>
+                    <h4 ><?php echo JgetElem('ELEM'); ?></h4>
                     <h6 class="custom-text1">ELEMENTARY</h6>
-                     <h4 ><?php echo JgetJH(); ?></h4>
+                     <h4 ><?php echo JgetElem('JHS'); ?></h4>
                     <h6 class="custom-text1">JUNIOR HIGH</h6>
               </div>
             </div>
             <div class="col-md-2 profile-text mt mb centered custom-sect">
               <div class="right-divider hidden-sm hidden-xs ">
-                <h4 ><?php echo JgetSH(); ?></h4>
+                <h4 ><?php echo JgetElem('SHS'); ?></h4>
                 <h6 class="custom-text1">SENIOR HIGH</h6>
                 <h4 ><?php echo JgetCOl(); ?></h4>
                 <h6 class="custom-text1">COLLEGE</h6>
@@ -110,7 +73,7 @@
             </div>
             <div class="col-md-2 profile-text mt mb centered custom-sect">
               <div class="right-divider hidden-sm hidden-xs ">
-                 <h4 ><?php echo JgetHS(); ?></h4>
+                 <h4 ><?php echo JgetElem('HS'); ?></h4>
                 <h6 class="custom-text1">HighSchool</h6>
               </div>
             </div>
@@ -120,15 +83,15 @@
             <div class="col-md-2 profile-text mt mb centered">    
               <div><h3 class="custom-pos mt">Magazine</h3></div>
               <div class="right-divider hidden-sm hidden-xs ">
-                   <h4 ><?php echo MgetElem(); ?></h4>
+                   <h4 ><?php echo MgetElem('ELEM'); ?></h4>
                     <h6 class="custom-text1">ELEMENTARY</h6>
-                     <h4 ><?php echo MgetJH(); ?></h4>
+                     <h4 ><?php echo MgetElem('JHS'); ?></h4>
                     <h6 class="custom-text1">JUNIOR HIGH</h6>
               </div>
             </div>
             <div class="col-md-2 profile-text mt mb centered custom-sect">
               <div class="right-divider hidden-sm hidden-xs ">
-                  <h4 ><?php echo MgetSH(); ?></h4>
+                  <h4 ><?php echo MgetElem('SHS'); ?></h4>
                 <h6 class="custom-text1">SENIOR HIGH</h6>
                 <h4 ><?php echo MgetCOl(); ?></h4>
                 <h6 class="custom-text1">COLLEGE</h6>
@@ -136,7 +99,7 @@
             </div>
             <div class="col-md-2 profile-text mt mb centered custom-sect">
               <div class="right-divider hidden-sm hidden-xs ">
-                <h4 ><?php echo MgetHS(); ?></h4>
+                <h4 ><?php echo MgetElem('HS'); ?></h4>
                 <h6 class="custom-text1">HighSchool</h6>
               </div>
             </div>
@@ -151,10 +114,10 @@
             <div class="panel-heading">
               <ul class="nav nav-tabs nav-justified">
                 <li class="active">
-                  <a data-toggle="tab" href="#notification">Notification</a>
+                  <a data-toggle="tab" href="#notification" id='notf'>Notification</a>
                 </li>
                 <li>
-                  <a data-toggle="tab" href="#overview">Overview</a>
+                  <a data-toggle="tab" href="#overview" id='ov'>Overview</a>
                 </li>
               </ul>
             </div>
@@ -170,11 +133,16 @@
                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     			<div class="custom-boxx centered" id="NotifContainer" >
                             <div  id='notifbox'>
-                      			  <h4>SENT SERIALS</h4>
+                      			  <h4>Pending SERIALS</h4>
                       			  <hr>     
                               <br>
                               <?php include 'php_codes/SentNotif.php';?>
-                            </div>			 
+                            </div>
+
+                          <div class="See-All">
+                            <a href="Pending_Serials.php">See all</a>
+                          </div>
+
                           </div>
                         </div>
 
@@ -185,7 +153,11 @@
                     			  <hr>
                     			  <br>
                             <?php include 'php_codes/receivenotif.php';?>
-                          </div>			 
+                          </div>
+
+                          <div class="See-All" id="RS_SEE_ALL">
+                            <a href="Received_Serials.php">See all</a>
+                          </div>
                         </div>
                       </div>
 
@@ -197,6 +169,10 @@
                     			  <br>
                            <?php include 'php_codes/latenotif.php';?>
                           </div>
+
+                          <div class="See-All">
+                            <a href="Late_Deliv.php">See all</a>
+                          </div>
                           </div>
                         </div>
                    </div>
@@ -205,10 +181,14 @@
                 </div>
                               			
                               	<div id="overview" class="tab-pane ">
+                                  <div class="container-fluid">
                               		<div class="row">
+                                  <div id="subs_chart">
+                                    
                               			            <!--CUSTOM CHART START -->
+                                       
                                           <div class="border-head">
-                                            <h3>Subscription Chart</h3>
+                                            <h3>Subscribed Titles</h3>
                                           </div>
                                           <div class="custom-bar-chart">
                                             <ul class="y-axis">
@@ -219,26 +199,83 @@
                                           
                                               <li><span>0</span></li>
                                             </ul>
-                                            <div class="bar">
-                              			  <div class="title">On Going</div>
+                                            <div class="bar" id="OG_Click">
+                              			  <div class="title">OnGoing</div>
                                               <?php include 'php_codes/barchart_ongoing.php';?>
                                             </div>
-                                            <div class="bar ">
+                                            <div class="bar " id="Cancel_Click">
                                               <div class="title">Cancelled</div>
                                               <?php include 'php_codes/barchart_cancelled.php';?>
                                             </div>
-                                            <div class="bar ">
+                                            <div class="bar " id="REF_Click">
                                               <div class="title">Refunded</div>
                                              <?php include 'php_codes/barchart_refunded.php';?>
                                             </div>
-                                            <div class="bar ">
-                                              <div class="title">Finished</div>
+                                            <div class="bar " id="Fulfilled_Click">
+                                              <div class="title">Fulfilled</div>
                                               <?php include 'php_codes/barchart_finished.php';?>
                                             </div>
 
                                           </div>
+                                        
                                           <!--custom chart end-->
                               		</div>
+                                  <div id="panel_subs_chart">                      
+                                    <h5 style="margin-bottom: 16px;margin-top: 43px;"><strong>Fulfilled: </strong><?php echo $ongoingtot.'/'.$total ?></h5>
+                                     <h5 style="margin-bottom: 16px;"><strong>OnGoing: </strong><?php echo ongoingtotal().'/'.$total ?></h5>
+                                    <h5 style="margin-bottom: 16px;"><strong>Refunded: </strong><?php echo ongoingtotalr().'/'.$total ?></h5>
+                                    <h5 style="margin-bottom: 16px;"><strong>Cancelled: </strong><?php echo ongoingtotalc().'/'.$total ?></h5>
+
+
+                                   
+                                  </div>
+
+                                  </div>
+
+                                  <div id="morris">
+                                  <div class="row">
+                                    <div class="col-lg-11 col-lg-offset-1">
+                                      <div class="content-panel">
+                                        <h4>Subscription Overview Per Distributors</h4>
+                                        <div class="panel-body">
+                                          <div id="hero-donut" class="graph"></div>
+                                          <div hidden id="disb">
+                                            <?php  
+                                            require 'php_codes/db.php';
+
+                                              $disblist_ID=array();
+                                              $disblist_names=array();
+                                              $inc=0;
+                                              $sqldisb="Select DistributorID,DistributorName From Distributor";
+                                              $querydisb=sqlsrv_query($conn,$sqldisb,array());
+                                              while($row=sqlsrv_fetch_array($querydisb,SQLSRV_FETCH_ASSOC))
+                                              {
+                                                $disblist_ID[$inc]=$row['DistributorID'];
+                                                $disblist_names[$inc]=$row['DistributorName'];
+                                                $inc++;
+                                              }              
+                                            
+                                            ?>
+                                          </div>
+                                          <div>
+                                            <select id="morris_select_chart">
+                                              <?php 
+                                              for($z=0;$z<count($disblist_ID);$z++)
+                                              {
+                                                echo '<option value="'.$disblist_ID[$z].'">'.$disblist_names[$z].'</option>';
+                                              }
+                                               ?>
+                                              }
+                                              
+                                            </select>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  </div>
+
+                                  </div>
             	                     </div>
             	
             	</div>	
@@ -250,6 +287,3 @@
   	  
 
   
-    </div>
-    </section>
-  </section>

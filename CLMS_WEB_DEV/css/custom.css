@@ -159,7 +159,6 @@ max-height:170px;
 	padding-top: 0px;
 	padding-bottom: 0px;
 	min-height:55px;
-
 	width:100%;
 
 }
@@ -185,11 +184,10 @@ max-height:170px;
 .custom-panelbox{
 	background: #ffffff;
 	box-shadow: 0px 2px 3px 2px #aab2bd;
-	margin-top:10px;
-	padding-bottom: 15px;
-	min-height:460px;		
+	margin-top:10px;	
 	margin-right: -15px;
 	margin-left: -15px;
+	min-height: 490px;
 
 }
 
@@ -284,4 +282,88 @@ p.RS_comment{
 }
 .rs_msg{
 	margin-top: 8.5px;
+}
+#step-1 h4,#step-2 h4{
+float:left;
+}
+#step-1 input,#step-2 input{
+margin-top: 6px;
+margin-left: 10px;
+}
+.steps{
+	margin-left: 250px;
+	margin-top: 110px;
+}
+#next_click button{
+	margin-left: 44px;
+	margin-top:60px;
+}
+.cog_action
+{
+	margin-bottom: 16px;
+	margin-right:10px;
+	float:right;
+	font-size: 20px;
+	cursor: pointer;
+}
+#subs_chart{
+		margin-left: 130px;
+}
+div.custom-bar-chart{
+	width: 55%;
+	float: left;
+}
+.bar:hover
+{
+cursor:pointer;
+}
+#panel_subs_chart{
+	height: 260px;
+	max-height: 260px;
+	overflow: auto;
+}
+#hero-donut{
+	  width: 830px;
+  height: 280px;
+  margin: 20px auto 0 auto;
+}
+#hero-donut>svg{
+	width: 100%;
+}
+#morris{
+	margin-top: 49px;
+}
+.content-text{
+	margin-top: 20px;
+}
+.progress{
+	margin-top: 23px;
+}
+.progress-bar{
+	background-color: #21b0f1;
+	font-size: 15px;
+}
+.Selection{
+	background-color:#e7e4e4;
+
+	border-width:0 1px 1px 0;
+	border-style: outset;
+	border-color:#dbd7d7;
+	border-radius: 3px;
+	margin-top: 20px;
+}
+.input_select>label{
+	font-size:14px;
+}
+.input_select{
+	margin-top: 15px;
+}
+.select_panel{
+	margin:6px 0 16px 0;
+	padding: 16px 0 16px 0;
+}
+.See-All{
+	position: absolute;
+	left:285px;
+	top:366px;
 }

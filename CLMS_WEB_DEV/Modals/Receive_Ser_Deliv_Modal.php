@@ -13,7 +13,7 @@
 						<form class="cmxform form-horizontal style-form" id="receive_del_form" method="post">
 
 						<div class="alert alert-success alert-dismissible collapse center" id="msg_scs_rec">
-						    <strong>Successfully added Receive Serial</strong>
+						    <strong>Successfully Added Receive Serial</strong>
 					 	 </div>
 
 					  	<div class="alert alert-danger alert-dismissible collapse center" id="msg_fail_rec">
@@ -21,9 +21,10 @@
 					  	</div>
 
 						<div class="form-group form-group-center">
-							<label for="sn_rec" class="control-label col-lg-3">Serial Name</label>
+							<label for="sn_rec" class="control-label col-lg-3">Serial Name:</label>
 							<div class="col-lg-6">
-								<input type="text" class="form-control" name="sn_rec" id="sn_rec" required>
+								<input type="hidden" name="sn_rec" id="sn_rec">
+								<h5 id='Serial_Name'>asd</h5>
 							</div>
 						</div>
 
@@ -46,14 +47,7 @@
 							<div class="col-lg-6">
 								<input type="number" class="form-control" name="IN_rec" id="IN_rec">
 							</div>
-						</div>
-
-						<div class="form-group form-group-center">
-							<label for="copy_rec" class="control-label col-lg-3">Copies</label>
-							<div class="col-lg-6">
-								<input type="number" class="form-control" name="copy_rec" id="copy_rec" required>
-							</div>
-						</div>
+						</div>						
 
 						<div class="form-group form-group-center">
 							<label for="DR_rec" class="control-label col-lg-3">Date Received</label>
@@ -63,6 +57,13 @@
 						</div>
 
 
+						<div class="form-group form-group-center">
+							<label for="copy_rec" class="control-label col-lg-3">Departments</label>
+
+							<div class="col-lg-6" id="dept_list_categ">
+							</div>
+						</div>
+
 
 						<div class="form-group form-group-center" id="save_btn">
 							<div class="col-lg-offset-8">
@@ -70,21 +71,6 @@
 							</div>
 						</div>
 
-						<div class="form-group form-group-center collapse" id="retry">
-							<div class="row">
-								<div class="col-lg-12">
-									<h4 style="margin-left:20px;">Continue?</h4>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-lg-3 col-lg-offset-3">
-									<button class=" custom-btn" type="button" id="btn_yes">Yes</button>
-								</div>
-								<div class="col-lg-offset-5">
-									<button class=" custom-btn" type="button" id="btn_no">No</button>
-								</div>
-							</div>
-						</div>
 					</form>
 					</div>
 			 		</div>
