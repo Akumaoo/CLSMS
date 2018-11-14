@@ -1,7 +1,7 @@
   <?php
   // GET ADDITIONAL INFO ON DELAYED NOTIF
 
-  $delivery_sqltxt="Select Count(DistributorName) AS num_rec,DistributorName,IDD_Phase from Subscription Inner Join Distributor ON Subscription.DistributorID=Distributor.DistributorID WHERE InitialDeliveryDate<CONVERT(VARCHAR(10), GETDATE(), 110) AND Subscription.Status=? AND IDD_Phase!=? Group By DistributorName,IDD_Phase
+  $delivery_sqltxt="Select TOP 3 Count(DistributorName) AS num_rec,DistributorName,IDD_Phase from Subscription Inner Join Distributor ON Subscription.DistributorID=Distributor.DistributorID WHERE InitialDeliveryDate<CONVERT(VARCHAR(10), GETDATE(), 110) AND Subscription.Status=? AND IDD_Phase!=? Group By DistributorName,IDD_Phase
 ";
 
   $delivery_query=sqlsrv_query($conn,$delivery_sqltxt,array('OnGoing','Complete'));

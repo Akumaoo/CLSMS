@@ -10,7 +10,7 @@ $(function(){
 			"ajax":"SSP/serverside_archiving.php",
 			"columnDefs":
 				[{
-					"targets":[0,3,4,5],
+					"targets":[0,4],
 					"searchable":false,
 				}]
 		});

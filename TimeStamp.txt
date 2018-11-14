@@ -13,14 +13,14 @@ Monday-Wednesday:
 *Fix Action Buttons					(DONE!!)
 
 Thursday-Saturday:
-*Fix Notifications[ADMIN]					(DONE!!!)
-*Fix Notifications[STAFF]					(PARTLY DONE!!!)
-*Dashboard						(Started!)
+*Fix Notifications[ADMIN]				(DONE!!!)
+*Fix Notifications[STAFF]				(DONE!!!)
+*Dashboard						(DONE!)
 
 3rd Week
 Monday-Wednesday:
 *Reports Generation					(STARTED!)
-*Staff UI/Reports					(LATE!!)
+*Staff UI/Reports					(DONE!)
 
 Thursday-Saturday:
 *Review Changes						(LATE!!)

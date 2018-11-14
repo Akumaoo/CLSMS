@@ -1,17 +1,10 @@
 ***OnGoing:***
--Dashboard
--User Tab
--Serial Tab 
--Sending Serials ADDING SERIALS
-
+-Finish the Reports Generation
+-PRINT Functionality
 
 
 ***PENDING:***
 
--Finish the Reports Generation
--Archiving
--Other Users UI
--PRINT Functionality
 
 
 ***FINISHED:***
@@ -23,7 +16,12 @@
 (DONE!!!)--UPDATE NO OF ITEMS RECEIVE WHEN DELIVERIES ARE UPDATE TO RECEIVED
 (DONE!!!!)-Distributor Tab(Managing Distributors)
 (DONE!!!)-Delivery Tab(Managing Deliveries)|| Include here The Creation of Package
-
+(DONE!!!)-Archiving
+(DONE!!!)-Other Users UI
+(DONE!!!)-Dashboard
+(DONE!!!)-User Tab
+(DONE!!!)-Serial Tab 
+(DONE!!!)-Sending Serials ADDING SERIALS
 =============================================FINALIZATION***
 
 

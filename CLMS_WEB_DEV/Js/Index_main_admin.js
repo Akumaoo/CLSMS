@@ -123,6 +123,4 @@ $(function(){
       $('#hero-donut').html($value_donut);
 
      });
-    
-
   });

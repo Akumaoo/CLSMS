@@ -1,6 +1,4 @@
    <?php 
-    if($_SESSION['Role']=='Admin')
-      {
         echo '
         
          <aside>
@@ -11,14 +9,18 @@
           <h5 class="centered">'.$_SESSION['current_user'].'</h5>
 
           <li class="mt">
-            <a href="index.php">
+            <a href="index.php" id="DB">
               <i class="fa fa-home"></i>
               <span>Dash Board</span>
               </a>
           </li>
 
             <!-- javascript:void(0) so that if yung page na ireredirect nung link is null or nonexistent magiistay sya sa page also its good combination for ajax para maremove din yung # sa url :))) -->
-
+            ';
+          if($_SESSION['Role']=='Admin')
+          {
+            // ADMIN UI
+          echo '
           <li>
             <a href="Request.php" id="CS">
               <i class="fa fa-handshake-o"></i>
@@ -85,45 +87,27 @@
         </ul>
         <!-- sidebar menu end-->
       </div>
-    </aside>
+    </aside>';
+      }
+      else
+      {
+        // STAFF UI
+        echo '
 
-        ';
-    }
-    else
-    {
-
-      echo '
-
-       <aside>
-      <div id="sidebar" class="nav-collapse ">
-        <!-- sidebar menu start-->
-        <ul class="sidebar-menu" id="nav-accordion">
-          <p class="centered"><a href="profile.php"><img src="img/02.jpg" class="img-circle" width="95"></a></p>
-          <h5 class="centered">'.$_SESSION['current_user'].'</h5>
-
-          <li class="mt">
-            <a class="active" href="index.php">
-              <i class="fa fa-home"></i>
-              <span>Dash Board</span>
-              </a>
-          </li>
-
-          <li>
-            <a href="javascript:void(0)" id="MS_staff">
+         <li>
+            <a href="manage_serials_Staff.php" id="MS_STAFF">
               <i class="fa fa-book"></i>
               <span>List Of Serials</span>
             </a>
-          </li>
-
-          <li>
+         </li>
 
         </ul>
         <!-- sidebar menu end-->
       </div>
     </aside>
 
-      ';
-    }
+        ';
+      }
      ?>
     
    

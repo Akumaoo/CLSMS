@@ -230,7 +230,7 @@ table{
 	margin-top:15px;
 }
 .RS_header{
-	margin-top: 59px;
+	margin-top: 6px;
 	position: relative;
 }
 .RS_header_left{
@@ -245,27 +245,26 @@ table{
 	
 }
 .RS_MSG{
-	margin-top:89px;
 	position:relative;
 }
+#view_ser_content{
+	min-height: 360px;
+}
 p.RS_comment{
-	margin-top:49px;
+	margin-top:10px;
 	max-width: 759px;
 	margin-left: 120px;
 }
 .rs-notif{
 	padding: 0;
-	margin-left:2%;
-	width: 47%;
 	height: 89px;
 	text-align: left;
 	float:left;
-	margin-top: 18px;
 
 }
 .rs_content{
 	padding-top: 23px;
-	padding-left: 30px;
+	padding-left: 28%;
 	padding-bottom: 23px;
 	max-height: 85px;
 }
@@ -278,10 +277,11 @@ p.RS_comment{
 }
 .rs_content:hover{
 	cursor: pointer;
-	box-shadow: 6px 9px 40px -1px  #9ba3b2;
 }
-.rs_msg{
-	margin-top: 8.5px;
+.rs_msg_staff{
+	margin-top: 9px;
+	margin-left: 60px;
+	font-size: 14px;
 }
 #step-1 h4,#step-2 h4{
 float:left;

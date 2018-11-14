@@ -16,8 +16,11 @@ if(isset($_POST['RSID']))
 		$comment=$row['Staff_Comment'];
 		$DS=$row['DateReceiveNotif_Give']->format('Y/m/d');
 	}
-
-	echo '<div class="form-panel site-min-height">
+		echo '<div>
+			<a id="refresh" href="javascript:void(0)" style="margin-left:10px;">Go Back To List</a>
+			</div>';	
+	echo '<div class="form-panel">
+	<div id="view_ser_content">
 	<div class="row">
 		<div class="RS_header">
 			<div class="RS_header_left">
@@ -40,7 +43,7 @@ if(isset($_POST['RSID']))
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-lg-10" style="margin-left: 66px;margin-top: 40px;">
+		<div class="col-lg-10" style="margin-left: 66px;">
 			<hr class="theme_hr">
 		</div>
 	</div>
@@ -59,6 +62,12 @@ if(isset($_POST['RSID']))
 			<p class="RS_comment"> '.$comment.'</p>
 		</div>
 	</div>
+	</div>
 </div>';
 }
  ?>
+ <script>
+ 	$('#refresh').click(function() {
+		location.reload();
+	});
+ </script>

@@ -237,5 +237,4 @@ $('#table_user').on('draw.dt', function() {
  			}
  		}
  	});
-
 });

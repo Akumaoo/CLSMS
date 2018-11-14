@@ -27,4 +27,3 @@
   
   <!--custom scripts-->
    <script type="text/javascript" src="lib/custom_js.js"></script>
-    <script type="text/javascript" src='lib/index_leftcateg.js'></script>

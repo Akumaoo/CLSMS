@@ -1,7 +1,7 @@
   <?php
   // GET ADDITIONAL INFO ON DELAYED NOTIF
 
-  $delivery_sqltxt="Select TOP 5 Count(Subq.DepartmentID) AS NumRec,Subq.DepartmentID,DateReceiveNotif_Give,Staff_Seen from
+  $delivery_sqltxt="Select TOP 3 Count(Subq.DepartmentID) AS NumRec,Subq.DepartmentID,DateReceiveNotif_Give,Staff_Seen from
 (Select ReceiveSerial.DepartmentID,DateReceiveNotif_Give,Staff_Seen from ReceiveSerial inner join Subscription on ReceiveSerial.SerialID=Subscription.SerialID Where Subscription.Status=? AND ReceiveSerial.Status=? AND Admin_Seen IS NULL) AS Subq Group By DepartmentID,DateReceiveNotif_Give,Staff_Seen";
 
   $delivery_query=sqlsrv_query($conn,$delivery_sqltxt,array('OnGoing','NotReceived'));

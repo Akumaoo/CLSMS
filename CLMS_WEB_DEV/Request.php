@@ -10,7 +10,7 @@ include 'Includes/header.php';
 				</div>
 			</div>
 			
-<div class=" custom-panelbox">			
+<div class="row custom-panelbox">			
 	<div class="">
 		<div class="">
 			<h4 class="fa fa-truck tag_style "> Manage Subscription:</h4>

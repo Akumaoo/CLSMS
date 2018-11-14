@@ -26,11 +26,16 @@ else
 			<h4 class="dividerr"></h4>
 		</div>
 
-		<div class="custom_table">
+		<div class="alert alert-success alert-dismissible collapse center" id="msg_scs_enter">
+	  	  <strong>Successfully Removed Sent Serial!</strong>
+ 		 </div>
+
+		<div class="custom_table view_ser">
 
 			<div class="container-fluid">
 			<div class="row">
 			<div class="col-lg-10 col-lg-offset-1">
+				<span class="fa fa-cog fa-lg cog_action" id="cog_action"></span>
 				<table cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover" id="table_pending_ser">
 					<thead class="thead_theme">
 					<tr>
@@ -39,6 +44,7 @@ else
 						<th class="radio-label-center">Serial Name</th>
 						<th class="radio-label-center">Serial Type</th>
 						<th class="radio-label-center">Date Sent</th>
+						<th class="radio-label-center">Staff Seen</th>
 					</tr>
 					</thead>
 					<tbody>
@@ -56,4 +62,4 @@ include 'Includes/footer.php';
  ?>
 </body>
 </html>
-<script type="text/javascript" src="Js/Pending_Serials.js?v=231" ></script>
+<script type="text/javascript" src="Js/Pending_Serials.js?v=2231" ></script>

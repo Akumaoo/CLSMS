@@ -1,64 +1,93 @@
 <?php 
 require 'db.php';
 
-function getSN($s)
+function getRS_LIST($dept)
 {
 	require 'db.php';
-	$getsql="Select SerialID from Serial Where SerialName=?";
-	$getquery=sqlsrv_query($conn,$getsql,array($s));
-	$row=sqlsrv_fetch_array($getquery,SQLSRV_FETCH_ASSOC);
-	$id=$row['SerialID'];
-	return $id;
+	$rs_list=[];
+	$inc=0;
+	$getsql="Select ReceivedSerialID from ReceiveSerial Where DepartmentID=? AND Status=?";
+	$getquery=sqlsrv_query($conn,$getsql,array($dept,'NotReceived'));
+	if(sqlsrv_has_rows($getquery))
+	{
+		while($row=sqlsrv_fetch_array($getquery,SQLSRV_FETCH_ASSOC))
+		{
+			$rs_list[$inc]=$row['ReceivedSerialID'];
+			$inc++;
+		}
+	}
+	return $rs_list;
 }
+
 
 if($_POST['type']=='seen')
 {
 	$dept=$_POST['dept'];
-	$sn=$_POST['sn'];
-	$sID=getSN($sn);
+	$rs_list=getRS_LIST($dept);
 
-
-
-	$sql="Update ReceiveSerial SET RS_Seen=? WHERE DepartmentID=? AND SerialID=? AND Status=?";
-	$query=sqlsrv_query($conn,$sql,array('Seen',$dept,$sID,'NotReceived'));
-	if($query)
+	for($x=0;$x<count($rs_list);$x++)
 	{
-		$msg='success';
-	}
-	else
-	{
-		$msg='fail';
-	}
-	header('Content-type: application/json');
-	echo json_encode($msg);
-}
-else if($_POST['type']=='receive')
-{
-	// $contno=12312312;
-	// $comms='TY';
-	// $ser='Journal of Abnormal Psychology (APA)';
-	// $dept='ELEM';
-
-	$contno=$_POST['cono'];
-	$comms=$_POST['coms'];
-	$ser=$_POST['ser'];
-	$dept=$_POST['depart'];
-	$sID=getSN($ser);
-	$date=date('Y/m/d');
-
-	$sql="Update ReceiveSerial SET Status=?,Staff_Comment=?,ControlNumber=? WHERE DepartmentID=? AND SerialID=? AND Status=?";
-	$query=sqlsrv_query($conn,$sql,array('Received',$comms,$contno,$dept,$sID,'NotReceived'));
-	if($query)
-	{
-		$insertxt="Insert Into Notification(SerialID,NotificationType,NotificationSeen,Date_Receive_RedFlag) VALUES(?,?,?,?)";
-		$queryinsert=sqlsrv_query($conn,$insertxt,array($sID,'Received','NotSeen',$date));
-		if($queryinsert)
+		$sql="Update ReceiveSerial SET Staff_Seen=? Where ReceivedSerialID=?";
+		$query=sqlsrv_query($conn,$sql,array('Seen',$rs_list[$x]));
+		if($query)
 		{
 			$msg='success';
 		}
 		else
 		{
 			$msg='fail';
+		}
+	}
+	header('Content-type: application/json');
+	echo json_encode($msg);
+}
+else if($_POST['type']=='receive')
+{
+
+	$rs_list=$_POST['rs_list'];
+	$cn_list=$_POST['cn_list'];
+	$rem_list=$_POST['rem_list'];
+
+	// $rs_list=array(1067,1066,1068);
+	// $cn_list=array(1,2,3);
+	// $rem_list=array('Received','Received','Received');
+	
+	$date=date('Y/m/d');
+
+
+	for($x=0;$x<count($rs_list);$x++)
+	{
+
+		if($rem_list[$x]=='Received')
+		{
+			$sql="Update ReceiveSerial SET Status=?,DateReceiveNotif_Receive=?,Staff_Comment=?,ControlNumber=? WHERE ReceivedSerialID=?";
+			$query=sqlsrv_query($conn,$sql,array('Received',$date,$rem_list[$x],$cn_list[$x],$rs_list[$x]));
+			if($query)
+			{
+				
+				$msg='success';
+				
+			}
+			else
+			{
+				$msg='fail';
+			}
+		}
+		else
+		{
+			$sql="Update ReceiveSerial SET Staff_Comment=? WHERE ReceivedSerialID=?";
+			$query=sqlsrv_query($conn,$sql,array($rem_list[$x],$rs_list[$x]));
+			if($query)
+			{
+				
+				$msg='success';
+				
+			}
+			else
+			{
+				$msg='fail';
+			}
+
 		}
 	}
 	header('Content-type: application/json');

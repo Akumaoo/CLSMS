@@ -227,5 +227,4 @@ $('#table_dept').on('draw.dt', function() {
  	});
 
 
-
 });

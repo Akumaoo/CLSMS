@@ -1,6 +1,6 @@
   <?php
 
-    $receive_sqltxt="Select TOP 5 Count(Subq.DepartmentID) AS NumRec,Subq.DepartmentID,DateReceiveNotif_Receive from
+    $receive_sqltxt="Select TOP 3 Count(Subq.DepartmentID) AS NumRec,Subq.DepartmentID,DateReceiveNotif_Receive from
 (Select ReceiveSerial.DepartmentID,DateReceiveNotif_Receive from ReceiveSerial inner join Subscription on ReceiveSerial.SerialID=Subscription.SerialID Where Subscription.Status=? AND ReceiveSerial.Status=? AND Admin_Seen IS NULL) AS Subq Group By DepartmentID,DateReceiveNotif_Receive";
     $receive_query=sqlsrv_query($conn,$receive_sqltxt,array('OnGoing','Received'));
 

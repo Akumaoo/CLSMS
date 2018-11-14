@@ -6,7 +6,7 @@ $date=strtotime($_POST['date']);
 $newdate=date('Y-m-d',$date);
 
 $table=<<<EOT
- (Select  ReceivedSerialID,DepartmentID,SerialName,TypeName,ReceiveSerial.Status AS RS_Status,Subscription.Status AS Sub_Status,DateReceiveNotif_Give from ReceiveSerial Inner Join Serial ON ReceiveSerial.SerialID=Serial.SerialID
+ (Select  ReceivedSerialID,DepartmentID,SerialName,TypeName,Staff_Seen,ReceiveSerial.Status AS RS_Status,Subscription.Status AS Sub_Status,DateReceiveNotif_Give from ReceiveSerial Inner Join Serial ON ReceiveSerial.SerialID=Serial.SerialID
 Inner Join Subscription On Serial.SerialID=Subscription.SerialID) temp
 EOT;
 
@@ -17,7 +17,8 @@ $columns=array(
 	array('db'=>'DepartmentID','dt'=>1),
 	array('db'=>'SerialName','dt'=>2),
 	array('db'=>'TypeName','dt'=>3),
-	array('db'=>'DateReceiveNotif_Give','dt'=>4)
+	array('db'=>'DateReceiveNotif_Give','dt'=>4),
+	array('db'=>'Staff_Seen','dt'=>5)
 
 );
 

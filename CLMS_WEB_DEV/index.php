@@ -31,7 +31,9 @@ else
 
    ?>
 </body>
-
 </html>
 
 <!-- CUSTOM SCRIPT -->
+<script>
+	$('#DB').addClass('active');
+</script>
