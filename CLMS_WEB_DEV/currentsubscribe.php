@@ -28,7 +28,11 @@ if(isset($_POST['dname']))
  	 </div>
 
  	 <div class="alert alert-success alert-dismissible collapse center" id="msg_deliv_enter">
-	    <strong>Successfully Received Delivery And Send Titles To Departments!</strong>
+	    <strong>Successfully Received Delivery And Sent Titles To Departments!</strong>
+ 	 </div>
+
+ 	  <div class="alert alert-success alert-dismissible collapse center" id="msg_remove">
+	    <strong>Successfully Removed Data!</strong>
  	 </div>
 
   	<div class="alert alert-danger alert-dismissible collapse center" id="msg_fail_enter">
@@ -73,6 +77,7 @@ if(isset($_POST['dname']))
 <?php
 include 'Modals/activate_Pre-Subs_Modal.php';
 include 'Modals/Receive_Ser_Deliv_Modal.php';
+include 'Modals/remove_modal.php';
 ?>
-<script type="text/javascript" src="Js/Subscription_main.js?v=.23334332"></script>
+<script type="text/javascript" src="Js/Subscription_main.js?v=.332"></script>
 

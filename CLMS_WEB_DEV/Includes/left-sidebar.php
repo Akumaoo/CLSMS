@@ -5,7 +5,7 @@
       <div id="sidebar" class="nav-collapse ">
         <!-- sidebar menu start-->
         <ul class="sidebar-menu" id="nav-accordion">
-          <p class="centered"><a href="javascript:void(0)"><img src="img/Avatars/'.$_SESSION['Avatar'].'" class="img-circle" width="95"></a></p>
+          <p class="centered"><a href="profile.php"><img src="img/Avatars/'.$_SESSION['Avatar'].'" class="img-circle" width="95" alt="No-Image"></a></p>
           <h5 class="centered">'.$_SESSION['current_user'].'</h5>
 
           <li class="mt">
@@ -68,19 +68,59 @@
 
           </li>
 
-         
+          
 
-          <li>
+          <li class="sub-menu">
             <a href=javascript:void(0)" id="overallreport">
               <i class="fa fa-line-chart"></i>
               <span>Reports</span>
-              </a>
+            </a>
+
+             <ul class="sub">
+
+              <li>
+                <a href="Reports_Subs.php" class="remove-hl" id="report_subs">
+                  <i class="fa fa-handshake-o"></i>
+                  <span>Subscriptions</span> 
+                </a>
+              </li>
+
+              <li>
+                <a href="Distributors.php" class="remove-hl" id="Disb">
+                  <i class="fa fa-building"></i>
+                  <span>Distributors</span>
+                </a>
+              </li>
+
+              <li>
+                <a href="Department.php" class="remove-hl" id="Dept">
+                  <i class="fa fa-university"></i>
+                  <span>Departments</span>
+                  </a>
+              </li>
+
+               <li>
+                <a href="User.php" class="remove-hl" id="MU">
+                  <i class="fa fa-user-plus"></i>
+                  <span>Manage User</span>
+                </a>
+              </li>
+
+              </ul>
+
           </li>
 
           <li>
             <a href="Archiving.php" id="arch">
               <i class="fa fa-archive"></i>
               <span>Archive</span>
+              </a>
+          </li>
+
+           <li>
+            <a href="recycle_bin.php" id="rb">
+              <i class="fa fa-recycle"></i>
+              <span>Recycle Bin</span>
               </a>
           </li>
 

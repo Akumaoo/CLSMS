@@ -58,7 +58,9 @@ else
 	</div>
 </div>
 <?php 
+
 include 'Includes/footer.php';
+include 'Modals/remove_modal.php';
  ?>
 </body>
 </html>

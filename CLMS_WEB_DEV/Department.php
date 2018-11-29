@@ -42,8 +42,8 @@ include 'Includes/header.php';
 				<table cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover" id="table_dept">
 					<thead class="thead_theme">
 					<tr>
-						<th class="radio-label-center">Department ID</th>
-						<th class="radio-label-center">Department Name</th>
+						<th class="radio-label-center">Department</th>
+						<th class="radio-label-center">Organizations</th>
 					</tr>
 					</thead>
 					<tbody>
@@ -58,7 +58,9 @@ include 'Includes/header.php';
 </div>
 <?php 
 include 'Modals/New_Department_modal.php';
+include 'Modals/remove_modal.php';
 include 'Includes/footer.php';
+
  ?>
 </body>
 </html>

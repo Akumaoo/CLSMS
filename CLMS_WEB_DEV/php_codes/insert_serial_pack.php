@@ -30,17 +30,27 @@ if(!empty($_POST))
 	{
 		$VN=$_POST['VN'];
 	}
-	$RD=$_POST['DR'];
 	$depts_list=$_POST['depts'];
+
+	if(empty($_POST['orgs']))
+	{
+		$orgs=array();
+		$progs=array();
+	}
+	else
+	{
+		$orgs=$_POST['orgs'];
+		$progs=$_POST['progs'];
+	}
 	
-	// $RD=date('Y/m/d');
-	// $depts_list=array('ELEM');
+	// $depts_list=array('ELEM','JHS','College');
+	// $progs=array('CS','IT');
 
 
 	function GetSerialID($sn)
 	{
 		require 'db.php';
-		$getsidsql="Select SerialID from Serial Where SerialName=?";
+		$getsidsql="Select SerialID from Serial Where SerialName=? AND Remove Is NULL";
 		$getidquery=sqlsrv_query($conn,$getsidsql,array($sn));
 		if(sqlsrv_has_rows($getidquery))
 		{
@@ -60,7 +70,7 @@ if(!empty($_POST))
 	function subsID($sid)
 	{
 		require 'db.php';
-		$sql='Select SubscriptionID from Subscription Where SerialID=? AND Status=?';
+		$sql='Select SubscriptionID from Subscription Where SerialID=? AND Status=? AND Archive IS NULL AND Remove IS NULL';
 		$query=sqlsrv_query($conn,$sql,array($sid,"OnGoing"));
 		$row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
 		$id=$row['SubscriptionID'];
@@ -133,10 +143,16 @@ if(!empty($_POST))
 		$row=sqlsrv_fetch_array($sqlquery,SQLSRV_FETCH_ASSOC);
 		$Total_NIR=$row['Total_NIR'];
 
-		$sqlcount="Select Count(*) AS DeptCount from Categorize_Serials Where SubscriptionID=?";
-		$querycount=sqlsrv_query($conn,$sqlcount,array($sub));
+		$sqlcount="
+				Select Count(*) as nums from 
+				(Select CategoryID,DepartmentID as dept_main from Categorize_Serials Inner Join Subscription On Categorize_Serials.SubscriptionID=Subscription.SubscriptionID Inner Join Serial On Subscription.SerialID=Serial.SerialID Where Subscription.Status=? And Subscription.SubscriptionID=?) as asd
+				Left join
+				(Select Category_Serials_Program.CategoryID_Program,Organization.DepartmentID as dept_prog,Organization.OrganizationID,Category_Serials_Program.ProgramID from Organization inner join Program On Organization.OrganizationID=Program.OrganizationID Inner Join Category_Serials_Program On Program.ProgramID=Category_Serials_Program.ProgramID
+				Inner Join Subscription On Category_Serials_Program.SubscriptionID=Subscription.SubscriptionID Inner Join Serial On Subscription.SerialID=Serial.SerialID Where Subscription.Status=? And Subscription.SubscriptionID=?) as dsa
+				On asd.dept_main=dsa.dept_prog";
+		$querycount=sqlsrv_query($conn,$sqlcount,array('OnGoing',$sub,'OnGoing',$sub));
 		$row=sqlsrv_fetch_array($querycount,SQLSRV_FETCH_ASSOC);
-		$deptCount=$row['DeptCount'];
+		$deptCount=$row['nums'];
 
 		$getfreqtxt="Select Frequency from Subscription Where SubscriptionID=?";
 		$queryfreq=sqlsrv_query($conn,$getfreqtxt,array($sub));
@@ -155,6 +171,41 @@ if(!empty($_POST))
 		}
 
 	}
+	function checkDupRS($sID,$date,$dept)
+	{
+		require 'db.php';
+		$sql="Select Count(*) as nums from ReceiveSerial where DepartmentID=? AND SerialID=? AND DateReceiveNotif_Give=? AND Status=?";
+		$query=sqlsrv_query($conn,$sql,array($dept,$sID,$date,'NotReceived'));
+		$row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
+		$num_rows=$row['nums'];
+
+		if($num_rows>0)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+	function checkDupRS_prog($sID,$date,$prog)
+	{
+		require 'db.php';
+		$sql="Select Count(*) as nums from ReceiveSerial_Program where ProgramID=? AND SerialID=? AND DateReceiveNotif_Give_Prog=?";
+		$query=sqlsrv_query($conn,$sql,array($prog,$sID,$date));
+		$row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
+		$num_rows=$row['nums'];
+
+		if($num_rows>0)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+
 
 	if(GetSerialID($SN)!='NotValid')
 	{
@@ -162,6 +213,7 @@ if(!empty($_POST))
 		$sub_id=subsID($serial_id);
 		$order=getFreq($sub_id);
 		$date_today=date('Y/m/d');
+
 
 			if(checkPhase($sub_id))
 			{
@@ -175,8 +227,21 @@ if(!empty($_POST))
 					for($x=0;$x<count($depts_list);$x++)
 					{
 						// SENDING SERIAL PROCESS
-						$sendsertxt="Insert Into ReceiveSerial(DepartmentID,SerialID,Status,DateReceiveNotif_Give) VALUES (?,?,?,?)";
-						$sendserquery=sqlsrv_query($conn,$sendsertxt,array($depts_list[$x],$serial_id,'NotReceived',$date_today));
+						if(checkDupRS($serial_id,$date_today,$depts_list[$x]))
+						{
+							$sendsertxt="Insert Into ReceiveSerial(DepartmentID,SerialID,Status,DateReceiveNotif_Give) VALUES (?,?,?,?)";
+							$sendserquery=sqlsrv_query($conn,$sendsertxt,array($depts_list[$x],$serial_id,'NotReceived',$date_today));
+						}
+					}
+
+					for($z=0;$z<count($progs);$z++)
+					{
+						// SENDING SERIAL PROCESS
+						if(checkDupRS_prog($serial_id,$date_today,$progs[$z]))
+						{
+							$sendsertxt_prog="Insert Into ReceiveSerial_Program(SerialID,ProgramID,DateReceiveNotif_Give_Prog) VALUES (?,?,?)";
+							$sendserquery_prog=sqlsrv_query($conn,$sendsertxt_prog,array($serial_id,$progs[$z],$date_today));
+						}
 						
 					}
 

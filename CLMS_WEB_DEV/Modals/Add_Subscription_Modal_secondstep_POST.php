@@ -82,25 +82,42 @@
 							<div class="col-lg-6">
 								<input type="date" class="form-control" name="SED_POST" id="SED_POST" required>
 							</div>
-						</div>
+						</div>		
 
-
-		 				<div class="form-group ">
-		 					<label for="department" class="control-label col-lg-3">Departments</label>
+						<div class="form-group form-group-center">
+		 					<label for="dept" class="control-label col-lg-3">Departments</label>
 		 					<div class="col-lg-6">
 		 						<?php require "php_codes/db.php";
-		 						$sql="SELECT * FROM Department";
+		 						$sql="SELECT * FROM Department WHERE Remove IS NULL";
 		 						$query = sqlsrv_query($conn, $sql, array());
 		 						if (sqlsrv_has_rows($query))
-		 							{
-		 								$depts="<li><input type='checkbox' value='SA' class='SA'>Select All</li>";
+		 							{	
 		 								echo "<ul>";
+		 								$depts="";
 		 								while ($row = sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC)){
-		 										$depts.="<li><input type='checkbox' name='dept' value='".$row['DepartmentID']."'>".$row['DepartmentID']."</li>";
+		 										$depts.="<li><input type='checkbox' class='dept_list_post' name='dept' value='".$row['DepartmentID']."'>".$row['DepartmentID']."</li>";
 		 								}
 		 								echo $depts."</ul>";
 		 							}
 		 						?>			
+		 					</div>
+		 				</div>
+
+		 				<div class="form-group form-group-center collapse select_org_post" id="">
+		 					<label for="org" class="control-label col-lg-3">Organizations</label>
+		 					<div class="col-lg-6">
+		 						<ul class="org_list_post">
+		 						</ul>
+		 					</div>
+		 				</div>
+
+		 				<div class="form-group form-group-center collapse select_prog_post" id="">
+		 					<label for="prog" class="control-label col-lg-3">Programs</label>
+		 					<div class="col-lg-6">
+		 						<ul>
+		 							<ul class="prog_list_post" style="padding: 0">
+		 							</ul>
+		 						</ul>
 		 					</div>
 		 				</div>
 

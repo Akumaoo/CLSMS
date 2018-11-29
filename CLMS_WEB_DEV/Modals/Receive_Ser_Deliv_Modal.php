@@ -49,12 +49,12 @@
 							</div>
 						</div>						
 
-						<div class="form-group form-group-center">
+						<!-- <div class="form-group form-group-center">
 							<label for="DR_rec" class="control-label col-lg-3">Date Received</label>
 							<div class="col-lg-6">
 								<input type="date" class="form-control" name="DR_rec" id="DR_rec" required>
 							</div>
-						</div>
+						</div> -->
 
 
 						<div class="form-group form-group-center">
@@ -63,6 +63,24 @@
 							<div class="col-lg-6" id="dept_list_categ">
 							</div>
 						</div>
+
+						<div class="form-group form-group-center collapse select_org" id="">
+		 					<label for="org" class="control-label col-lg-3">Organizations</label>
+		 					<div class="col-lg-6">
+		 						<ul class="org_list">
+		 						</ul>
+		 					</div>
+		 				</div>
+
+		 				<div class="form-group form-group-center collapse select_prog" id="">
+		 					<label for="prog" class="control-label col-lg-3">Programs</label>
+		 					<div class="col-lg-6">
+		 						<ul>
+		 							<ul class="prog_list" style="padding: 0">
+		 							</ul>
+		 						</ul>
+		 					</div>
+		 				</div>
 
 
 						<div class="form-group form-group-center" id="save_btn">
@@ -80,4 +98,5 @@
 		</div>
 	</div>
 </div>
+
 

@@ -2,7 +2,7 @@
   // GET ADDITIONAL INFO ON DELAYED NOTIF
 
   $delivery_sqltxt="Select TOP 3 Count(Subq.DepartmentID) AS NumRec,Subq.DepartmentID,DateReceiveNotif_Give,Staff_Seen from
-(Select ReceiveSerial.DepartmentID,DateReceiveNotif_Give,Staff_Seen from ReceiveSerial inner join Subscription on ReceiveSerial.SerialID=Subscription.SerialID Where Subscription.Status=? AND ReceiveSerial.Status=? AND Admin_Seen IS NULL) AS Subq Group By DepartmentID,DateReceiveNotif_Give,Staff_Seen";
+(Select ReceiveSerial.DepartmentID,DateReceiveNotif_Give,Staff_Seen from ReceiveSerial inner join Subscription on ReceiveSerial.SerialID=Subscription.SerialID Where Subscription.Status=? AND ReceiveSerial.Status=? AND (ReceiveSerial.Remove IS NULL AND Subscription.Remove IS NULL) AND Admin_Seen IS NULL) AS Subq Group By DepartmentID,DateReceiveNotif_Give,Staff_Seen";
 
   $delivery_query=sqlsrv_query($conn,$delivery_sqltxt,array('OnGoing','NotReceived'));
   
@@ -26,7 +26,7 @@
               }
               else
               {
-                echo '<a href="javascript:void(0)" class="pending_click"><span> <img src="img/receive.png"  height="35" width="35"> </span></a>';
+                echo '<a href="javascript:void(0)" class="pending_click"><span> <img src="img/sent_green.png"  height="35" width="35"> </span></a>';
               }
              
         echo' </div>

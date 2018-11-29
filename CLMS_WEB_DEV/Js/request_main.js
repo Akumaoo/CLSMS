@@ -142,21 +142,58 @@
                           
 	   $('#subscribe_new_form_Pre').on('submit',function(event){
 		event.preventDefault();
-		$depts=[];
+		$progs=[];
+		$dept=[];
+		$org=[];
 		
-		$('input[type="checkbox"]:checked').each(function(){
-			if($(this).val()!='SA')
+		$('.dept_cb').each(function(){
+			if($(this).is(':checked'))
 			{
-				$depts.push($(this).val());
+				if($(this).val()!='SA')
+				{
+					$dept.push($(this).val());
+				}
 			}
 		});
+		$org_counter=0;
+		$('.org_cb').each(function(){
+			if($(this).is(':checked'))
+			{
+				if($(this).val()!='SA')
+				{
+					$org.push($(this).val());
+				}
+			}
+			$org_counter++;
+		});
 
-		if($depts.length==0)
+		$prog_counter=0;
+		$('.prog_cb').each(function(){
+			if($(this).is(':checked'))
+			{
+				if($(this).val()!='SA')
+				{
+					$progs.push($(this).val());
+				}
+			}
+			$prog_counter++;
+		});
+
+		if($dept.length==0)
 		{
-			alert('Please Select Atleast One Department');
+			alert('Please Choose A Department');
 		}
-		else
+		else if($org_counter>1 && $org.length==0)
 		{
+			alert('Please Select Atleast One Organization');
+		}
+		else if($prog_counter>1 && $progs.length==0)
+		{
+			alert('Please Select Atleast One Program');
+		}	
+		else
+		{	
+
 			$named=$('strong#disb_tag').text();
 			$dtype=$('strong#disb_type').text();
 			$sname=$('#SNf').val();
@@ -166,7 +203,7 @@
 			$.ajax({
 				url:"php_codes/Insert_New_Subscription.php",
 				method:"POST",
-				data:{dname:$named,type:$dtype,sname:$sname,freq:$freq,cost:$cost,depts:$depts},
+				data:{dname:$named,type:$dtype,sname:$sname,freq:$freq,cost:$cost,dept:$dept,org:$org,progs:$progs},
 				success:function(data)
 				{
 					
@@ -205,25 +242,63 @@
 				}
 			});
 		}
+			
 	});
 
 	 $('#subscribe_new_form_POST').on('submit',function(event){
 		event.preventDefault();
-		$depts=[];
-		
-		$('input[type="checkbox"]:checked').each(function(){
-			if($(this).val()!='SA')
+		$progs=[];
+		$dept=[];
+		$org=[];
+
+		$('.dept_list_post').each(function(){
+			if($(this).is(':checked'))
 			{
-				$depts.push($(this).val());
+				if($(this).val()!='SA')
+				{
+					$dept.push($(this).val());
+				}
 			}
 		});
+		$org_counter=0;
+		$('.org_cb').each(function(){
+			if($(this).is(':checked'))
+			{
+				if($(this).val()!='SA')
+				{
+					$org.push($(this).val());
+				}
+			}
+			$org_counter++;
+		});
 
-		if($depts.length==0)
+		$prog_counter=0;
+		$('.prog_cb').each(function(){
+			if($(this).is(':checked'))
+			{
+				if($(this).val()!='SA')
+				{
+					$progs.push($(this).val());
+				}
+			}
+			$prog_counter++;
+		});
+
+		
+		if($dept.length==0)
 		{
-			alert('Please Select Atleast One Department');
+			alert('Please Choose A Department');
 		}
-		else
+		else if($org_counter>1 && $org.length==0)
 		{
+			alert('Please Select Atleast One Organization');
+		}
+		else if($prog_counter>1 && $progs.length==0)
+		{
+			alert('Please Select Atleast One Program');
+		}	
+		else
+		{	
 
 			$named=$('strong#disb_tag_POST').text();
 			$dtype=$('strong#disb_type_POST').text();
@@ -237,7 +312,7 @@
 			$.ajax({
 				url:"php_codes/Insert_New_Subscription.php",
 				method:"POST",
-				data:{dname:$named,type:$dtype,sname:$sname,freq:$freq,cost:$cost,SED:$SED,depts:$depts,SSD:$SSD},
+				data:{dname:$named,type:$dtype,sname:$sname,freq:$freq,cost:$cost,SED:$SED,dept:$dept,org:$org,progs:$progs,SSD:$SSD},
 				success:function(data)
 				{
 					
@@ -277,18 +352,51 @@
 				}
 			});
 		}
-
 	});
+	 function resetPreform(){
+	 	$('#SNf').val('');
+	 	$('#Freq').val('');
+	 	$('#Cost').val('');
+	 	$('input[type="checkbox"]').each(function(){
+	 		$(this).prop('checked',false);
+	 	});
+
+	 	$('.org_list').html('');
+	 	$('.prog_list').html('');
+	 	$('#script_org').remove();
+	 	$script_org_inc=false;
+
+	 	$('.select_org').addClass('collapse');
+	 	$('.select_prog').addClass('collapse');
+	 }
+	  function resetPOSTform(){
+	 	$('#SNf_POST').val('');
+	 	$('#Freq_POST').val('');
+	 	$('#Cost_POST').val('');
+	 	$('#SSD_POST').val('');
+	 	$('#SED_POST').val('');
+	 	$('input[type="checkbox"]').each(function(){
+	 		$(this).prop('checked',false);
+	 	});
+
+	 	$('.org_list_post').html('');
+	 	$('.prog_list_post').html('');
+	 	$('#script_org_post').remove();
+	 	$script_org_inc_post=false;
+
+	 	$('.select_org_post').addClass('collapse');
+	 	$('.select_prog_post').addClass('collapse');
+	 }
 
 	$('#btn_yes').click(function(){
 		$("#msg_scs").addClass('collapse');
-		$("#subscribe_new_form_Pre")[0].reset();
+		resetPreform();
 		$('#save_btn').removeClass('collapse');
  		$('#retry').addClass('collapse');
 	});
 	$('#btn_no').click(function(){
 		$("#subscribe_new_form_Pre")[0].reset();
-		$("#first_step")[0].reset();
+		resetPreform();
 		$('#add_data_Modal_next').modal('hide');
 		$('#prev-data').addClass('collapse');
 
@@ -299,14 +407,14 @@
 
 	$('#btn_yes_POST').click(function(){
 		$("#msg_scs_POST").addClass('collapse');
-		$("#subscribe_new_form_POST")[0].reset();
+		resetPOSTform();
 		$('#save_btn_POST').removeClass('collapse');
  		$('#retry_POST').addClass('collapse');
 
  		
 	});
 	$('#btn_no_POST').click(function(){
-		$("#subscribe_new_form_POST")[0].reset();
+		resetPOSTform();
 		$("#first_step")[0].reset();
 		$('#add_data_Modal_next_POST').modal('hide');
 		$('#prev-data-POST').addClass('collapse');
@@ -327,4 +435,121 @@
 
 		}
 	});
+
+	$script_org_inc=false;
+	$('.dept_cb').on('change',function(){
+
+		$dept=$(this).val();
+
+		if($(this).is(':checked'))
+		{
+			$.ajax({
+				url:"php_codes/select_depts.php",
+				method:"POST",
+				data:{type:'check_dept',dept:$dept},
+				success:function(data){
+					if(data.orgs!='')
+					{
+						$('.select_org').removeClass('collapse');
+						$('.org_list').append(data.orgs);
+
+						if(!$script_org_inc)
+						{
+							$('.org_list').append('<div id="script_org"></div>');
+
+							var s=document.createElement("script");
+							s.type='text/javascript';
+							s.src='Js/script_org.js?v=1';
+							$('#script_org').append(s);
+							$script_org_inc=true;
+						}
+						
+					}
+				}
+			});
+		
+		}
+		else
+		{
+			$('.tag_'+$dept).remove();
+			//
+				
+			$inc=0;
+			$('.org_cb').each(function(){				
+					$inc++;	
+			});
+
+			if( $inc==0)
+			{
+				$('.select_org').addClass('collapse');
+				$('.select_prog').addClass('collapse');
+				
+				$('.prog_list').html('');
+				$('.org_list').html('');
+
+				$('#script_org').remove();
+				$script_org_inc=false;
+			}
+			
+		}
+	});
+
+	$script_org_inc_post=false;
+	$('.dept_list_post').on('change',function(){
+
+		$dept=$(this).val();
+
+		if($(this).is(':checked'))
+		{
+			$.ajax({
+				url:"php_codes/select_depts.php",
+				method:"POST",
+				data:{type:'check_dept',dept:$dept},
+				success:function(data){
+					if(data.orgs!='')
+					{
+						$('.select_org_post').removeClass('collapse');
+						$('.org_list_post').append(data.orgs);
+
+						if(!$script_org_inc_post)
+						{
+							$('.org_list_post').append('<div id="script_org_post"></div>');
+
+							var s=document.createElement("script");
+							s.type='text/javascript';
+							s.src='Js/script_org_post.js';
+							$('#script_org_post').append(s);
+							$script_org_inc_post=true;
+						}
+						
+					}
+				}
+			});
+		
+		}
+		else
+		{
+			$('.tag_'+$dept).remove();
+			
+				
+			$inc=0;
+			$('.org_cb').each(function(){				
+					$inc++;	
+			});
+
+			if( $inc==0)
+			{
+				$('.select_org_post').addClass('collapse');
+				$('.select_prog_post').addClass('collapse');
+
+				$('.prog_list_post').html('');
+				$('.org_list_post').html('');
+
+				$('#script_org_post').remove();
+				$script_org_inc_post=false;
+			}
+			
+		}
+	});
+	
 });

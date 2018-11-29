@@ -10,7 +10,7 @@ $(function(){
 		});
 	}
 
-
+$sID="";
 $('#table_MS').on('draw.dt', function() {
 		$('#table_MS').Tabledit({
 			url:"php_codes/modify_serials.php",
@@ -20,26 +20,7 @@ $('#table_MS').on('draw.dt', function() {
 				},
 			onSuccess:function(data,textStatus,jqXHR)
 			{
-				if(data.action=='delete')
-				{
-					if(!$('#msg_scs').hasClass('collapse'))
-				{
-					$('#msg_scs').addClass('collapse');
-				}
-				else if(!$('#msg_scs_update').hasClass('collapse'))
-				{
-					$('#msg_scs_update').addClass('collapse');
-				}
-				else if(!$('#msg_fail').hasClass('collapse'))
-				{
-					$('#msg_fail').addClass('collapse');
-				}
-				$('#msg_scs_remove').removeClass('collapse');
-					$("#"+data.SerialID).remove();	
-				$table.ajax.reload(null,false);		
-
-				}
-				else if(data.status=='success')
+				if(data.status=='success')
 				{
 					if(!$('#msg_scs').hasClass('collapse'))
 					{
@@ -80,6 +61,16 @@ $('#table_MS').on('draw.dt', function() {
 
 		$('thead>tr>th:nth-child(5)').addClass('collapse');
 		$('tbody>tr>td:nth-child(5)').addClass('collapse');
+		
+		// RECYCLE
+		$('.tabledit-confirm-button').remove();
+
+		$('.tabledit-delete-button').click(function(){
+ 			$('#Remove_Modal').modal('show');
+ 			$sID=$(this).closest('tr').find('td.sorting_1>span').text();
+ 		});
+
+
 	});
 
 	$('#Add_Serial').on('submit',function(event){
@@ -178,16 +169,16 @@ $('#table_MS').on('draw.dt', function() {
  		{
  			// DELETE BTN
 		$('button.tabledit-delete-button').each(function(){
-				if($(this).hasClass('active'))
-				{
-					$(this).removeClass('active');
-				}
+			if($(this).hasClass('active'))
+			{
+				$(this).removeClass('active');
+			}
 		});
 		$('button.tabledit-confirm-button').each(function(){
- 					if($(this).css('display')!='none')
- 					{
- 						$(this).css('display','none');
- 					}
+			if($(this).css('display')!='none')
+			{
+				$(this).css('display','none');
+			}
  		});
 
  			if($x!=0)
@@ -234,4 +225,42 @@ $('#table_MS').on('draw.dt', function() {
 
  	$('#table_MS_wrapper').removeClass('form-inline');
 
+ 	$('#remove_data').on('submit',function(event){
+ 		event.preventDefault();
+
+ 		$reason=$('#reason_data').val();
+ 		
+ 		$.ajax({
+ 			url:'php_codes/modify_serials.php',
+ 			method:'POST',
+ 			data:{reason:$reason,action:'delete',sID:$sID},
+ 			success:function(data)
+ 			{
+ 				if(data.action=='delete')
+				{
+					$('#Remove_Modal').modal('hide');
+					$('#reason_data').val('');
+					if(!$('#msg_scs').hasClass('collapse'))
+					{
+						$('#msg_scs').addClass('collapse');
+					}
+					else if(!$('#msg_scs_update').hasClass('collapse'))
+					{
+						$('#msg_scs_update').addClass('collapse');
+					}
+					else if(!$('#msg_fail').hasClass('collapse'))
+					{
+						$('#msg_fail').addClass('collapse');
+					}
+					$('#msg_scs_remove').removeClass('collapse');	
+					$table.ajax.reload(null,false);		
+
+				}
+
+ 			}
+ 		});
+
+ 	});
+
+ 	
 });

@@ -12,10 +12,11 @@ require 'db.php';
 // $mail='hajie@gmail.com';
 
 $input=filter_input_array(INPUT_POST);
-$id=$input['DistributorID'];
+
 
 if($input['action']=='edit')
 {
+	$id=$input['DistributorID'];
 	$name=$input['DistributorName'];
 	$noi=$input['NameOfIncharge'];
 	$contact=$input['ContactNumber'];
@@ -26,12 +27,20 @@ if($input['action']=='edit')
 		$updatesql="Update Distributor SET DistributorName=?,NameOfIncharge=?,ContactNumber=?,Email=? WHERE DistributorID=?";
 		$queryup=sqlsrv_query($conn,$updatesql,array($name,$noi,$contact,$mail,$id));
 	}
+	echo json_encode($input);
 }
 else if($input['action']=='delete')
 {
-	$sqldel="Delete From Distributor WHERE DistributorID=?";
-	$delquery=sqlsrv_query($conn,$sqldel,array($id));
+	$reason=$input['reason'];
+	$disbID=$input['disbID'];
+
+
+	$sqltxtdel="Update Distributor SET Remove=?,Remove_Remarks=? Where DistributorID=?";
+	$querydel=sqlsrv_query($conn,$sqltxtdel,array('Removed',$reason,$disbID));
+	
+	header('Content-type: application/json');
+	echo json_encode($input);
 }
-echo json_encode($input);
+
 
  ?>

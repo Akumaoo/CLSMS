@@ -68,6 +68,7 @@ include 'Includes/header.php';
 </div>
 <?php 
 include 'Modals/New_Distributor_Modal.php';
+include 'Modals/remove_modal.php';
 include 'Includes/footer.php';
  ?>
 </body>

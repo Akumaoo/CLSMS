@@ -1,12 +1,10 @@
 ***OnGoing:***
 -Finish the Reports Generation
 -PRINT Functionality
-
+-REVIEW CHANGES
 
 ***PENDING:***
-
-
-
+-Q/A
 ***FINISHED:***
 (DONE!!!)-SSP for Subscription,Deliveries,SendSerials
 (DONE!!)-Serial Type Tab
@@ -18,6 +16,8 @@
 (DONE!!!)-Delivery Tab(Managing Deliveries)|| Include here The Creation of Package
 (DONE!!!)-Archiving
 (DONE!!!)-Other Users UI
+(DONE!!!)-DELETE REVISE
+(DONE!!!)-MAKE ALL per SCHOOL YEAR
 (DONE!!!)-Dashboard
 (DONE!!!)-User Tab
 (DONE!!!)-Serial Tab 

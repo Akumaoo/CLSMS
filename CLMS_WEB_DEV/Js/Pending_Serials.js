@@ -16,7 +16,7 @@ $date=$('span#date').text();
 		});
 	}
 
-
+	$rsID="";
 	$('#table_pending_ser').on('draw.dt', function() {
 		
 		$('tbody tr td:nth-child(1)').addClass('rsID');
@@ -45,13 +45,6 @@ $date=$('span#date').text();
 				},
 			onSuccess:function(data,textStatus,jqXHR)
 			{
-				if(data.action=='delete')
-				{
-					
-					$('#msg_scs_enter').removeClass('collapse');
-					$table.ajax.reload(null,false);
-								
-				}
 	 		}		
 		
 		});
@@ -67,6 +60,12 @@ $date=$('span#date').text();
 		$('.tabledit-edit-button').remove();
 		$('.tabledit-restore-button').remove();
 
+		$('.tabledit-confirm-button').remove();
+
+		$('.tabledit-delete-button').click(function(){
+ 			$('#Remove_Modal').modal('show');
+ 			$rsID=$(this).closest('tr').find('td.sorting_1>span').text();
+ 		});
 
 	});
 
@@ -144,6 +143,32 @@ $date=$('span#date').text();
  			$('thead>tr>th:nth-child(7)').addClass('collapse');
 			$('tbody>tr>td:nth-child(7)').addClass('collapse');
  		}
+ 	});
+
+ 	$('#remove_data').on('submit',function(event){
+ 		event.preventDefault();
+
+ 		$reason=$('#reason_data').val();
+ 		
+ 		$.ajax({
+ 			url:'php_codes/modify_send_Serial.php',
+ 			method:'POST',
+ 			data:{reason:$reason,action:'delete',rsID:$rsID},
+ 			success:function(data)
+ 			{
+ 				if(data.action=='delete')
+				{
+					$('#Remove_Modal').modal('hide');
+					$('#reason_data').val('');
+					
+					$('#msg_scs_enter').removeClass('collapse');	
+					$table.ajax.reload(null,false);		
+
+				}
+
+ 			}
+ 		});
+
  	});
 
 

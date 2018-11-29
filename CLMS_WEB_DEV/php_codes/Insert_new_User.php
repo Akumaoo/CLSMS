@@ -2,7 +2,17 @@
 require 'db.php';
 
 if(!empty($_POST))
-{
+{	
+	session_start();
+	if(isset($_SESSION['Dept']))
+	{
+		$dept=$_SESSION['Dept'];
+	}
+	else
+	{
+		$dept="COLLEGE";
+	}
+
 	$FName=$_POST['FN'];
 	$LName=$_POST['LN'];
 	$mail=$_POST['mail'];
@@ -29,7 +39,7 @@ if(!empty($_POST))
 	// $role='Admin';
 	// $dept='';
 
-	$avaname=$_FILES['ava']['name'];
+	$avaname=$dept.'_'.$_FILES['ava']['name'];
 	$avasize=$_FILES['ava']['size'];
 	$avatype=$_FILES['ava']['type'];
 	$temp_path=$_FILES['ava']['tmp_name'];

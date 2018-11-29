@@ -23,6 +23,8 @@ if(isset($_POST['submit'])){
         $dbdepartment=$row['DepartmentID'];
         $fn=$row['FirstName'];
         $ln=$row['LastName'];
+        $mail=$row['Email'];
+        $uID=$row['UserID'];
             
         }      
             
@@ -32,6 +34,8 @@ if(isset($_POST['submit'])){
             $_SESSION['Dept']=$dbdepartment;
             $_SESSION['FirstName']=$fn;
             $_SESSION['LastName']=$ln;
+            $_SESSION['Email']=$mail;
+            $_SESSION['uID']=$uID;
             header ("Location:index.php");        
     }
       

@@ -10,6 +10,7 @@ $(function(){
 			});
 	}
 
+$uID="";
 $('#table_user').on('draw.dt', function() {
 	$('#table_user').Tabledit({
 		url:"php_codes/modify_user.php",
@@ -50,6 +51,13 @@ $('#table_user').on('draw.dt', function() {
 
 	$('thead>tr>th:nth-child(8)').addClass('collapse');
 	$('tbody>tr>td:nth-child(8)').addClass('collapse');
+
+	$('.tabledit-confirm-button').remove();
+	$('.tabledit-delete-button').click(function(){
+		$('#Remove_Modal').modal('show');
+		$uID=$(this).closest('tr').find('td.sorting_1>span').text();
+	});
+
 
 	});
 	
@@ -236,5 +244,38 @@ $('#table_user').on('draw.dt', function() {
  				$('#Dept_select').removeClass('collapse');
  			}
  		}
+ 	});
+
+ 	$('#remove_data').on('submit',function(event){
+ 		event.preventDefault();
+
+ 		$reason=$('#reason_data').val();
+ 		
+ 		$.ajax({
+ 			url:'php_codes/modify_user.php',
+ 			method:'POST',
+ 			data:{reason:$reason,action:'delete',uID:$uID},
+ 			success:function(data)
+ 			{
+ 				if(data.action=='delete')
+				{
+					$('#Remove_Modal').modal('hide');
+					$('#reason_data').val('');
+					if(!$('#msg_scs').hasClass('collapse'))
+					{
+						$('#msg_scs').addClass('collapse');
+					}
+					else if(!$('#msg_fail').hasClass('collapse'))
+					{
+						$('#msg_fail').addClass('collapse');
+					}
+					$('#msg_scs_remove').removeClass('collapse');	
+					$table.ajax.reload(null,false);		
+
+				}
+
+ 			}
+ 		});
+
  	});
 });

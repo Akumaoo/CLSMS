@@ -62,8 +62,10 @@ include 'Includes/header.php';
 </div>
 </div>
 <?php include 'Modals/Add_Serial_Modal.php';
+	  include 'Modals/remove_modal.php';
 	  include 'Includes/footer.php';
+	   
 ?>
 </body>
 </html>
-<script src="Js/manage_serials_RBAC.js?v=233633333933" type="text/javascript"></script>';
+<script src="Js/manage_serials_RBAC.js?v=2233333933" type="text/javascript"></script>';

@@ -2,10 +2,13 @@
 require "db.php";
 
 $input=filter_input_array(INPUT_POST);
-$sID=$input['SerialID'];
+// $input['reason']='rety';
+// $input['sID']=34;
+// $input['action']='delete';
+
 
 	if($input["action"]==="edit")
-	{
+	{	$sID=$input['SerialID'];
 		$type=$input['TypeName'];
 		$orig=$input['Origin'];
 		if($type!='stat' && $orig!='stat')
@@ -58,13 +61,19 @@ $sID=$input['SerialID'];
 			$input['status']='fail';
 		}
 		
+		echo json_encode($input);
 	}
 	else if($input["action"]==='delete')
 	{
-		$sqltxtdel="Delete FROM Serial Where SerialID=?";
-		$querydel=sqlsrv_query($conn,$sqltxtdel,array($sID));
+		$reason=$input['reason'];
+		$sID=$input['sID'];
+		// $reason='asdas';
+		// $sID=34;
+	
+		$sqltxtdel="Update Serial SET Remove=?,Remove_Remarks=? Where SerialID=?";
+		$querydel=sqlsrv_query($conn,$sqltxtdel,array('Removed',$reason,$sID));
+		
+		header('Content-type: application/json');
+		echo json_encode($input);
 	}
-
-
-	echo json_encode($input);
  ?>

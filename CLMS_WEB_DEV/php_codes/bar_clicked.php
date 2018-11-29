@@ -6,7 +6,7 @@ if(isset($_POST['type']))
 	$inc=0;
 	$titles=array();
 	$subs_list=array();
-	$sql="Select SerialID,SubscriptionID FROM Subscription Where Status=? AND Archive IS NULL";
+	$sql="Select SerialID,SubscriptionID FROM Subscription Where Status=? AND Archive IS NULL AND REMOVE IS NULL AND Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01'))";
 	$query=sqlsrv_query($conn,$sql,array($type));
 	if(sqlsrv_has_rows($query))
 	{	

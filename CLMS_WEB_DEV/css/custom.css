@@ -367,3 +367,6 @@ cursor:pointer;
 	left:285px;
 	top:366px;
 }
+.btn-active{
+	background-color:#21b0f1;
+}

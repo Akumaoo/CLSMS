@@ -15,7 +15,7 @@ $table=<<<EOT
 			 END)
 		END)
 		 AS Subscription_Year
-		,Status as Status from Distributor Inner Join Subscription ON Distributor.DistributorID=Subscription.DistributorID Group By Distributor.DistributorID,Subscription_Date,DistributorName,Status) AS SUB GROUP BY Subscription_Year,SUB.DistributorID,SUB.DistributorName,SUB.Status) temp
+		,Status,Subscription.Remove as remv from Distributor Inner Join Subscription ON Distributor.DistributorID=Subscription.DistributorID Group By Distributor.DistributorID,Subscription_Date,DistributorName,Status,Subscription.Remove) AS SUB GROUP BY Subscription_Year,SUB.DistributorID,SUB.DistributorName,SUB.Status,SUB.remv) temp
 EOT;
 
 $primary_key='DistributorID';
@@ -27,7 +27,7 @@ $columns=array(
 
 require( 'ssp.php' );
 echo json_encode(
-	SSP::complex( $_GET, $sql_details, $table, $primary_key, $columns,null,"Status='OnGoing'")
+	SSP::complex( $_GET, $sql_details, $table, $primary_key, $columns,null,"Status='OnGoing' AND remv IS NULL")
 );
 
  ?>

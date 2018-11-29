@@ -20,6 +20,7 @@ $(function(){
 				}]
 		});
 	}
+	$subID="";
 	$('#table_subs').on('draw.dt', function() {
 		$('#table_subs').Tabledit({
 		url:"php_codes/modify_subs.php",
@@ -44,6 +45,10 @@ $(function(){
 					{
 						$('#msg_deliv_enter').addClass('collapse');
 					}
+					else if(!$('#msg_remove').hasClass('collapse'))
+					{
+						$('#msg_remove').addClass('collapse');
+					}
 
 					$("#msg_scs_enter").removeClass('collapse');
 					$table.ajax.reload(null,false);
@@ -57,6 +62,10 @@ $(function(){
 					else if(!$('#msg_deliv_enter').hasClass('collapse'))
 					{
 						$('#msg_deliv_enter').addClass('collapse');
+					}
+					else if(!$('#msg_remove').hasClass('collapse'))
+					{
+						$('#msg_remove').addClass('collapse');
 					}
 
 					$("#msg_fail_enter").removeClass('collapse');
@@ -100,16 +109,6 @@ $(function(){
 	   			data:{sname:$sname},
 	   			success:function(data){
 	   				$('#dept_list_categ').html(data);
-
-	   				$('.SA').change(function() {
-						if($(this).is(':checked'))
-						{
-							$('input[type="checkbox"]').each(function(){
-								$(this).prop('checked',true);
-							});
-
-						}
-					});
 	   			}
 	   		});
 	   		$('#receive_deliv_modal').modal('show');
@@ -131,6 +130,12 @@ $(function(){
 
 		});	
 		
+		$('.tabledit-confirm-button').remove();
+
+		$('.tabledit-delete-button').click(function(){
+				$('#Remove_Modal').modal('show');
+				$subID=$(this).closest('tr').find('td.sorting_1>span').text();
+		});
 
 	});
 
@@ -236,32 +241,72 @@ $(function(){
 		event.preventDefault();
 
 		$depts=[];
+		$orgs=[];
+		$progs=[];
+
+		$('.dept_cb').each(function(){
+			if($(this).is(':checked'))
+			{
+				if($(this).val()!='SA')
+				{
+					$depts.push($(this).val());
+				}
+			}
+		});
+		$org_counter=0;
+		$('.org_cb').each(function(){
+			if($(this).is(':checked'))
+			{
+				if($(this).val()!='SA')
+				{
+					$orgs.push($(this).val());
+				}
+			}
+			$org_counter++;
+		});
+
+		$prog_counter=0;
+		$('.prog_cb').each(function(){
+			if($(this).is(':checked'))
+			{
+				if($(this).val()!='SA')
+				{
+					$progs.push($(this).val());
+				}
+			}
+			$prog_counter++;
+		});
+
+
 		$sn=$('#sn_rec').val();
 		$DOI=$('#DOI_rec').val();
 		$VN=$('#VN_rec').val();
 		$IN=$('#IN_rec').val();
-		$DR=$('#DR_rec').val();
+		// $DR=$('#DR_rec').val();
 
-
-
-		$('input[type="checkbox"]:checked').each(function(){
-			if($(this).val()!='SA')
-			{
-				$depts.push($(this).val());
-			}
-		});
-
-		if($depts.length==0)
+		if($DOI=="" && $VN==0 && $IN==0)
 		{
-			alert('Please Select Atleast One Department');
+			alert('Missing value on Date Of Issue/Volume Number/Issue Number');
 		}
+		else if($depts.length==0)
+		{
+			alert('Please Choose A Department');
+		}
+		else if($org_counter>1 && $orgs.length==0)
+		{
+			alert('Please Select Atleast One Organization');
+		}
+		else if($prog_counter>1 && $progs.length==0)
+		{
+			alert('Please Select Atleast One Program');
+		}	
 		else
 		{
 
 	 		$.ajax({
 	 			url:"php_codes/insert_serial_pack.php",
 	 			method:"POST",
-	 			data:{sn:$sn,DOI:$DOI,VN:$VN,IN:$IN,DR:$DR,depts:$depts},
+	 			data:{sn:$sn,DOI:$DOI,VN:$VN,IN:$IN,depts:$depts,orgs:$orgs,progs:$progs},
 	 			success:function(data)
 	 			{
 					$("#receive_del_form")[0].reset();
@@ -274,6 +319,10 @@ $(function(){
 						else if(!$('#msg_fail_enter').hasClass('collapse'))
 						{
 							$('#msg_fail_enter').addClass('collapse');
+						}
+						else if(!$('#msg_remove').hasClass('collapse'))
+						{
+							$('#msg_remove').addClass('collapse');
 						}
 
 						$('#msg_deliv_enter').removeClass('collapse');
@@ -289,6 +338,10 @@ $(function(){
 						else if(!$('#msg_deliv_enter').hasClass('collapse'))
 						{
 							$('#msg_deliv_enter').addClass('collapse');
+						}
+						else if(!$('#msg_remove').hasClass('collapse'))
+						{
+							$('#msg_remove').addClass('collapse');
 						}
 
 						$('#msg_fail_enter').removeClass('collapse');
@@ -385,6 +438,44 @@ $(function(){
 
  	$('#table_subs_wrapper').removeClass('form-inline');
 
+
+ 	$('#remove_data').on('submit',function(event){
+ 		event.preventDefault();
+
+ 		$reason=$('#reason_data').val();
+ 		
+ 		$.ajax({
+ 			url:'php_codes/modify_subs.php',
+ 			method:'POST',
+ 			data:{reason:$reason,action:'delete',subID:$subID},
+ 			success:function(data)
+ 			{
+ 				if(data.action=='delete')
+				{
+					$('#Remove_Modal').modal('hide');
+					$('#reason_data').val('');
+
+					if(!$('#msg_scs_enter').hasClass('collapse'))
+					{
+						$('#msg_scs_enter').addClass('collapse');
+					}
+					else if(!$('#msg_deliv_enter').hasClass('collapse'))
+					{
+						$('#msg_deliv_enter').addClass('collapse');
+					}
+					else if(!$('#msg_fail_enter').hasClass('collapse'))
+					{
+						$('#msg_fail_enter').addClass('collapse');
+					}
+					$('#msg_remove').removeClass('collapse');	
+					$table.ajax.reload(null,false);		
+
+				}
+
+ 			}
+ 		});
+
+ 	});
 
 
 });

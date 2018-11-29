@@ -6,7 +6,7 @@ $date=strtotime($_POST['date']);
 $newdate=date('Y-m-d',$date);
 
 $table=<<<EOT
- (Select  ReceivedSerialID,DepartmentID,SerialName,TypeName,Staff_Seen,ReceiveSerial.Status AS RS_Status,Subscription.Status AS Sub_Status,DateReceiveNotif_Give from ReceiveSerial Inner Join Serial ON ReceiveSerial.SerialID=Serial.SerialID
+ (Select  ReceivedSerialID,DepartmentID,SerialName,TypeName,Staff_Seen,ReceiveSerial.Status AS RS_Status,Subscription.Status AS Sub_Status,DateReceiveNotif_Give,ReceiveSerial.Remove as rem from ReceiveSerial Inner Join Serial ON ReceiveSerial.SerialID=Serial.SerialID
 Inner Join Subscription On Serial.SerialID=Subscription.SerialID) temp
 EOT;
 
@@ -26,13 +26,13 @@ require( 'ssp.php' );
 if($data!="")
 {
 	echo json_encode(
-		SSP::complex( $_POST, $sql_details, $table, $primary_key, $columns,null,"RS_Status='NotReceived' AND Sub_Status='OnGoing' AND DepartmentID='".$data."' AND DateReceiveNotif_Give='".$newdate."'")
+		SSP::complex( $_POST, $sql_details, $table, $primary_key, $columns,null,"RS_Status='NotReceived' AND Sub_Status='OnGoing' AND DepartmentID='".$data."' AND DateReceiveNotif_Give='".$newdate."' AND rem IS NULL")
 	);
 }
 else
 {
 	echo json_encode(
-		SSP::complex( $_POST, $sql_details, $table, $primary_key, $columns,null,"RS_Status='NotReceived' AND Sub_Status='OnGoing'")
+		SSP::complex( $_POST, $sql_details, $table, $primary_key, $columns,null,"RS_Status='NotReceived' AND Sub_Status='OnGoing' AND rem IS NULL")
 	);
 }
 

@@ -48,8 +48,8 @@ if(isset($_POST['S_ID']))
 				<table cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover" id="table_CS">
 					<thead class="thead_theme">
 					<tr>
-						<th class="radio-label-center">Department ID</th>
-						<th class="radio-label-center">Department Name</th>
+						<th class="radio-label-center">Department</th>
+						<th class="radio-label-center">Programs</th>
 						<th class="radio-label-center">Total Received</th>
 					</tr>
 					</thead>
@@ -80,21 +80,21 @@ if(isset($_POST['S_ID']))
 						<form class="cmxform form-horizontal style-form" id="Re_Categorize_form" method="post">
 
 						<div class="form-group ">
-		 					<label class="control-label col-lg-12">*Note: Re-Categoring Serials Will Reset The Number Of Items Received Of Each Departments</label>
+		 					<label class="control-label col-lg-12">*Note: Removing a serial on the current list will reset the Number Of Items Received of that specific Department</label>
 		 				</div>
 
-						<div class="form-group ">
-		 					<label for="department" class="control-label col-lg-3">Departments</label>
+						<div class="form-group form-group-center">
+		 					<label for="dept" class="control-label col-lg-3">Departments</label>
 		 					<div class="col-lg-6">
 		 						<?php
-		 						$sql="SELECT * FROM Department";
+		 						$sql="SELECT * FROM Department WHERE Remove IS NULL";
 		 						$query = sqlsrv_query($conn, $sql, array());
 		 						if (sqlsrv_has_rows($query))
-		 							{
-		 								$depts="<li><input type='checkbox' value='SA' class='SA'>Select All</li>";
+		 							{	
 		 								echo "<ul>";
+		 								$depts="";
 		 								while ($row = sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC)){
-		 										$depts.="<li><input type='checkbox' name='dept' value='".$row['DepartmentID']."'>".$row['DepartmentID']."</li>";
+		 										$depts.="<li><input type='checkbox' class='dept_list_post' name='dept' value='".$row['DepartmentID']."'>".$row['DepartmentID']."</li>";
 		 								}
 		 								echo $depts."</ul>";
 		 							}
@@ -102,6 +102,23 @@ if(isset($_POST['S_ID']))
 		 					</div>
 		 				</div>
 
+		 				<div class="form-group form-group-center collapse select_org_post" id="">
+		 					<label for="org" class="control-label col-lg-3">Organizations</label>
+		 					<div class="col-lg-6">
+		 						<ul class="org_list_post">
+		 						</ul>
+		 					</div>
+		 				</div>
+
+		 				<div class="form-group form-group-center collapse select_prog_post" id="">
+		 					<label for="prog" class="control-label col-lg-3">Programs</label>
+		 					<div class="col-lg-6">
+		 						<ul>
+		 							<ul class="prog_list_post" style="padding: 0">
+		 							</ul>
+		 						</ul>
+		 					</div>
+		 				</div>
 
 
 						<div class="form-group form-group-center" id="save_btn">
@@ -120,4 +137,4 @@ if(isset($_POST['S_ID']))
 	</div>
 </div>
 
-<script type="text/javascript" src="Js/View_dept_ser.js?v=1"></script>
+<script type="text/javascript" src="Js/View_dept_ser.js?v=13"></script>

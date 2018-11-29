@@ -71,7 +71,7 @@
 										<option style="display: none" value="stat">--Dept--</option>
 										<?php 
 										require 'php_codes/db.php';
-										$sql="Select * from Department";
+										$sql="Select * from Department WHERE Remove IS NULL";
 										$query=sqlsrv_query($conn,$sql,array());
 										if(sqlsrv_has_rows($query))
 										{

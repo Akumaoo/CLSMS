@@ -35,12 +35,14 @@ include 'Includes/header.php';
 		<div class="row">
 		<div class="col-lg-10 col-lg-offset-1">
 			<span class="fa fa-cog fa-lg cog_action" id="cog_action"></span>
+			<span class="fa fa-print fa-lg cog_action" id="gen_rep"></span>
 			<table cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover" id="table_MS">
 				<thead class="thead_theme">
 				<tr>
 					<th class="radio-label-center">Category ID</th>
 					<th class="radio-label-center">Serial Name</th>
 					<th class="radio-label-center">Serial Type</th>
+					<th class="radio-label-center">Subscription Status</th>
 					<th class="radio-label-center">Status Of Delivery</th>
 					<th class="radio-label-center">Usage</th>
 				</tr>
@@ -57,6 +59,7 @@ include 'Includes/header.php';
 </div>
 </div>
 <?php
+	  include 'Modals/Print_modal.php';
 	  include 'Includes/footer.php';
 ?>
 </body>

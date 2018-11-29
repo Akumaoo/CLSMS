@@ -21,7 +21,7 @@ $columns=array(
 
 require( 'ssp.php' );
 echo json_encode(
-	SSP::complex( $_GET, $sql_details, $table, $primary_key, $columns,null,null)
+	SSP::complex( $_GET, $sql_details, $table, $primary_key, $columns,null,'Remove IS NULL')
 );
 
  ?>

@@ -2,12 +2,29 @@
 require 'db.php';
 if(!empty($_POST))
 {
-	$year_today=date('Y');
+	// $_POST['data_type']='Count_Archive';
+
+	// $dt=date('Y-m-d',strtotime('2018/10/01'));
+	// $sub_year_string=strtotime('2018/08/01');
+
+	$dt=date('Y-m-d');
+	$sub_year_string=strtotime(date('Y').'-08-01');
+	$sub_year=date('Y-m-d',$sub_year_string);
 	$subs_list=array();
 
 	if ($_POST['data_type']=='Count_Archive') {	
 
-		$sql="Select Count(*) as Nums from Subscription Where Status!=? AND Archive IS NULL AND Year(Subscription_Date)<?";
+		if($dt<$sub_year)
+		{
+			$date_strtotime=strtotime('-1 year',strtotime($sub_year));
+			$year_today=date('Y-m-d',$date_strtotime);
+		}
+		else
+		{
+			$date_strtotime=strtotime($sub_year);
+			$year_today=date('Y-m-d',$date_strtotime);
+		}
+		$sql="Select Count(*) as Nums from Subscription Where Status!=? AND Archive IS NULL AND Subscription_Date<? AND Remove IS NULL";
 		$query=sqlsrv_query($conn,$sql,array('OnGoing',$year_today));
 		$row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
 		$nums_data=$row['Nums'];
@@ -18,8 +35,18 @@ if(!empty($_POST))
 	}
 	else if($_POST['data_type']=='Archive_datas')
 	{
+		if($dt<$sub_year)
+		{
+			$date_strtotime=strtotime('-1 year',strtotime($sub_year));
+			$year_today=date('Y-m-d',$date_strtotime);
+		}
+		else
+		{
+			$date_strtotime=strtotime($sub_year);
+			$year_today=date('Y-m-d',$date_strtotime);
+		}
 
-		$sql2="Select SubscriptionID from Subscription Where Status!=? AND Archive IS NULL AND Year(Subscription_Date)<?";
+		$sql2="Select SubscriptionID from Subscription Where Status!=? AND Archive IS NULL AND Subscription_Date<? AND Remove IS NULL";
 		$query2=sqlsrv_query($conn,$sql2,array('OnGoing',$year_today));
 		if(sqlsrv_has_rows($query2))
 		{	

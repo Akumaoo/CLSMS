@@ -5,29 +5,42 @@ if(isset($_POST['sname']))
 	$sname=$_POST['sname'];
 	// $sname='DUMMY';
 
-	$sqlgetID="Select SerialID from Serial Where SerialName=?";
-	$sqlqueryID=sqlsrv_query($conn,$sqlgetID,array($sname));
+	$sqlgetID="Select SubscriptionID from Subscription Inner Join Serial On Subscription.SerialID=Serial.SerialID Where SerialName=? AND Status=?";
+	$sqlqueryID=sqlsrv_query($conn,$sqlgetID,array($sname,'OnGoing'));
 	$row=sqlsrv_fetch_array($sqlqueryID,SQLSRV_FETCH_ASSOC);
-	$sID=$row['SerialID'];
+	$sID=$row['SubscriptionID'];
 
-	// GET FREQ
-	$sqlfreq="Select Frequency from Subscription Where SerialID=? AND Status=?";
-	$sqlfrequery=sqlsrv_query($conn,$sqlfreq,array($sID,'OnGoing'));
-	$rowfreq=sqlsrv_fetch_array($sqlfrequery,SQLSRV_FETCH_ASSOC);
-	$freq=$rowfreq['Frequency'];
-
-	$sql="Select Department.DepartmentID From Department Inner Join Categorize_Serials ON Department.DepartmentID=Categorize_Serials.DepartmentID Inner Join Subscription ON Categorize_Serials.SubscriptionID=Subscription.SubscriptionID Inner Join Serial On Subscription.SerialID=Serial.SerialID Where Subscription.SerialID=? AND Status=? AND NumberOfItemReceived!=?";
-	$sqlquery=sqlsrv_query($conn,$sql,array($sID,'OnGoing',$freq));
+	$dept_list=[];
+	$inc=0;
+	$sql="Select * from 
+	(Select CategoryID,DepartmentID as dept_main from Categorize_Serials Inner Join Subscription On Categorize_Serials.SubscriptionID=Subscription.SubscriptionID Inner Join Serial On Subscription.SerialID=Serial.SerialID Where Subscription.Status=? And Subscription.SubscriptionID=?) as asd
+	Left join
+	(Select Category_Serials_Program.CategoryID_Program,Organization.DepartmentID as dept_prog,Organization.OrganizationID,Category_Serials_Program.ProgramID from Organization inner join Program On Organization.OrganizationID=Program.OrganizationID Inner Join Category_Serials_Program On Program.ProgramID=Category_Serials_Program.ProgramID
+	Inner Join Subscription On Category_Serials_Program.SubscriptionID=Subscription.SubscriptionID Inner Join Serial On Subscription.SerialID=Serial.SerialID Where Subscription.Status=? And Subscription.SubscriptionID=?) as dsa
+	On asd.dept_main=dsa.dept_prog";
+	$sqlquery=sqlsrv_query($conn,$sql,array('OnGoing',$sID,'OnGoing',$sID));
 	if(sqlsrv_has_rows($sqlquery))
 	{	
 		echo "<ul>";
-		echo "<li><input type='checkbox' value='SA' class='SA'>Select All</li>";
+		echo "<li></li>";
 
 		while($row=sqlsrv_fetch_array($sqlquery,SQLSRV_FETCH_ASSOC))
 		{
-			echo "<li><input type='checkbox' name='dept' value='".$row['DepartmentID']."'>".$row['DepartmentID']."</li>";
+			if(!in_array($row['dept_main'],$dept_list))
+			{
+				array_push($dept_list,$row['dept_main']);
+			}
+			
 		}
-		echo '</ul>';
+
+		for($x=0;$x<count($dept_list);$x++)
+		{
+			echo "<li><input type='checkbox' class='dept_cb' name='dept' value='".$dept_list[$x]."'>".$dept_list[$x]."</li>";
+		}
+		
+		echo '</ul>
+		<script type="text/javascript" src="Js/send_select_dept.js?v=13"></script>
+		';
 	}
 }
 

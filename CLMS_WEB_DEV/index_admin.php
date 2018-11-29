@@ -4,14 +4,14 @@
             // Journals
             function JgetElem($dept)
             {   require 'php_codes/db.php';
-                $sql="Select  Max(ReceivedSerialID) AS ReceivedSerialID from ReceiveSerial Left Join Categorize_Serials ON ReceiveSerial.DepartmentID=Categorize_Serials.DepartmentID Inner Join Subscription ON Categorize_Serials.SubscriptionID=Subscription.SubscriptionID Inner Join Serial On Subscription.SerialID=Serial.SerialID Where ReceiveSerial.DepartmentID=? AND ReceiveSerial.Status=? AND TypeName=? Group By ReceivedSerialID";
+                $sql="Select ReceivedSerialID from ReceiveSerial Inner Join Serial On ReceiveSerial.SerialID=Serial.SerialID Inner Join Subscription On Serial.SerialID=Subscription.SerialID Where ReceiveSerial.DepartmentID=? AND ReceiveSerial.Status=? AND TypeName=? And ReceiveSerial.Remove IS NULL AND Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) Group By ReceivedSerialID";
                 $query=sqlsrv_query($conn,$sql,array($dept,'Received','Journal'),$opt);
                 $row=sqlsrv_num_rows($query);
                 return $row;
             }
              function JgetCOl()
             {   require 'php_codes/db.php';
-                $sql="Select  Max(ReceivedSerialID) AS ReceivedSerialID from ReceiveSerial Left Join Categorize_Serials ON ReceiveSerial.DepartmentID=Categorize_Serials.DepartmentID Inner Join Subscription ON Categorize_Serials.SubscriptionID=Subscription.SubscriptionID Inner Join Serial On Subscription.SerialID=Serial.SerialID Where (ReceiveSerial.DepartmentID!=? AND ReceiveSerial.DepartmentID!=? AND ReceiveSerial.DepartmentID!=? AND ReceiveSerial.DepartmentID!=?) AND ReceiveSerial.Status=? AND TypeName=? Group By ReceivedSerialID";
+                $sql="Select ReceivedSerialID from ReceiveSerial Inner Join Serial On ReceiveSerial.SerialID=Serial.SerialID Inner Join Subscription On Serial.SerialID=Subscription.SerialID Where (ReceiveSerial.DepartmentID!=? AND ReceiveSerial.DepartmentID!=? AND ReceiveSerial.DepartmentID!=? AND ReceiveSerial.DepartmentID!=?) AND ReceiveSerial.Status=? AND TypeName=? And ReceiveSerial.Remove IS NULL AND Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) Group By ReceivedSerialID";
                  $query=sqlsrv_query($conn,$sql,array('ELEM','JSH','SHS','HS','Received','Journal'),$opt);
                 $row=sqlsrv_num_rows($query);
                 return $row;
@@ -22,14 +22,14 @@
 
             function  MgetElem($dept)
             {   require 'php_codes/db.php';
-                $sql="Select  Max(ReceivedSerialID) AS ReceivedSerialID from ReceiveSerial Left Join Categorize_Serials ON ReceiveSerial.DepartmentID=Categorize_Serials.DepartmentID Inner Join Subscription ON Categorize_Serials.SubscriptionID=Subscription.SubscriptionID Inner Join Serial On Subscription.SerialID=Serial.SerialID Where ReceiveSerial.DepartmentID=? AND ReceiveSerial.Status=? AND TypeName=? Group By ReceivedSerialID";
+                $sql="Select ReceivedSerialID from ReceiveSerial Inner Join Serial On ReceiveSerial.SerialID=Serial.SerialID Inner Join Subscription On Serial.SerialID=Subscription.SerialID Where ReceiveSerial.DepartmentID=? AND ReceiveSerial.Status=? AND TypeName=? And ReceiveSerial.Remove IS NULL AND Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) Group By ReceivedSerialID";
                 $query=sqlsrv_query($conn,$sql,array($dept,'Received','Magazine'),$opt);
                 $row=sqlsrv_num_rows($query);
                 return $row;
             }
              function  MgetCOl()
             {   require 'php_codes/db.php';
-                $sql="Select  Max(ReceivedSerialID) AS ReceivedSerialID from ReceiveSerial Left Join Categorize_Serials ON ReceiveSerial.DepartmentID=Categorize_Serials.DepartmentID Inner Join Subscription ON Categorize_Serials.SubscriptionID=Subscription.SubscriptionID Inner Join Serial On Subscription.SerialID=Serial.SerialID Where (ReceiveSerial.DepartmentID!=? AND ReceiveSerial.DepartmentID!=? AND ReceiveSerial.DepartmentID!=? AND ReceiveSerial.DepartmentID!=?) AND ReceiveSerial.Status=? AND TypeName=? Group By ReceivedSerialID";
+                $sql="Select ReceivedSerialID from ReceiveSerial Inner Join Serial On ReceiveSerial.SerialID=Serial.SerialID Inner Join Subscription On Serial.SerialID=Subscription.SerialID Where (ReceiveSerial.DepartmentID!=? AND ReceiveSerial.DepartmentID!=? AND ReceiveSerial.DepartmentID!=? AND ReceiveSerial.DepartmentID!=?) AND ReceiveSerial.Status=? AND TypeName=? And ReceiveSerial.Remove IS NULL AND Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) Group By ReceivedSerialID";
                  $query=sqlsrv_query($conn,$sql,array('ELEM','JSH','SHS','HS','Received','Magazine'),$opt);
                 $row=sqlsrv_num_rows($query);
                 return $row;
@@ -188,7 +188,11 @@
                               			            <!--CUSTOM CHART START -->
                                        
                                           <div class="border-head">
-                                            <h3>Subscribed Titles</h3>
+                                            <?php 
+                                            $c_year=date('Y');
+                                            $n_year=date('Y',strtotime('+1 year'));
+                                             ?>
+                                            <h3>Subscribed Titles [S.Y. <?php echo $c_year.'-'.$n_year ?>]</h3>
                                           </div>
                                           <div class="custom-bar-chart">
                                             <ul class="y-axis">
@@ -200,7 +204,7 @@
                                               <li><span>0</span></li>
                                             </ul>
                                             <div class="bar" id="OG_Click">
-                              			  <div class="title">OnGoing</div>
+                              			         <div class="title">OnGoing</div>
                                               <?php include 'php_codes/barchart_ongoing.php';?>
                                             </div>
                                             <div class="bar " id="Cancel_Click">
@@ -246,7 +250,7 @@
                                               $disblist_ID=array();
                                               $disblist_names=array();
                                               $inc=0;
-                                              $sqldisb="Select DistributorID,DistributorName From Distributor";
+                                              $sqldisb="Select DistributorID,DistributorName From Distributor WHERE Remove IS NULL";
                                               $querydisb=sqlsrv_query($conn,$sqldisb,array());
                                               while($row=sqlsrv_fetch_array($querydisb,SQLSRV_FETCH_ASSOC))
                                               {

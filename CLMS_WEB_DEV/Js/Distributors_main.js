@@ -10,6 +10,7 @@ $(function(){
 			});
 		}
 
+	$disbID="";
 	$('#table_disb').on('draw.dt', function() {
 		$('#table_disb').Tabledit({
 			url:"php_codes/modify_distributors.php",
@@ -72,6 +73,13 @@ $(function(){
 
 		$('thead>tr>th:nth-child(6)').addClass('collapse');
 		$('tbody>tr>td:nth-child(6)').addClass('collapse');
+
+		$('.tabledit-confirm-button').remove();
+
+		$('.tabledit-delete-button').click(function(){
+ 			$('#Remove_Modal').modal('show');
+ 			$disbID=$(this).closest('tr').find('td.sorting_1>span').text();
+ 		});
 	});
 
 	$('#Add_Distributor').on('submit',function(event){
@@ -230,5 +238,41 @@ $(function(){
 
  	$('#table_disb_wrapper').removeClass('form-inline');
 
+ 	 	$('#remove_data').on('submit',function(event){
+ 		event.preventDefault();
+
+ 		$reason=$('#reason_data').val();
+ 		
+ 		$.ajax({
+ 			url:'php_codes/modify_distributors.php',
+ 			method:'POST',
+ 			data:{reason:$reason,action:'delete',disbID:$disbID},
+ 			success:function(data)
+ 			{
+ 				if(data.action=='delete')
+				{
+					$('#Remove_Modal').modal('hide');
+					$('#reason_data').val('');
+					if(!$('#msg_scs').hasClass('collapse'))
+					{
+						$('#msg_scs').addClass('collapse');
+					}
+					else if(!$('#msg_scs_update').hasClass('collapse'))
+					{
+						$('#msg_scs_update').addClass('collapse');
+					}
+					else if(!$('#msg_fail').hasClass('collapse'))
+					{
+						$('#msg_fail').addClass('collapse');
+					}
+					$('#msg_scs_remove').removeClass('collapse');	
+					$table.ajax.reload(null,false);		
+
+				}
+
+ 			}
+ 		});
+
+ 	});
 
 });

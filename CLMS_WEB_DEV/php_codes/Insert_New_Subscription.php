@@ -8,14 +8,30 @@ if(!empty($_POST))
 	$sn=$_POST['sname'];
 	$freq=$_POST['freq'];
 	$cost=$_POST['cost'];
-	$dept_list=$_POST['depts'];
+	$dept_list=$_POST['dept'];
 
-	// $distname="UMX";
-	// $type="Auto-Activate";
-	// $sn="DUMMY";
+	if(empty($_POST['org']))
+	{
+		$org=array();
+		$prog_list=array();
+	}
+	else
+	{
+		$org=$_POST['org'];
+		$prog_list=$_POST['progs'];
+	}
+
+	
+	
+
+	// $distname="emerald";
+	// $type="Manual-Activate";
+	// $sn="new";
 	// $freq=6;
 	// $cost=6;
-	// $dept_list=array('HS','ELEM');
+	// $dept_list=array('HS','JHS');
+	// $org=array();
+	// $prog_list=array();
 	
 	// $date_today=date('Y/m/d');
 
@@ -41,7 +57,7 @@ function CheckSerial($ser)
 {
 	require 'db.php';
 	$Sname=$ser;
-	$checksqlser="Select * from [Serial] Where [Serial].[SerialName]=?";
+	$checksqlser="Select * from [Serial] Where [Serial].[SerialName]=? AND Remove IS NULL";
 	$queryser=sqlsrv_query($conn,$checksqlser,array($Sname),$opt);
 	if(sqlsrv_has_rows($queryser))
 	{
@@ -59,7 +75,7 @@ function CheckSerial($ser)
 function CheckDup($sid)
 {
 	require 'db.php';
-	$sql="Select * from Subscription Where SerialID=? AND Status=?";
+	$sql="Select * from Subscription Where SerialID=? AND Status=? AND Remove IS NULL";
 	$query=sqlsrv_query($conn,$sql,array($sid,'OnGoing'));
 	if(sqlsrv_has_rows($query))
 	{
@@ -73,7 +89,7 @@ function CheckDup($sid)
 function getStype($sid)
 {
 	require 'db.php';
-	$sql="Select Origin from Serial Where SerialID=?";
+	$sql="Select Origin from Serial Where SerialID=? AND Remove IS NULL";
 	$query=sqlsrv_query($conn,$sql,array($sid));
 	$row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
 	$type=$row['Origin'];
@@ -94,6 +110,7 @@ function getNewSubID()
 	{
 		$dID=CheckDisbtributor($distname);
 		$SID=CheckSerial($sn);
+
 		
 
 		if($type=="Manual-Activate")
@@ -107,17 +124,23 @@ function getNewSubID()
 			{
 				$new_SubID=getNewSubID();
 
-				for($x=0;$x<count($dept_list);$x++)
+				for($y=0;$y<count($dept_list);$y++)
 				{
-					$dept=$dept_list[$x];
 					$sqlins="Insert Into Categorize_Serials(SubscriptionID,DepartmentID,NumberOfItemReceived,Usage_Stat) VALUES(?,?,?,?)";
-					$insquery=sqlsrv_query($conn,$sqlins,array($new_SubID,$dept,0,0));
+					$insquery=sqlsrv_query($conn,$sqlins,array($new_SubID,$dept_list[$y],0,0));
 				}
+
+				for($x=0;$x<count($prog_list);$x++)
+				{
+						$sqlins_prog="Insert Into Category_Serials_Program(SubscriptionID,ProgramID,NumberofItemsReceived_Prog) VALUES(?,?,?)";
+						$insqueryprog=sqlsrv_query($conn,$sqlins_prog,array($new_SubID,$prog_list[$x],0));	
+				}
+				
 				$scs['status']="success";
 			}
 			else
 			{
-				$scs['status']='fail';
+				$scs['status']='fail1';
 			}
 		}
 		else
@@ -145,11 +168,16 @@ function getNewSubID()
 			{
 				$new_SubID=getNewSubID();
 
-				for($x=0;$x<count($dept_list);$x++)
+				for($y=0;$y<count($dept_list);$y++)
 				{
-					$dept=$dept_list[$x];
 					$sqlins="Insert Into Categorize_Serials(SubscriptionID,DepartmentID,NumberOfItemReceived,Usage_Stat) VALUES(?,?,?,?)";
-					$insquery=sqlsrv_query($conn,$sqlins,array($new_SubID,$dept,0,0));
+					$insquery=sqlsrv_query($conn,$sqlins,array($new_SubID,$dept_list[$y],0,0));
+				}
+
+				for($x=0;$x<count($prog_list);$x++)
+				{
+						$sqlins_prog="Insert Into Category_Serials_Program(SubscriptionID,ProgramID,NumberofItemsReceived_Prog) VALUES(?,?,?)";
+						$insqueryprog=sqlsrv_query($conn,$sqlins_prog,array($new_SubID,$prog_list[$x],0));	
 				}
 
 				$scs['status']="success";

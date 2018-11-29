@@ -3,13 +3,9 @@ require "db.php";
 
 $input=filter_input_array(INPUT_POST);
 
-$sub_id=$input['SubscriptionID'];
-// $sub_id=1229;
-// $input['action']='edit';
-
-
 if($input["action"]==="edit")
 {
+	$sub_id=$input['SubscriptionID'];
 	$orders=$input["Orders"];
 	$cost=$input["Cost"];
 	$stat=$input["Status"];
@@ -71,15 +67,23 @@ if($input["action"]==="edit")
 		$queryedit=sqlsrv_query($conn,$sqltxt,array($orders,$cost,$stat,$sub_id));
 		$input['status']='success';
 	}
-
+	echo json_encode($input);
 }
 else if($input["action"]==='delete')
 {
 
-	$sqltxtdel="Delete FROM [Subscription] Where [SubscriptionID]=?";
-	$querydel=sqlsrv_query($conn,$sqltxtdel,array($sub_id));
+	$reason=$input['reason'];
+	$subID=$input['subID'];
+		// $reason='asdas';
+		// $sID=34;
+	
+	$sqltxtdel="Update Subscription SET Remove=?,Remove_Remarks=? Where SubscriptionID=?";
+	$querydel=sqlsrv_query($conn,$sqltxtdel,array('Removed',$reason,$subID));
+	
+	header('Content-type: application/json');
+	echo json_encode($input);
 }
 
-echo json_encode($input);
+
 
 ?>

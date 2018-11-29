@@ -23,7 +23,7 @@ $(function(){
 		url:"php_codes/modify_serial_category.php",
 		columns:{
 		identifier:[0,"Category_ID"],
-		editable:[[4,"Usage"]]
+		editable:[[5,"Usage"]]
 			},
 		onSuccess:function(data,textStatus,jqXHR)
 		{
@@ -52,7 +52,7 @@ $(function(){
 				
 			}
 		},onDraw: function() {
-				$('tbody tr td:nth-child(5)>input,tbody tr td:nth-child(4)>input').each(function(){
+				$('tbody tr td:nth-child(6)>input').each(function(){
 					$('<input class="tabledit-input form-control input-sm" type="number" style="display: none;" disabled="">').attr({ name: this.name, value: this.value }).insertBefore(this)
 				}).remove()
 	 	}	
@@ -69,8 +69,8 @@ $(function(){
 	}
 		
 
-	$('thead>tr>th:nth-child(6)').addClass('collapse');
-	$('tbody>tr>td:nth-child(6)').addClass('collapse');
+	$('thead>tr>th:nth-child(7)').addClass('collapse');
+	$('tbody>tr>td:nth-child(7)').addClass('collapse');
 
 	$('.tabledit-delete-button').remove();
 
@@ -88,10 +88,10 @@ $(function(){
 
  		}); 		
 
- 		if($('thead>tr>th:nth-child(6)').hasClass('collapse'))
+ 		if($('thead>tr>th:nth-child(7)').hasClass('collapse'))
  		{
- 			$('thead>tr>th:nth-child(6)').removeClass('collapse');
-			$('tbody>tr>td:nth-child(6)').removeClass('collapse');
+ 			$('thead>tr>th:nth-child(7)').removeClass('collapse');
+			$('tbody>tr>td:nth-child(7)').removeClass('collapse');
 			
  		}
  		else
@@ -147,11 +147,22 @@ $(function(){
  			}
  			
 
- 			$('thead>tr>th:nth-child(6)').addClass('collapse');
-			$('tbody>tr>td:nth-child(6)').addClass('collapse');
+ 			$('thead>tr>th:nth-child(7)').addClass('collapse');
+			$('tbody>tr>td:nth-child(7)').addClass('collapse');
  		}
  	});
 
+	$('#gen_rep').click(function(){
+		$('#Print_Modal').modal('show');
+	});
+
+	$('#form_report').on('submit',function(event){
+		$('#Print_Modal').modal('hide');
+	});
+
+	$('#form_report').attr({
+		action: 'fpdf/Reports/Staff_List_Ser.php'
+	});
 
 
 });
