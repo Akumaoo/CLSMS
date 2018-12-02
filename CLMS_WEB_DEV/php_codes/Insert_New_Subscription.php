@@ -126,14 +126,14 @@ function getNewSubID()
 
 				for($y=0;$y<count($dept_list);$y++)
 				{
-					$sqlins="Insert Into Categorize_Serials(SubscriptionID,DepartmentID,NumberOfItemReceived,Usage_Stat) VALUES(?,?,?,?)";
-					$insquery=sqlsrv_query($conn,$sqlins,array($new_SubID,$dept_list[$y],0,0));
+					$sqlins="Insert Into Categorize_Serials(SubscriptionID,DepartmentID,NumberOfItemReceived,Usage_Stat_Employee,Usage_Stat_Student) VALUES(?,?,?,?,?)";
+					$insquery=sqlsrv_query($conn,$sqlins,array($new_SubID,$dept_list[$y],0,0,0));
 				}
 
 				for($x=0;$x<count($prog_list);$x++)
 				{
-						$sqlins_prog="Insert Into Category_Serials_Program(SubscriptionID,ProgramID,NumberofItemsReceived_Prog) VALUES(?,?,?)";
-						$insqueryprog=sqlsrv_query($conn,$sqlins_prog,array($new_SubID,$prog_list[$x],0));	
+						$sqlins_prog="Insert Into Category_Serials_Program(SubscriptionID,ProgramID,NumberofItemsReceived_Prog,Usage_Stat_Employee_Prog,Usage_Stat_Student_Prog) VALUES(?,?,?,?,?)";
+						$insqueryprog=sqlsrv_query($conn,$sqlins_prog,array($new_SubID,$prog_list[$x],0,0,0));	
 				}
 				
 				$scs['status']="success";
@@ -170,14 +170,14 @@ function getNewSubID()
 
 				for($y=0;$y<count($dept_list);$y++)
 				{
-					$sqlins="Insert Into Categorize_Serials(SubscriptionID,DepartmentID,NumberOfItemReceived,Usage_Stat) VALUES(?,?,?,?)";
-					$insquery=sqlsrv_query($conn,$sqlins,array($new_SubID,$dept_list[$y],0,0));
+					$sqlins="Insert Into Categorize_Serials(SubscriptionID,DepartmentID,NumberOfItemReceived,Usage_Stat_Employee,Usage_Stat_Student) VALUES(?,?,?,?,?)";
+					$insquery=sqlsrv_query($conn,$sqlins,array($new_SubID,$dept_list[$y],0,0,0));
 				}
 
 				for($x=0;$x<count($prog_list);$x++)
 				{
-						$sqlins_prog="Insert Into Category_Serials_Program(SubscriptionID,ProgramID,NumberofItemsReceived_Prog) VALUES(?,?,?)";
-						$insqueryprog=sqlsrv_query($conn,$sqlins_prog,array($new_SubID,$prog_list[$x],0));	
+						$sqlins_prog="Insert Into Category_Serials_Program(SubscriptionID,ProgramID,NumberofItemsReceived_Prog,Usage_Stat_Employee_Prog,Usage_Stat_Student_Prog) VALUES(?,?,?,?,?)";
+						$insqueryprog=sqlsrv_query($conn,$sqlins_prog,array($new_SubID,$prog_list[$x],0,0,0));	
 				}
 
 				$scs['status']="success";

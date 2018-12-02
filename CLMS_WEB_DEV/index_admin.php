@@ -4,17 +4,21 @@
             // Journals
             function JgetElem($dept)
             {   require 'php_codes/db.php';
-                $sql="Select ReceivedSerialID from ReceiveSerial Inner Join Serial On ReceiveSerial.SerialID=Serial.SerialID Inner Join Subscription On Serial.SerialID=Subscription.SerialID Where ReceiveSerial.DepartmentID=? AND ReceiveSerial.Status=? AND TypeName=? And ReceiveSerial.Remove IS NULL AND Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) Group By ReceivedSerialID";
+                $sql="Select ReceivedSerialID from ReceiveSerial Inner Join Serial On ReceiveSerial.SerialID=Serial.SerialID Inner Join Subscription On Serial.SerialID=Subscription.SerialID Where ReceiveSerial.DepartmentID=? AND ReceiveSerial.Status=? AND TypeName=? And ReceiveSerial.Remove IS NULL AND Subscription.Remove IS NULL AND Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) Group By ReceivedSerialID";
                 $query=sqlsrv_query($conn,$sql,array($dept,'Received','Journal'),$opt);
                 $row=sqlsrv_num_rows($query);
                 return $row;
             }
              function JgetCOl()
             {   require 'php_codes/db.php';
-                $sql="Select ReceivedSerialID from ReceiveSerial Inner Join Serial On ReceiveSerial.SerialID=Serial.SerialID Inner Join Subscription On Serial.SerialID=Subscription.SerialID Where (ReceiveSerial.DepartmentID!=? AND ReceiveSerial.DepartmentID!=? AND ReceiveSerial.DepartmentID!=? AND ReceiveSerial.DepartmentID!=?) AND ReceiveSerial.Status=? AND TypeName=? And ReceiveSerial.Remove IS NULL AND Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) Group By ReceivedSerialID";
-                 $query=sqlsrv_query($conn,$sql,array('ELEM','JSH','SHS','HS','Received','Journal'),$opt);
-                $row=sqlsrv_num_rows($query);
-                return $row;
+                $sql="Select Count(*) as nums from Subscription Inner Join Serial On Subscription.SerialID=Serial.SerialID
+                      Inner Join ReceiveSerial_Program On Serial.SerialID=ReceiveSerial_Program.SerialID
+                      Inner Join Program on ReceiveSerial_Program.ProgramID=Program.ProgramID
+                      Where Status_Prog=? And TypeName=? AND (ReceiveSerial_Program.Remove IS NULL AND Subscription.Remove IS NULL) And Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01'))";
+                 $query=sqlsrv_query($conn,$sql,array('Received','Journal'));
+                $row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
+                $nums=$row['nums'];
+                return $nums;
             }
 
             // MAGAZINE
@@ -22,17 +26,21 @@
 
             function  MgetElem($dept)
             {   require 'php_codes/db.php';
-                $sql="Select ReceivedSerialID from ReceiveSerial Inner Join Serial On ReceiveSerial.SerialID=Serial.SerialID Inner Join Subscription On Serial.SerialID=Subscription.SerialID Where ReceiveSerial.DepartmentID=? AND ReceiveSerial.Status=? AND TypeName=? And ReceiveSerial.Remove IS NULL AND Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) Group By ReceivedSerialID";
+                $sql="Select ReceivedSerialID from ReceiveSerial Inner Join Serial On ReceiveSerial.SerialID=Serial.SerialID Inner Join Subscription On Serial.SerialID=Subscription.SerialID Where ReceiveSerial.DepartmentID=? AND ReceiveSerial.Status=? AND TypeName=? And ReceiveSerial.Remove IS NULL AND Subscription.Remove IS NULL AND Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) Group By ReceivedSerialID";
                 $query=sqlsrv_query($conn,$sql,array($dept,'Received','Magazine'),$opt);
                 $row=sqlsrv_num_rows($query);
                 return $row;
             }
              function  MgetCOl()
             {   require 'php_codes/db.php';
-                $sql="Select ReceivedSerialID from ReceiveSerial Inner Join Serial On ReceiveSerial.SerialID=Serial.SerialID Inner Join Subscription On Serial.SerialID=Subscription.SerialID Where (ReceiveSerial.DepartmentID!=? AND ReceiveSerial.DepartmentID!=? AND ReceiveSerial.DepartmentID!=? AND ReceiveSerial.DepartmentID!=?) AND ReceiveSerial.Status=? AND TypeName=? And ReceiveSerial.Remove IS NULL AND Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) Group By ReceivedSerialID";
-                 $query=sqlsrv_query($conn,$sql,array('ELEM','JSH','SHS','HS','Received','Magazine'),$opt);
-                $row=sqlsrv_num_rows($query);
-                return $row;
+                $sql="Select Count(*) as nums from Subscription Inner Join Serial On Subscription.SerialID=Serial.SerialID
+                      Inner Join ReceiveSerial_Program On Serial.SerialID=ReceiveSerial_Program.SerialID
+                      Inner Join Program on ReceiveSerial_Program.ProgramID=Program.ProgramID
+                      Where Status_Prog=? And TypeName=? AND (ReceiveSerial_Program.Remove IS NULL AND Subscription.Remove IS NULL) And Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01'))";
+                 $query=sqlsrv_query($conn,$sql,array('Received','Magazine'));
+                $row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
+                $nums=$row['nums'];
+                return $nums;
             }
        ?>
         <div class="row custom-box">

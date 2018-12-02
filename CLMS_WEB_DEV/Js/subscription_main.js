@@ -325,6 +325,8 @@ $(function(){
 							$('#msg_remove').addClass('collapse');
 						}
 
+
+
 						$('#msg_deliv_enter').removeClass('collapse');
 						$('#receive_deliv_modal').modal('hide');
 						
@@ -345,8 +347,10 @@ $(function(){
 						}
 
 						$('#msg_fail_enter').removeClass('collapse');
+						$('#receive_deliv_modal').modal('hide');
 						
 					}
+					resetPreform();
 	 			}
 	 		});
  		}
@@ -359,6 +363,22 @@ $(function(){
 
 	}
 
+	 function resetPreform(){
+	 	$('#SNf').val('');
+	 	$('#Freq').val('');
+	 	$('#Cost').val('');
+	 	$('input[type="checkbox"]').each(function(){
+	 		$(this).prop('checked',false);
+	 	});
+
+	 	$('.org_list').html('');
+	 	$('.prog_list').html('');
+	 	$('#script_org').remove();
+	 	$script_org_inc=false;
+
+	 	$('.select_org').addClass('collapse');
+	 	$('.select_prog').addClass('collapse');
+	 }
 
 	$('#cog_action').click(function(){
 

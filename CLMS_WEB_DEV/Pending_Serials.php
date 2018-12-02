@@ -5,11 +5,13 @@ if(isset($_POST['dept']))
 {
 	$dept=$_POST['dept'];
 	$date=$_POST['date'];
+	$seen=$_POST['seen'];
 }
 else
 {
 	$dept="";
 	$date="";
+	$seen="";
 }
  ?>
 <div class="container-fluid">
@@ -22,7 +24,7 @@ else
 <div class="custom-panelbox">			
 	<div class="">
 		<div class="">
-			<h5 class="fa fa-spinner tag_style"> Pending Serial: <span id="dept"><?php echo $dept; ?></span><span id="date" hidden><?php echo $date ?></span></h5>
+			<h5 class="fa fa-spinner tag_style"> Pending Serial: <span id="dept"><?php echo $dept; ?></span><span id="date" hidden><?php echo $date ?></span> <span id="seen" hidden><?php echo $seen?></span></h5>
 			<h4 class="dividerr"></h4>
 		</div>
 
@@ -42,7 +44,8 @@ else
 						<th class="radio-label-center">RS ID</th>
 						<th class="radio-label-center">Department</th>
 						<th class="radio-label-center">Serial Name</th>
-						<th class="radio-label-center">Serial Type</th>
+						<th class="radio-label-center">Rs Program ID</th>
+						<th class="radio-label-center">Program</th>
 						<th class="radio-label-center">Date Sent</th>
 						<th class="radio-label-center">Staff Seen</th>
 					</tr>

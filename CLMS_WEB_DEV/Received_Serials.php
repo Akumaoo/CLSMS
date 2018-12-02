@@ -34,6 +34,7 @@ else
 					<tr>
 						<th class="radio-label-center">RS ID</th>
 						<th class="radio-label-center">Department</th>
+						<th class="radio-label-center">Program</th>
 						<th class="radio-label-center">Serial Name</th>
 						<th class="radio-label-center">Serial Type</th>
 					</tr>
@@ -53,4 +54,4 @@ include 'Includes/footer.php';
  ?>
 </body>
 </html>
-<script type="text/javascript" src="Js/RS_NOTIF.js?v=231" ></script>
+<script type="text/javascript" src="Js/RS_NOTIF.js?v=2311" ></script>

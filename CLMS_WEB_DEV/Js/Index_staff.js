@@ -65,6 +65,9 @@ $(function(){
 		if($reload)
 		{
 			location.reload(true);
+			$('input[name="cont_no"]').each(function(){
+				$(this).val('');
+			});
 			$reload=false;
 		}
 	});
@@ -72,8 +75,17 @@ $(function(){
 	$('#SEND_RECEIVE').on('submit',function(event){
 		event.preventDefault();
 		$rs_list=[];
+		$rs_prog_list=[];
 		$cn_list=[];
 		$rem_list=[];
+
+		$iden=$('#iden').text();
+		if($iden!="")
+		{
+			$('input[name="rsprog_id"]').each(function(){
+				$rs_prog_list.push($(this).val());
+			});
+		}
 
 		$('input[name="rs_id"]').each(function(){
 			$rs_list.push($(this).val());
@@ -85,11 +97,11 @@ $(function(){
 			$rem_list.push($(this).val());
 		});
 		
-		// alert($rem_list);
+		// alert($rs_prog_list);
  		$.ajax({
  			url:'php_codes/Receive_Seen.php',
  			method:"POST",
- 			data:{type:'receive',rs_list:$rs_list,cn_list:$cn_list,rem_list:$rem_list},
+ 			data:{type:'receive',rs_list:$rs_list,cn_list:$cn_list,rem_list:$rem_list,rs_prog_list:$rs_prog_list},
  			success:function(data)
  			{	
  				if(data=='success')

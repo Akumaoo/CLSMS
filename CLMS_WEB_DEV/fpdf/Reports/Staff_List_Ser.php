@@ -128,6 +128,9 @@ class PDF extends FPDF
 		$date_today=date('Y-m-d');
 		$c_year=date('Y');
 		$sub_date=$c_year.'-08-01';
+
+		global $deptID;
+
 		if($date_today<$sub_date)
 		{
 			$c_SY=date('Y',strtotime('-1 year',strtotime($date_today))).'-'.$c_year;
@@ -137,20 +140,21 @@ class PDF extends FPDF
 			$c_SY=$c_year.'-'.date('Y',strtotime('+1 year',strtotime($date_today)));
 		}
 	    // Logo
-	    $this->Image('../../img/icon.png',10,11,25);
+	    $this->Image('../../img/icon.png',10,11,30);
 	    // Arial bold 15
 	    $this->SetFont('Arial','',12);
 	    // Move to the right
 	    // Title
-	    $this->Cell(185,6,'UNIVERSITY LIBRARIES',0,1,'R');
-	    $this->Cell(185,6,'Office Of The Example Office~',0,0,'R');
+	     $this->Cell(203,6,'UNIVERSITY OF SAINT LOUIS',0,1,'C');
+	    $this->Cell(203,6,'UNIVERSITY LIBRARIES',0,1,'C');
+	    $this->Cell(203,6,'OFFICE OF THE COLLECTION DEVELOPMENT',0,0,'C');
 	    $this->Ln(10);
 
 	    $this->SetFont('Arial','B',13);
-	    $this->Cell(185,6,'LIST OF SUBSCRIBED TITLES',0,1,'R');
+	    $this->Cell(203,6,'USAGE STATISTICS OF '.strtoupper($deptID).' DEPARTMENT',0,1,'C');
 
 	    $this->SetFont('Arial','',12);
-	    $this->Cell(185,6,'SY ['.$c_SY.']',0,0,'R');
+	    $this->Cell(203,6,'SY ['.$c_SY.']',0,0,'C');
 	    // Line break
 	    $this->Ln(16);
 	}
@@ -170,24 +174,147 @@ class PDF extends FPDF
 	    $this->SetFont('Arial','I',8);
 	    $this->Cell(0,3,$date_today,0,0,'C');
 	}
+
+	function checkType($dept)
+	{
+		require('../../php_codes/db.php');
+		$sql="Select Count(*) as rows from Department Inner Join Organization On Department.DepartmentID=Organization.DepartmentID Where Department.DepartmentID=?";
+		$query=sqlsrv_query($conn,$sql,array($dept));
+		$row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
+		$num_rows=$row['rows'];
+
+		if($num_rows>0)
+		{
+			$type='Multiple';
+		}
+		else
+		{
+			$type='Single';
+		}
+
+		return $type;
+	}
 	// Load data
-	function LoadData($dept)
+	function LoadData($dept,$emp_stud)
 	{
 		require('../../php_codes/db.php');
 
 		$inc=0;
-	   $sql="Select SerialName,CONCAT(NumberOfItemReceived,'/',Frequency) as deliv_stat,Usage_Stat,Status,TypeName from Categorize_Serials Inner Join Subscription On Categorize_Serials.SubscriptionID=Subscription.SubscriptionID Inner Join Serial On Subscription.SerialID=Serial.SerialID And DepartmentID=? Order By SerialName,Status ASC";
-	   $query=sqlsrv_query($conn,$sql,array($dept));
-	   while($rows=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
-	   {
-	   		$data[$inc][0]=$rows['SerialName'];
-	   		$data[$inc][1]=$rows['deliv_stat'];
-	   		$data[$inc][2]=$rows['Usage_Stat'];
-	   		$data[$inc][3]=$rows['Status'];
-	   		$data[$inc][4]=$rows['TypeName'];
-	   		$inc++;
-	   }
-	   return $data;
+		$type=$this->checkType($dept);
+
+		if($type=='Multiple')
+		{
+			if($emp_stud=='Student')
+			{
+				$col='Usage_Stat_Student_Prog';
+				$col_tag_mag='Student_Magazine';
+				$col_tag_jour='Student_Journal';
+			}
+			else
+			{
+				$col='Usage_Stat_Employee_Prog';
+				$col_tag_mag='Employee_Magazine';
+				$col_tag_jour='Employee_Journal';
+			}
+	  	 $sql="
+			Select 
+			(CASE
+				WHEN asd.ProgramID IS NULL
+				THEN dsa.ProgramID 
+				ELSE asd.ProgramID
+				END
+			) as Program,
+			(CASE
+				WHEN ".$col_tag_jour." IS NULL
+				THEN 0
+				ELSE ".$col_tag_jour."
+				END
+			) as ".$col_tag_jour.",
+			(CASE
+				WHEN ".$col_tag_mag." IS NULL
+				THEN 0
+				ELSE ".$col_tag_mag."
+				END
+			)as ".$col_tag_mag."
+			 from 
+				(Select ProgramID,SUM(".$col.") as ".$col_tag_mag." from Serial Inner Join Subscription On Serial.SerialID=Subscription.SerialID
+				 Inner Join Category_Serials_Program On Subscription.SubscriptionID=Category_Serials_Program.SubscriptionID
+				WHERE (Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) OR Subscription.Status='OnGoing') AND (Subscription.Remove IS NULL AND Subscription.Archive IS NULL)
+				AND TypeName='Magazine' Group By ProgramID) as asd
+				Full Join 
+			(Select ProgramID,SUM(".$col.") as ".$col_tag_jour." from Serial Inner Join Subscription On Serial.SerialID=Subscription.SerialID
+				 Inner Join Category_Serials_Program On Subscription.SubscriptionID=Category_Serials_Program.SubscriptionID
+				WHERE (Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) OR Subscription.Status='OnGoing') AND (Subscription.Remove IS NULL AND Subscription.Archive IS NULL)
+				AND TypeName='Journal' Group By ProgramID) as dsa On asd.ProgramID=dsa.ProgramID";
+
+			$query=sqlsrv_query($conn,$sql,array());
+			 while($rows=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
+			 {
+			   		$data[$inc][0]=$rows['Program'];
+			   		$data[$inc][1]=$rows[$col_tag_jour];
+			   		$data[$inc][2]=$rows[$col_tag_mag];
+			   		$inc++;
+			 }
+			 
+		}
+		else
+		{
+			if($emp_stud=='Student')
+			{
+				$col='Usage_Stat_Student';
+				$col_tag_mag='Student_Magazine';
+				$col_tag_jour='Student_Journal';
+			}
+			else
+			{
+				$col='Usage_Stat_Employee';
+				$col_tag_mag='Employee_Magazine';
+				$col_tag_jour='Employee_Journal';
+			}
+
+	  	 $sql="
+			Select 
+			(CASE
+				WHEN asd.DepartmentID IS NULL
+				THEN dsa.DepartmentID
+				ELSE asd.DepartmentID
+				END
+			)as Department,
+			(CASE
+				WHEN ".$col_tag_mag." IS NULL
+				THEN 0
+				ELSE ".$col_tag_mag."
+				END
+			) as ".$col_tag_mag.",
+			(CASE
+				WHEN ".$col_tag_jour." IS NULL
+				THEN 0
+				ELSE ".$col_tag_jour."
+				END
+			)as ".$col_tag_jour."
+			 from 
+			(Select DepartmentID,SUM(".$col.") as ".$col_tag_mag." from Serial Inner Join Subscription On Serial.SerialID=Subscription.SerialID
+			Inner Join Categorize_Serials On Subscription.SubscriptionID=Categorize_Serials.SubscriptionID
+			WHERE (Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) OR Subscription.Status='OnGoing') AND (Subscription.Remove IS NULL AND Subscription.Archive IS NULL)
+				AND TypeName='Magazine' Group By DepartmentID) as asd	
+			FULL JOIN
+			(Select DepartmentID,SUM(".$col.") as ".$col_tag_jour." from Serial Inner Join Subscription On Serial.SerialID=Subscription.SerialID
+			Inner Join Categorize_Serials On Subscription.SubscriptionID=Categorize_Serials.SubscriptionID
+			WHERE (Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) OR Subscription.Status='OnGoing') AND (Subscription.Remove IS NULL AND Subscription.Archive IS NULL)
+				AND TypeName='Journal' Group By DepartmentID) as dsa ON asd.DepartmentID=dsa.DepartmentID WHERE asd.DepartmentID=?
+				";
+
+			$query=sqlsrv_query($conn,$sql,array($dept));
+			 while($rows=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
+			 {
+			   		$data[$inc][0]=$rows[$col_tag_jour];
+			   		$data[$inc][1]=$rows[$col_tag_mag];
+			   		$inc++;
+			 }
+			 
+		}
+
+		return $data;
 	}
 	// Colored table
 	function FancyTableHeader($header)
@@ -234,22 +361,61 @@ class PDF extends FPDF
 $pdf = new PDF('P','mm',$BP_size);
 $pdf->AliasNbPages();
 // Column headings
-$header = array('Title','Title Received','Usage','Subscription Status','Type');
-// Data loading
-$data=$pdf->LoadData($deptID);
-$pdf->SetFont('Arial','',14);
+$type=$pdf->checkType($deptID);
 $pdf->AddPage();
-$pdf->SetWidths(array('35','35','30','45','40'));
+if($type=='Multiple')
+{
+	$header = array('Program','Journal','Magazine');
+	$pdf->SetWidths(array('65','65','65'));
+}
+else
+{
+	$header = array('Journal','Magazine');
+	$pdf->SetWidths(array('65','65'));
+}
+
+// Data loading STUDENT
+$pdf->SetFont('Arial','B',12);
+$pdf->Cell(203,20,'[STUDENT DATA]',0,1,'C');
+$data=$pdf->LoadData($deptID,'Student');
+
+if($type=='Single')
+{$pdf->Cell(35);}
 
 $pdf->FancyTableHeader($header);
+
+if($type=='Single')
+{$pdf->Cell(35);}
+
 $fill = false;
 for($x=0;$x<count($data);$x++)
 {
 	$pdf->Row($fill,$data[$x]);
 	$fill = !$fill;
 }
-// $pdf->Cell(array_sum($data),0,'','T');
+
+$pdf->LN(15);
+
+// Data loading EMPLOYEE
+$pdf->SetFont('Arial','B',12);
+$pdf->Cell(203,20,'[EMPLOYEE DATA]',0,1,'C');
+$data=$pdf->LoadData($deptID,'Employee');
+
+if($type=='Single')
+{$pdf->Cell(35);}
+
+$pdf->FancyTableHeader($header);
+
+if($type=='Single')
+{$pdf->Cell(35);}
+
+$fill = false;
+for($x=0;$x<count($data);$x++)
+{
+	$pdf->Row($fill,$data[$x]);
+	$fill = !$fill;
+}
 $pdf->Output();
 
 }
-?>s
+?>

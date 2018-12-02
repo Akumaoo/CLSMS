@@ -1,15 +1,20 @@
   <?php
 
-    $receive_sqltxt="Select TOP 3 Count(Subq.DepartmentID) AS NumRec,Subq.DepartmentID,DateReceiveNotif_Receive from
-(Select ReceiveSerial.DepartmentID,DateReceiveNotif_Receive from ReceiveSerial inner join Subscription on ReceiveSerial.SerialID=Subscription.SerialID Where Subscription.Status=? AND ReceiveSerial.Status=? AND (ReceiveSerial.Remove IS NULL AND Subscription.Remove IS NULL) AND Admin_Seen IS NULL) AS Subq Group By DepartmentID,DateReceiveNotif_Receive";
-    $receive_query=sqlsrv_query($conn,$receive_sqltxt,array('OnGoing','Received'));
+    $receive_sqltxt="Select Top 3 Count(asd.DepartmentID) as nums_depts,asd.DepartmentID,DateReceiveNotif_Give,asd.DateReceiveNotif_Receive,Admin_Seen from
+  (Select ReceiveSerial.DepartmentID,SerialName as sn_main,Status,DateReceiveNotif_Give,ReceiveSerial.Remove,Admin_Seen,ReceiveSerial.DateReceiveNotif_Receive from Serial Inner Join ReceiveSerial On Serial.SerialID=ReceiveSerial.SerialID
+  Inner Join Department on ReceiveSerial.DepartmentID=Department.DepartmentID Where Status=? and ReceiveSerial.Remove IS NULL And Admin_Seen IS NULL) as asd
+  Left Join
+  (Select Organization.DepartmentID,SerialName as sn_prog,Organization.OrganizationID,ReceiveSerial_Program.ProgramID,DateReceiveNotif_Give_Prog from Serial Inner Join ReceiveSerial_Program On Serial.SerialID=ReceiveSerial_Program.SerialID
+  Inner Join Program On ReceiveSerial_Program.ProgramID=Program.ProgramID
+  inner Join Organization on Program.OrganizationID=Organization.OrganizationID) as dsa on asd.DepartmentID=dsa.DepartmentID where (sn_main=sn_prog OR sn_prog IS NULL) Group By asd.DepartmentID,DateReceiveNotif_Give,Admin_Seen,DateReceiveNotif_Receive";
+    $receive_query=sqlsrv_query($conn,$receive_sqltxt,array('Received'));
 
     if(sqlsrv_has_rows($receive_query))
     {
       while($receive_row=sqlsrv_fetch_array($receive_query,SQLSRV_FETCH_ASSOC))
       {
 
-          $rec_num=$receive_row['NumRec'];
+          $rec_num=$receive_row['nums_depts'];
           $receive_RSDATE=$receive_row['DateReceiveNotif_Receive']->format('M-d-Y');
           $receive_Dept=$receive_row['DepartmentID'];
 

@@ -1,6 +1,20 @@
 $(function(){
 
 	$dept=$('strong#dept').html();
+
+	$iden=$('th:nth-child(2)').text();
+
+	if($iden=="Program")
+	{
+		$type='Multiple';
+		$col_colmn=8;
+	}
+	else
+	{
+		$col_colmn=7;
+		$type='Single';
+	}
+
 	if(!$.fn.DataTable.isDataTable("#table_MS")){
 	$table=$('#table_MS').DataTable({			
 	"processing":true,
@@ -20,15 +34,77 @@ $(function(){
  	$('#table_MS').on('draw.dt',function(){
 
  	$('#table_MS').Tabledit({
-		url:"php_codes/modify_serial_category.php",
+		url:"",
 		columns:{
 		identifier:[0,"Category_ID"],
-		editable:[[5,"Usage"]]
+		editable:[]
 			},
 		onSuccess:function(data,textStatus,jqXHR)
+		{			
+		}	
+	});
+
+ 	$('thead>tr>th:nth-child(1)').addClass('collapse');
+ 	$('tbody>tr>td:nth-child(1)').addClass('Categ_ID collapse');
+
+ 	if($('tbody>tr>td:nth-child(1)').hasClass('dataTables_empty'))
+	{
+		$('.tabledit-toolbar-column').remove();
+		$('tbody>tr>td:nth-child(2)').remove();
+	}
+		
+
+	$('thead>tr>th:nth-child('+$col_colmn+')').addClass('collapse');
+	$('tbody>tr>td:nth-child('+$col_colmn+')').addClass('collapse');
+
+	$('.tabledit-delete-button').remove();
+	$('.tabledit-edit-button').remove();
+	if($('.Select_Usage').text()=="")
+	{
+		$('.tabledit-toolbar-column').append('<select name="type" Class="Select_Usage fill-tag"><option value="Add">Add</option><option value="Remove">Remove</option></select>');
+		$('.tabledit-toolbar-column').append('<select name="p_type" Class="Select_P fill-tag"><option value="Student">Student</option><option value="Employee">Employee</option></select>');
+	}
+	$('.btn-group').append('<button type="button" class="tabledit-add-usage-emp btn btn-sm btn-default" style="float: none;"><span class="fa fa-plus-circle ico_plus"></span><span class="fa fa-minus-circle hidden ico_minus"></span> <span class="btn_text">Student</span></button>');
+	
+	$('.Select_Usage').change(function(){
+		if($(this).val()=='Add')
 		{
-			if(data.action=='edit')
-			{
+			$('.ico_minus').each(function(){
+				$(this).addClass('hidden');
+			})
+			$('.ico_plus').each(function(){
+				$(this).removeClass('hidden');
+			})
+		}
+		else
+		{
+			$('.ico_plus').each(function(){
+				$(this).addClass('hidden');
+			})
+			$('.ico_minus').each(function(){
+				$(this).removeClass('hidden');
+			})
+		}
+		// alert('asd');
+	});
+
+	$('.Select_P').change(function(){
+		
+		$('.btn_text').text($(this).val());
+	});
+
+	$('.tabledit-add-usage-emp').click(function(){
+		
+		$cID=$(this).closest('tr').find('td.Categ_ID').text();
+		$plus_minus=$('.Select_Usage').val();
+		$stud_emp=$('.Select_P').val();
+
+		$.ajax({
+			url:"php_codes/modify_serial_category.php",
+			method:"POST",
+			data:{type:$type,cID:$cID,plus_minus:$plus_minus,stud_emp:$stud_emp},
+			success:function(data){
+
 				if(data.scs='success')
 				{
 					if(!$('#msg_fail').hasClass('collapse'))
@@ -48,31 +124,13 @@ $(function(){
 
 					$('#msg_fail').removeClass('collapse');
 
-				}
-				
+				}	
+				$('.Select_Usage').prop('selectedIndex',0);
+				$('.Select_P').prop('selectedIndex',0);
 			}
-		},onDraw: function() {
-				$('tbody tr td:nth-child(6)>input').each(function(){
-					$('<input class="tabledit-input form-control input-sm" type="number" style="display: none;" disabled="">').attr({ name: this.name, value: this.value }).insertBefore(this)
-				}).remove()
-	 	}	
+		});
+		// alert($cID+"||"+$type+"||"+$plus_minus+"||"+$stud_emp);
 	});
-
-
- 	$('thead>tr>th:nth-child(1)').addClass('collapse');
- 	$('tbody>tr>td:nth-child(1)').addClass('Categ_ID collapse');
-
- 	if($('tbody>tr>td:nth-child(1)').hasClass('dataTables_empty'))
-	{
-		$('.tabledit-toolbar-column').remove();
-		$('tbody>tr>td:nth-child(2)').remove();
-	}
-		
-
-	$('thead>tr>th:nth-child(7)').addClass('collapse');
-	$('tbody>tr>td:nth-child(7)').addClass('collapse');
-
-	$('.tabledit-delete-button').remove();
 
  	});
 
@@ -88,10 +146,10 @@ $(function(){
 
  		}); 		
 
- 		if($('thead>tr>th:nth-child(7)').hasClass('collapse'))
+ 		if($('thead>tr>th:nth-child('+$col_colmn+')').hasClass('collapse'))
  		{
- 			$('thead>tr>th:nth-child(7)').removeClass('collapse');
-			$('tbody>tr>td:nth-child(7)').removeClass('collapse');
+ 			$('thead>tr>th:nth-child('+$col_colmn+')').removeClass('collapse');
+			$('tbody>tr>td:nth-child('+$col_colmn+')').removeClass('collapse');
 			
  		}
  		else
@@ -147,8 +205,8 @@ $(function(){
  			}
  			
 
- 			$('thead>tr>th:nth-child(7)').addClass('collapse');
-			$('tbody>tr>td:nth-child(7)').addClass('collapse');
+ 			$('thead>tr>th:nth-child('+$col_colmn+')').addClass('collapse');
+			$('tbody>tr>td:nth-child('+$col_colmn+')').addClass('collapse');
  		}
  	});
 

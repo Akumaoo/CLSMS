@@ -2,6 +2,7 @@ $(function(){
 $table="";
 $data=$('span#dept').text();
 $date=$('span#date').text();
+$seen=$('span#seen').text();
 	if( ! $.fn.DataTable.isDataTable("#table_pending_ser")){
 	$table=$('#table_pending_ser').DataTable({			
 	"processing":true,
@@ -11,12 +12,13 @@ $date=$('span#date').text();
 	"ajax":
 		{"url":"SSP/serverside_Pending_Serials.php",
 		"method":"POST",
-		"data":{data:$data,date:$date}
+		"data":{data:$data,date:$date,seen:$seen}
 		}
 		});
 	}
 
 	$rsID="";
+	$rs_prog="";
 	$('#table_pending_ser').on('draw.dt', function() {
 		
 		$('tbody tr td:nth-child(1)').addClass('rsID');
@@ -55,8 +57,10 @@ $date=$('span#date').text();
 			$('tbody>tr>td:nth-child(2)').remove();
 		}
 
-		$('thead>tr>th:nth-child(7)').addClass('collapse');
-		$('tbody>tr>td:nth-child(7)').addClass('collapse');
+		$('thead>tr>th:nth-child(8)').addClass('collapse');
+		$('tbody>tr>td:nth-child(8)').addClass('collapse');
+
+		$('tbody>tr>td:nth-child(4)').addClass('rs_prog');
 		$('.tabledit-edit-button').remove();
 		$('.tabledit-restore-button').remove();
 
@@ -65,6 +69,7 @@ $date=$('span#date').text();
 		$('.tabledit-delete-button').click(function(){
  			$('#Remove_Modal').modal('show');
  			$rsID=$(this).closest('tr').find('td.sorting_1>span').text();
+ 			$rs_prog=$(this).closest('tr').find('td.rs_prog').text();
  		});
 
 	});
@@ -81,10 +86,10 @@ $date=$('span#date').text();
 
  		}); 		
 
- 		if($('thead>tr>th:nth-child(7)').hasClass('collapse'))
+ 		if($('thead>tr>th:nth-child(8)').hasClass('collapse'))
  		{
- 			$('thead>tr>th:nth-child(7)').removeClass('collapse');
-			$('tbody>tr>td:nth-child(7)').removeClass('collapse');
+ 			$('thead>tr>th:nth-child(8)').removeClass('collapse');
+			$('tbody>tr>td:nth-child(8)').removeClass('collapse');
 			
  		}
  		else
@@ -140,8 +145,8 @@ $date=$('span#date').text();
  			}
  			
 
- 			$('thead>tr>th:nth-child(7)').addClass('collapse');
-			$('tbody>tr>td:nth-child(7)').addClass('collapse');
+ 			$('thead>tr>th:nth-child(8)').addClass('collapse');
+			$('tbody>tr>td:nth-child(8)').addClass('collapse');
  		}
  	});
 
@@ -153,7 +158,7 @@ $date=$('span#date').text();
  		$.ajax({
  			url:'php_codes/modify_send_Serial.php',
  			method:'POST',
- 			data:{reason:$reason,action:'delete',rsID:$rsID},
+ 			data:{reason:$reason,action:'delete',rsID:$rsID,rs_prog:$rs_prog},
  			success:function(data)
  			{
  				if(data.action=='delete')
@@ -168,6 +173,7 @@ $date=$('span#date').text();
 
  			}
  		});
+
 
  	});
 

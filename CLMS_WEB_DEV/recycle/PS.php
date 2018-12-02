@@ -8,7 +8,8 @@ echo '
 						<th class="radio-label-center">RS ID</th>
 						<th class="radio-label-center">Department</th>
 						<th class="radio-label-center">Serial Name</th>
-						<th class="radio-label-center">Serial Type</th>
+						<th class="radio-label-center">Rs Program ID</th>
+						<th class="radio-label-center">Program</th>
 						<th class="radio-label-center">Date Sent</th>
 						<th class="radio-label-center">Staff Seen</th>
 						<th class="radio-label-center">Remarks</th>
@@ -22,6 +23,6 @@ echo '
 			<button class="custom-btn collapse" id="RS" style="float: right;height: 43px;">Retrieve Selected</button>
 		</div>
 
-			<script src="Js/recycle/PS.js?v=1" type="text/javascript"></script>
+			<script src="Js/recycle/PS.js?v=12" type="text/javascript"></script>
 			';
  ?>

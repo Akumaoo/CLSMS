@@ -190,8 +190,8 @@ if(!empty($_POST))
 		{
 			if(checkDupCSmain($subID,$reindex_depts[$y]))
 			{
-				$sqlinsert="Insert Into Categorize_Serials(DepartmentID,SubscriptionID,NumberOfItemReceived,Usage_Stat) Values(?,?,?,?)";
-				$queryinsert=sqlsrv_query($conn,$sqlinsert,array($reindex_depts[$y],$subID,0,0));
+				$sqlinsert="Insert Into Categorize_Serials(DepartmentID,SubscriptionID,NumberOfItemReceived,Usage_Stat_Employee,Usage_Stat_Student) Values(?,?,?,?,?)";
+				$queryinsert=sqlsrv_query($conn,$sqlinsert,array($reindex_depts[$y],$subID,0,0,0));
 			}
 			else
 			{
@@ -201,8 +201,8 @@ if(!empty($_POST))
 
 		for($z=0;$z<count($reindex_progs);$z++)
 		{
-			$sqlinsert_prog="Insert Into Category_Serials_Program(ProgramID,SubscriptionID,NumberofItemsReceived_Prog) Values(?,?,?)";
-			$queryinsert_prog=sqlsrv_query($conn,$sqlinsert_prog,array($reindex_progs[$z],$subID,0));
+			$sqlinsert_prog="Insert Into Category_Serials_Program(ProgramID,SubscriptionID,NumberofItemsReceived_Prog,Usage_Stat_Employee_Prog,Usage_Stat_Student_Prog) Values(?,?,?,?,?)";
+			$queryinsert_prog=sqlsrv_query($conn,$sqlinsert_prog,array($reindex_progs[$z],$subID,0,0,0));
 		}
 	}
 	else

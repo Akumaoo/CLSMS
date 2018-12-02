@@ -79,5 +79,5 @@ include 'Modals/activate_Pre-Subs_Modal.php';
 include 'Modals/Receive_Ser_Deliv_Modal.php';
 include 'Modals/remove_modal.php';
 ?>
-<script type="text/javascript" src="Js/Subscription_main.js?v=.332"></script>
+<script type="text/javascript" src="Js/Subscription_main.js?v=.3132"></script>
 

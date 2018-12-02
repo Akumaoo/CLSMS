@@ -370,3 +370,16 @@ cursor:pointer;
 .btn-active{
 	background-color:#21b0f1;
 }
+.fill-tag {
+    background:rgba(47, 50, 59,.1);
+    color: #fff;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+    border:0;
+}
+.fill-tag option {
+    background:rgba(47, 50, 59,.89);
+    color: #fff;
+    text-align: center;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+    border:0;
+}

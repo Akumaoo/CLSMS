@@ -43,8 +43,8 @@ if(!empty($_POST))
 		$progs=$_POST['progs'];
 	}
 	
-	// $depts_list=array('ELEM','JHS','College');
-	// $progs=array('CS','IT');
+	// $depts_list=array('JHS');
+	// $progs=array();
 
 
 	function GetSerialID($sn)
@@ -174,8 +174,8 @@ if(!empty($_POST))
 	function checkDupRS($sID,$date,$dept)
 	{
 		require 'db.php';
-		$sql="Select Count(*) as nums from ReceiveSerial where DepartmentID=? AND SerialID=? AND DateReceiveNotif_Give=? AND Status=?";
-		$query=sqlsrv_query($conn,$sql,array($dept,$sID,$date,'NotReceived'));
+		$sql="Select Count(*) as nums from ReceiveSerial where DepartmentID=? AND SerialID=? AND DateReceiveNotif_Give=? AND Status=? AND Remove IS NULL AND Status=?";
+		$query=sqlsrv_query($conn,$sql,array($dept,$sID,$date,'NotReceived','NotReceived'));
 		$row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
 		$num_rows=$row['nums'];
 
@@ -191,8 +191,8 @@ if(!empty($_POST))
 	function checkDupRS_prog($sID,$date,$prog)
 	{
 		require 'db.php';
-		$sql="Select Count(*) as nums from ReceiveSerial_Program where ProgramID=? AND SerialID=? AND DateReceiveNotif_Give_Prog=?";
-		$query=sqlsrv_query($conn,$sql,array($prog,$sID,$date));
+		$sql="Select Count(*) as nums from ReceiveSerial_Program where ProgramID=? AND SerialID=? AND DateReceiveNotif_Give_Prog=? AND Remove IS NULL AND Status_Prog=?";
+		$query=sqlsrv_query($conn,$sql,array($prog,$sID,$date,'NotReceived'));
 		$row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
 		$num_rows=$row['nums'];
 
@@ -219,8 +219,21 @@ if(!empty($_POST))
 			{
 				$delID=checkDeliv();
 				// $scs['del']=$delID.",".$sub_id.",".$DOI.",".$IN.",".$VN;
-				$insertsql="Insert Into Delivery_Subs(DeliveryID,SubscriptionID,DateofIssue,IssueNumber,VolumeNumber) VALUES(?,?,?,?,?)";
-				$insertquery=sqlsrv_query($conn,$insertsql,array($delID,$sub_id,$DOI,$IN,$VN));
+
+				$sqlcheckdelsubs="Select Count(*) as rows from Delivery_Subs Where DeliveryID=? And SubscriptionID=?";
+				$queryup=sqlsrv_query($conn,$sqlcheckdelsubs,array($delID,$sub_id));
+				$row_ds=sqlsrv_fetch_array($queryup,SQLSRV_FETCH_ASSOC);
+				$num_ds_rows=$row_ds['rows'];
+
+				if($num_ds_rows==0)
+				{
+					$insertsql="Insert Into Delivery_Subs(DeliveryID,SubscriptionID,DateofIssue,IssueNumber,VolumeNumber) VALUES(?,?,?,?,?)";
+					$insertquery=sqlsrv_query($conn,$insertsql,array($delID,$sub_id,$DOI,$IN,$VN));
+				}
+				else
+				{
+					$insertquery=true;
+				}
 
 				if($insertquery)
 				{
@@ -232,17 +245,39 @@ if(!empty($_POST))
 							$sendsertxt="Insert Into ReceiveSerial(DepartmentID,SerialID,Status,DateReceiveNotif_Give) VALUES (?,?,?,?)";
 							$sendserquery=sqlsrv_query($conn,$sendsertxt,array($depts_list[$x],$serial_id,'NotReceived',$date_today));
 						}
+						else
+						{
+							if(count($progs)>0)
+							{
+								$sendserquery=true;
+							}
+							else
+							{
+								$sendserquery=false;
+							}
+						}
 					}
 
-					for($z=0;$z<count($progs);$z++)
+					if(count($progs)>0)
 					{
-						// SENDING SERIAL PROCESS
-						if(checkDupRS_prog($serial_id,$date_today,$progs[$z]))
+						for($z=0;$z<count($progs);$z++)
 						{
-							$sendsertxt_prog="Insert Into ReceiveSerial_Program(SerialID,ProgramID,DateReceiveNotif_Give_Prog) VALUES (?,?,?)";
-							$sendserquery_prog=sqlsrv_query($conn,$sendsertxt_prog,array($serial_id,$progs[$z],$date_today));
+							// SENDING SERIAL PROCESS
+							if(checkDupRS_prog($serial_id,$date_today,$progs[$z]))
+							{
+								$sendsertxt_prog="Insert Into ReceiveSerial_Program(SerialID,ProgramID,DateReceiveNotif_Give_Prog,Status_Prog) VALUES (?,?,?,?)";
+								$sendserquery_prog=sqlsrv_query($conn,$sendsertxt_prog,array($serial_id,$progs[$z],$date_today,'NotReceived'));
+							}
+							else
+							{
+								$sendserquery_prog=false;
+							}
+							
 						}
-						
+					}
+					else
+					{
+						$sendserquery_prog=true;
 					}
 
 					if(checkFinished($sub_id)=='Finished')
@@ -256,7 +291,7 @@ if(!empty($_POST))
 						$upquery=sqlsrv_query($conn,$sqlup,array('Complete',$sub_id));
 					}	
 					// ($upquery && $sendserquery && $sqlupCSquery)
-					if(($upquery && $sendserquery))
+					if($upquery && ($sendserquery && $sendserquery_prog))
 					{
 						$scs['status']='success';
 					}
