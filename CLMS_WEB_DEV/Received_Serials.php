@@ -54,4 +54,4 @@ include 'Includes/footer.php';
  ?>
 </body>
 </html>
-<script type="text/javascript" src="Js/RS_NOTIF.js?v=2311" ></script>
+<script type="text/javascript" src="Js/RS_NOTIF.js?v=11" ></script>

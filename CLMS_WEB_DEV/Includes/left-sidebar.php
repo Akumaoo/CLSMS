@@ -68,46 +68,11 @@
 
           </li>
 
-          
-
-          <li class="sub-menu">
-            <a href=javascript:void(0)" id="overallreport">
+          <li>
+            <a href="Reports_Subs.php" id="overallreport">
               <i class="fa fa-line-chart"></i>
-              <span>Reports</span>
+              <span>Reports</span> 
             </a>
-
-             <ul class="sub">
-
-              <li>
-                <a href="Reports_Subs.php" class="remove-hl" id="report_subs">
-                  <i class="fa fa-handshake-o"></i>
-                  <span>Subscriptions</span> 
-                </a>
-              </li>
-
-              <li>
-                <a href="Distributors.php" class="remove-hl" id="Disb">
-                  <i class="fa fa-building"></i>
-                  <span>Distributors</span>
-                </a>
-              </li>
-
-              <li>
-                <a href="Department.php" class="remove-hl" id="Dept">
-                  <i class="fa fa-university"></i>
-                  <span>Departments</span>
-                  </a>
-              </li>
-
-               <li>
-                <a href="User.php" class="remove-hl" id="MU">
-                  <i class="fa fa-user-plus"></i>
-                  <span>Manage User</span>
-                </a>
-              </li>
-
-              </ul>
-
           </li>
 
           <li>

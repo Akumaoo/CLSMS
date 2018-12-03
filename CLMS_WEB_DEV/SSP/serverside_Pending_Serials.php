@@ -5,7 +5,7 @@ $data=$_POST['data'];
 $date=strtotime($_POST['date']);
 $newdate=date('Y-m-d',$date);
 $seen=$_POST['seen'];
-if($seen=="seen")
+if($seen=="Seen")
 {
 	$seen_stat='Staff_Seen IS NOT NULL';
 }

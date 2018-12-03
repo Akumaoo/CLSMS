@@ -13,7 +13,15 @@ if(isset($_POST['RSID']))
 		$prog="";
 	}
 	
-
+	$type=$_POST['type'];
+	if($type=='pending')
+	{
+		$stat='NotReceived';
+	}
+	else
+	{
+		$stat='Received';
+	}
 
 	$sql="Select ReceivedSerialID,asd.DepartmentID,dsa.ReceiveSerialID_Program,dsa.ProgramID,
 		(CASE
@@ -43,7 +51,7 @@ if(isset($_POST['RSID']))
 			(Select Organization.DepartmentID,ReceiveSerial_Program.Status_Prog as stat_prog,ReceiveSerialID_Program,ReceiveSerial_Program.ProgramID,SerialName,Staff_Comment_Prog,ControlNumber_Prog,Status_Prog,DateReceiveNotif_Give_Prog,ReceiveSerial_Program.Remove from Serial Inner JOin ReceiveSerial_Program On Serial.SerialID=ReceiveSerial_Program.SerialID
 			Inner Join Program on ReceiveSerial_Program.ProgramID=Program.ProgramID 
 			Inner JOin Organization on Program.OrganizationID=Organization.OrganizationID) as dsa ON asd.DepartmentID=dsa.DepartmentID 
-			WHERE (asd.SerialName=dsa.SerialName OR (asd.SerialName IS NOT NULL AND dsa.SerialName IS NULL)) AND (asd.DateReceiveNotif_Give=dsa.DateReceiveNotif_Give_Prog OR (asd.DateReceiveNotif_Give IS NOT NULL AND dsa.DateReceiveNotif_Give_Prog IS NULL)) AND (asd.Remove IS NULL AND dsa.Remove IS NULL) AND (asd.Status='Received' OR dsa.Status_Prog='Received') AND ReceivedSerialID=? ".$prog;
+			WHERE (asd.SerialName=dsa.SerialName OR (asd.SerialName IS NOT NULL AND dsa.SerialName IS NULL)) AND (asd.DateReceiveNotif_Give=dsa.DateReceiveNotif_Give_Prog OR (asd.DateReceiveNotif_Give IS NOT NULL AND dsa.DateReceiveNotif_Give_Prog IS NULL)) AND (asd.Remove IS NULL AND dsa.Remove IS NULL) AND (asd.Status='".$stat."' OR dsa.Status_Prog='".$stat."') AND ReceivedSerialID=? ".$prog;
 	$query=sqlsrv_query($conn,$sql,array($RSid));
 	while($row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
 	{

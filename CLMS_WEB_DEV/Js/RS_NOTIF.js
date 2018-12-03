@@ -28,7 +28,7 @@ $data=$('span#dept').text();
 			$.ajax({
 			type:'POST',
 			url:'View_RS_Serial.php',
-			data:{sername:sername,RSID:RSID,prog:prog},
+			data:{sername:sername,RSID:RSID,prog:prog,type:'received'},
 			success:function(data){
 				$('.main-chart').html(data)
 			}

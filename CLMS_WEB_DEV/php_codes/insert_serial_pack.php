@@ -4,7 +4,7 @@ require 'db.php';
 if(!empty($_POST))
 {
 	$SN=$_POST['sn'];
-	// $SN='DUMMY';
+	// $SN='new';
 
 	if(!$_POST['DOI'])
 	{
@@ -43,7 +43,7 @@ if(!empty($_POST))
 		$progs=$_POST['progs'];
 	}
 	
-	// $depts_list=array('JHS');
+	// $depts_list=array('ELEM');
 	// $progs=array();
 
 
@@ -206,6 +206,78 @@ if(!empty($_POST))
 		}
 	}
 
+	function getKey($dept,$subID,$type)
+	{
+		require 'db.php';
+
+		if($type=='Single')
+		{
+			$sql="Select CategoryID from Subscription Inner join Categorize_Serials On Subscription.SubscriptionID=Categorize_Serials.SubscriptionID
+					Inner Join Department ON Categorize_Serials.DepartmentID=Department.DepartmentID Where Categorize_Serials.SubscriptionID=? AND Categorize_Serials.DepartmentID=?";
+			$query=sqlsrv_query($conn,$sql,array($subID,$dept));
+			$row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
+			$key=$row['CategoryID'];
+		}
+		else
+		{
+			$sql="	Select CategoryID_Program from Subscription Inner Join Category_Serials_Program On Subscription.SubscriptionID=Category_Serials_Program.SubscriptionID
+				Inner Join Program On Category_Serials_Program.ProgramID=Program.ProgramID
+				Inner JOin Organization On Program.OrganizationID=Organization.OrganizationID Where Category_Serials_Program.SubscriptionID=? AND Category_Serials_Program.ProgramID=?";
+			$query=sqlsrv_query($conn,$sql,array($subID,$dept));
+			$row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
+			$key=$row['CategoryID_Program'];
+		}
+
+		return $key;
+		
+	}
+
+	function currentNIR($dept,$subID,$type)
+	{
+		require 'db.php';
+
+		if($type=='Single')
+		{
+			$sql="Select NumberOfItemReceived from Subscription Inner join Categorize_Serials On Subscription.SubscriptionID=Categorize_Serials.SubscriptionID
+					Inner Join Department ON Categorize_Serials.DepartmentID=Department.DepartmentID Where Categorize_Serials.SubscriptionID=? AND Categorize_Serials.DepartmentID=?";
+			$query=sqlsrv_query($conn,$sql,array($subID,$dept));
+			$row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
+			$key=$row['NumberOfItemReceived'];
+		}
+		else
+		{
+			$sql="	Select NumberofItemsReceived_Prog from Subscription Inner Join Category_Serials_Program On Subscription.SubscriptionID=Category_Serials_Program.SubscriptionID
+				Inner Join Program On Category_Serials_Program.ProgramID=Program.ProgramID
+				Inner JOin Organization On Program.OrganizationID=Organization.OrganizationID Where Category_Serials_Program.SubscriptionID=? AND Category_Serials_Program.ProgramID=?";
+			$query=sqlsrv_query($conn,$sql,array($subID,$dept));
+			$row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
+			$key=$row['NumberofItemsReceived_Prog'];
+		}
+
+		return $key;
+		
+	}
+
+	function getType_dept($dept)
+	{
+		require 'db.php';
+		$sql="Select Count(*) as nums from Department Inner Join Organization On Department.DepartmentID=Organization.DepartmentID Where Department.DepartmentID=?";
+		$query=sqlsrv_query($conn,$sql,array($dept));
+		$row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
+		$num=$row['nums'];
+
+		if($num>0)
+		{
+			$type='Multiple';
+		}
+		else
+		{
+			$type='Single';
+		}
+
+		return $type;
+	}
+
 
 	if(GetSerialID($SN)!='NotValid')
 	{
@@ -238,46 +310,119 @@ if(!empty($_POST))
 				if($insertquery)
 				{
 					for($x=0;$x<count($depts_list);$x++)
-					{
-						// SENDING SERIAL PROCESS
-						if(checkDupRS($serial_id,$date_today,$depts_list[$x]))
+					{	
+						$send_ser=true;
+						if(getType_dept($depts_list[$x])=='Multiple')
 						{
-							$sendsertxt="Insert Into ReceiveSerial(DepartmentID,SerialID,Status,DateReceiveNotif_Give) VALUES (?,?,?,?)";
-							$sendserquery=sqlsrv_query($conn,$sendsertxt,array($depts_list[$x],$serial_id,'NotReceived',$date_today));
+							$num_prog="Select Count(*) as nums from 
+									(Select CategoryID,DepartmentID as dept_main from Categorize_Serials Inner Join Subscription On Categorize_Serials.SubscriptionID=Subscription.SubscriptionID Inner Join Serial On Subscription.SerialID=Serial.SerialID Where Subscription.Status=? And Subscription.SubscriptionID=?) as asd
+									INNER join
+									(Select Category_Serials_Program.CategoryID_Program,Organization.DepartmentID as dept_prog,Organization.OrganizationID,Category_Serials_Program.ProgramID from Organization inner join Program On Organization.OrganizationID=Program.OrganizationID Inner Join Category_Serials_Program On Program.ProgramID=Category_Serials_Program.ProgramID
+									Inner Join Subscription On Category_Serials_Program.SubscriptionID=Subscription.SubscriptionID Inner Join Serial On Subscription.SerialID=Serial.SerialID Where Subscription.Status=? And Subscription.SubscriptionID=?) as dsa
+									On asd.dept_main=dsa.dept_prog";
+							$query_num_prog=sqlsrv_query($conn,$num_prog,array('OnGoing',$sub_id,'OnGoing',$sub_id));
+							$row_num=sqlsrv_fetch_array($query_num_prog,SQLSRV_FETCH_ASSOC);
+							$num_p=$row_num['nums'];
+
+							$freq_dept=getFreq($sub_id);
+							$total_freq=$freq_dept*$num_p;
+
+							$count_prog=count($progs);
+							$cNIR=currentNIR($depts_list[$x],$sub_id,'Single');
+							$newNIR=$cNIR+$count_prog;
+
+							if($newNIR>=$total_freq)
+							{
+								$newNIR=$total_freq;
+								$send_ser=false;
+							}
+							$key=getKey($depts_list[$x],$sub_id,'Single');
+							$updateNIR="Update Categorize_Serials Set NumberOfItemReceived=? Where CategoryID=?";
+							$updateNIRquery=sqlsrv_query($conn,$updateNIR,array($newNIR,$key));
 						}
 						else
 						{
-							if(count($progs)>0)
+							$cNIR=currentNIR($depts_list[$x],$sub_id,'Single');
+							$freq_dept=getFreq($sub_id);
+							$newNIR=$cNIR+1;
+
+							if($newNIR>=$freq_dept)
 							{
-								$sendserquery=true;
+								$newNIR=$freq_dept;
+								$send_ser=false;
+							}
+							$key=getKey($depts_list[$x],$sub_id,'Single');
+							$updateNIR="Update Categorize_Serials Set NumberOfItemReceived=? Where CategoryID=?";
+							$updateNIRquery=sqlsrv_query($conn,$updateNIR,array($newNIR,$key));
+						}
+
+						// SENDING SERIAL PROCESS
+						if($send_ser)
+						{
+							if(checkDupRS($serial_id,$date_today,$depts_list[$x]))
+							{
+								$sendsertxt="Insert Into ReceiveSerial(DepartmentID,SerialID,Status,DateReceiveNotif_Give) VALUES (?,?,?,?)";
+								$sendserquery=sqlsrv_query($conn,$sendsertxt,array($depts_list[$x],$serial_id,'NotReceived',$date_today));
 							}
 							else
 							{
-								$sendserquery=false;
+								if(count($progs)>0)
+								{
+									$sendserquery=true;
+								}
+								else
+								{
+									$sendserquery=false;
+								}
 							}
 						}
+						else
+						{
+							$sendserquery=true;
+						}
+
 					}
 
 					if(count($progs)>0)
 					{
 						for($z=0;$z<count($progs);$z++)
 						{
-							// SENDING SERIAL PROCESS
-							if(checkDupRS_prog($serial_id,$date_today,$progs[$z]))
+							$send_ser_prog=true;
+							$cNIR_prog=currentNIR($progs[$z],$sub_id,'Multiple');
+							$freq=getFreq($sub_id);
+							$newNIR_prog=$cNIR_prog+1;
+							if($newNIR_prog>=$freq)
 							{
-								$sendsertxt_prog="Insert Into ReceiveSerial_Program(SerialID,ProgramID,DateReceiveNotif_Give_Prog,Status_Prog) VALUES (?,?,?,?)";
-								$sendserquery_prog=sqlsrv_query($conn,$sendsertxt_prog,array($serial_id,$progs[$z],$date_today,'NotReceived'));
+								$newNIR_prog=$freq;
+								$send_ser_prog=false;
+							}
+							$key_prog=getKey($progs[$z],$sub_id,'Multiple');
+							$updateNIR_prog="Update Category_Serials_Program Set NumberofItemsReceived_Prog=? Where CategoryID_Program=?";
+							$updateNIRquery_prog=sqlsrv_query($conn,$updateNIR_prog,array($newNIR_prog,$key_prog));
+
+							// SENDING SERIAL PROCESS
+							if($send_ser_prog)
+							{
+								if(checkDupRS_prog($serial_id,$date_today,$progs[$z]))
+								{
+									$sendsertxt_prog="Insert Into ReceiveSerial_Program(SerialID,ProgramID,DateReceiveNotif_Give_Prog,Status_Prog) VALUES (?,?,?,?)";
+									$sendserquery_prog=sqlsrv_query($conn,$sendsertxt_prog,array($serial_id,$progs[$z],$date_today,'NotReceived'));
+								}
+								else
+								{
+									$sendserquery_prog=false;
+								}
 							}
 							else
 							{
-								$sendserquery_prog=false;
+								$sendserquery_prog=true;
 							}
-							
 						}
 					}
 					else
 					{
 						$sendserquery_prog=true;
+						$updateNIRquery_prog=true;
 					}
 
 					if(checkFinished($sub_id)=='Finished')
@@ -291,7 +436,7 @@ if(!empty($_POST))
 						$upquery=sqlsrv_query($conn,$sqlup,array('Complete',$sub_id));
 					}	
 					// ($upquery && $sendserquery && $sqlupCSquery)
-					if($upquery && ($sendserquery && $sendserquery_prog))
+					if($upquery && ($sendserquery && $sendserquery_prog) && ($updateNIRquery && $updateNIRquery_prog))
 					{
 						$scs['status']='success';
 					}

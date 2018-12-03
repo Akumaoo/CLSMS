@@ -22,15 +22,17 @@ $seen=$('span#seen').text();
 	$('#table_pending_ser').on('draw.dt', function() {
 		
 		$('tbody tr td:nth-child(1)').addClass('rsID');
+		$('tbody tr td:nth-child(5)').addClass('progName');
 		$('tbody tr td:nth-child(3)').addClass('ser_click');
 
 		$(".ser_click").click(function(){
 			var sername=$(this).text();
 			var RSID=$(this).closest('tr').find('.rsID').text();
+			var prog=$(this).closest('tr').find('.progName').text();
 			$.ajax({
 			type:'POST',
 			url:'View_RS_Serial.php',
-			data:{sername:sername,RSID:RSID},
+			data:{sername:sername,RSID:RSID,prog:prog,type:'pending'},
 			success:function(data){
 				$('.view_ser').html(data)
 			}

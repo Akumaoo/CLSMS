@@ -19,12 +19,12 @@ Thursday-Saturday:
 
 3rd Week
 Monday-Wednesday:
-*Reports Generation					(STARTED!)
+*Reports Generation					(DONE!)
 *Staff UI/Reports					(DONE!)
 
 Thursday-Saturday:
-*Review Changes						(LATE!!)
-*Empty Database/Debug/Find Bugs				(LATE!!)
+*Review Changes						(DONE!)
+*Empty Database/Debug/Find Bugs				(DONE!)
 
 4th Week 
 *Finalizing/Check To Clients

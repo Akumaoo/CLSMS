@@ -1,10 +1,9 @@
 ***OnGoing:***
--Finish the Reports Generation
--PRINT Functionality
--REVIEW CHANGES
 
-***PENDING:***
+-REVIEW CHANGES
 -Q/A
+***PENDING:***
+
 ***FINISHED:***
 (DONE!!!)-SSP for Subscription,Deliveries,SendSerials
 (DONE!!)-Serial Type Tab
@@ -22,6 +21,8 @@
 (DONE!!!)-User Tab
 (DONE!!!)-Serial Tab 
 (DONE!!!)-Sending Serials ADDING SERIALS
+(DONE!!)-Finish the Reports Generation
+(DONE!!)-PRINT Functionality
 =============================================FINALIZATION***
 
 
