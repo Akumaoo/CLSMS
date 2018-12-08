@@ -21,7 +21,7 @@ $table=<<<EOT
 	Left Join
 	(Select ReceiveSerialID_Program,Organization.DepartmentID,SerialName as sn_prog,Organization.OrganizationID,ReceiveSerial_Program.ProgramID,DateReceiveNotif_Give_Prog,ReceiveSerial_Program.Remove from Serial Inner Join ReceiveSerial_Program On Serial.SerialID=ReceiveSerial_Program.SerialID
 	Inner Join Program On ReceiveSerial_Program.ProgramID=Program.ProgramID
-	inner Join Organization on Program.OrganizationID=Organization.OrganizationID) as dsa on asd.DepartmentID=dsa.DepartmentID where (sn_main=sn_prog OR sn_prog IS NULL)  AND (asd.Remove IS NULL and dsa.Remove IS NULL)) temp
+	inner Join Organization on Program.OrganizationID=Organization.OrganizationID) as dsa on asd.DepartmentID=dsa.DepartmentID where (sn_main=sn_prog OR sn_prog IS NULL)  AND (asd.Remove IS NULL and dsa.Remove IS NULL) AND ((asd.DateReceiveNotif_Give=dsa.DateReceiveNotif_Give_Prog) OR (asd.DateReceiveNotif_Give IS NOT NULL AND dsa.DateReceiveNotif_Give_Prog IS NULL))) temp
 EOT;
 
 $primary_key='ReceivedSerialID';

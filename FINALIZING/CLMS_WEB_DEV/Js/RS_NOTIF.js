@@ -1,6 +1,7 @@
 $(function(){
 $table="";
 $data=$('span#dept').text();
+$date=$('span#date').text();
 	if( ! $.fn.DataTable.isDataTable("#table_RS_notif")){
 	$table=$('#table_RS_notif').DataTable({			
 	"processing":true,
@@ -10,7 +11,7 @@ $data=$('span#dept').text();
 	"ajax":
 		{"url":"SSP/serverside_RS_NOTIF.php",
 		"method":"POST",
-		"data":{data:$data}
+		"data":{data:$data,date:$date}
 		}
 		});
 	}
@@ -37,4 +38,9 @@ $data=$('span#dept').text();
 		});
 	});
 
+    $.ajax({
+        url:'php_codes/update_seen_deleyed.php',
+        method:'POST',
+        data:{type:'per dept',dept:$data}
+    });
 });

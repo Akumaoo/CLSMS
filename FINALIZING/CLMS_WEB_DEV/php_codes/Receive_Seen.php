@@ -1,6 +1,11 @@
 <?php 
 require 'db.php';
 
+// $_POST['rs_list']=array(2245,2246);
+// $_POST['cn_list']=array(95,96);
+// $_POST['rem_list']=array('Received','Received');
+// $_POST['type']='receive';
+
 function getRS_LIST($dept)
 {
 	require 'db.php';
@@ -22,8 +27,8 @@ function GetNumsRows($rsID)
 {
 	require 'db.php';
 	$sql="Select Count(*) as num_rows from
-	(Select ReceivedSerialID,ReceiveSerial.DepartmentID,ControlNumber,SerialName,VolumeNumber,IssueNumber,DateofIssue,Staff_Comment,ReceiveSerial.Remove,ReceiveSerial.Status,Subscription.Status as subs_stat,DateReceiveNotif_Give from Delivery_Subs Inner Join Subscription On Delivery_Subs.SubscriptionID=Subscription.SubscriptionID Inner JOin Serial On Subscription.SerialID=Serial.SerialID Inner Join ReceiveSerial on Serial.SerialID=ReceiveSerial.SerialID 
-	Inner JOin Department On ReceiveSerial.DepartmentID=Department.DepartmentID WHERE Subscription.Status='OnGoing') as asd
+	(Select ReceivedSerialID,ReceiveSerial.DepartmentID,ControlNumber,SerialName,Staff_Comment,ReceiveSerial.Remove,ReceiveSerial.Status,Subscription.Status as subs_stat,DateReceiveNotif_Give from Subscription Inner JOin Serial On Subscription.SerialID=Serial.SerialID Inner Join ReceiveSerial on Serial.SerialID=ReceiveSerial.SerialID 
+	Inner JOin Department On ReceiveSerial.DepartmentID=Department.DepartmentID WHERE (Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) OR Subscription.Status='OnGoing') ) as asd
 	Left Join
 	(Select Organization.DepartmentID,ReceiveSerialID_Program,ReceiveSerial_Program.ProgramID,SerialName,Staff_Comment_Prog,ControlNumber_Prog,Status_Prog,DateReceiveNotif_Give_Prog,ReceiveSerial_Program.Remove from Serial Inner JOin ReceiveSerial_Program On Serial.SerialID=ReceiveSerial_Program.SerialID
 	Inner Join Program on ReceiveSerial_Program.ProgramID=Program.ProgramID 

@@ -4,10 +4,12 @@ include 'Includes/header.php';
 if(isset($_POST['dept']))
 {
 	$dept=$_POST['dept'];
+	$date=$_POST['date'];
 }
 else
 {
 	$dept="";
+	$date="";
 }
  ?>
 <div class="container-fluid">
@@ -20,7 +22,7 @@ else
 <div class="custom-panelbox">			
 	<div class="">
 		<div class="">
-			<h5 class="fa fa-paper-plane tag_style"> Received Serial: <span id="dept"><?php echo $dept; ?></span></h5>
+			<h5 class="fa fa-paper-plane tag_style"> Received Serial: <span id="dept"><?php echo $dept; ?></span> <span id='date'><?php echo $date; ?></span></h5>
 			<h4 class="dividerr"></h4>
 		</div>
 
@@ -54,4 +56,4 @@ include 'Includes/footer.php';
  ?>
 </body>
 </html>
-<script type="text/javascript" src="Js/RS_NOTIF.js?v=11" ></script>
+<script type="text/javascript" src="Js/RS_NOTIF.js?v=121" ></script>

@@ -46,7 +46,7 @@ if(isset($_POST['RSID']))
 			END
 		)as Staff_Comment,asd.Staff_Seen,asd.DateReceiveNotif_Give from
 			(Select ReceivedSerialID,Staff_Seen,ReceiveSerial.Status as stat_main,ReceiveSerial.DepartmentID,ControlNumber,SerialName,TypeName,VolumeNumber,IssueNumber,DateofIssue,Staff_Comment,ReceiveSerial.Remove,ReceiveSerial.Status,Subscription.Status as subs_stat,DateReceiveNotif_Give from Delivery_Subs Inner Join Subscription On Delivery_Subs.SubscriptionID=Subscription.SubscriptionID Inner JOin Serial On Subscription.SerialID=Serial.SerialID Inner Join ReceiveSerial on Serial.SerialID=ReceiveSerial.SerialID 
-			Inner JOin Department On ReceiveSerial.DepartmentID=Department.DepartmentID WHERE Subscription.Status='OnGoing') as asd
+			Inner JOin Department On ReceiveSerial.DepartmentID=Department.DepartmentID WHERE (Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) OR Subscription.Status='OnGoing') ) as asd
 			Left Join
 			(Select Organization.DepartmentID,ReceiveSerial_Program.Status_Prog as stat_prog,ReceiveSerialID_Program,ReceiveSerial_Program.ProgramID,SerialName,Staff_Comment_Prog,ControlNumber_Prog,Status_Prog,DateReceiveNotif_Give_Prog,ReceiveSerial_Program.Remove from Serial Inner JOin ReceiveSerial_Program On Serial.SerialID=ReceiveSerial_Program.SerialID
 			Inner Join Program on ReceiveSerial_Program.ProgramID=Program.ProgramID 
@@ -62,10 +62,8 @@ if(isset($_POST['RSID']))
 		$comment=$row['Staff_Comment'];
 		$DS=$row['DateReceiveNotif_Give']->format('Y/m/d');
 	}
-		echo '<div>
-			<a id="refresh" href="javascript:void(0)" style="margin-left:10px;">Go Back To List</a>
-			</div>';	
-	echo '<div class="form-panel">
+		echo '<div id="back"></div>	
+			<div class="form-panel">
 	<div id="view_ser_content">
 	<div class="row">
 		<div class="RS_header">
@@ -118,7 +116,12 @@ if(isset($_POST['RSID']))
 }
  ?>
  <script>
- 	$('#refresh').click(function() {
-		location.reload();
-	});
+ 	if($('span#dept').text()=="")
+ 	{
+ 		$('#back').append('<a id="refresh" href="javascript:void(0)" style="margin-left:10px;">Go Back To List</a>');
+ 		 
+ 		$('#refresh').click(function() {
+			location.reload();
+		});
+ 	}
  </script>

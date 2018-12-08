@@ -1,15 +1,7 @@
 $(function(){
   
     $('.receive_seen').click(function(){
-      $dept=$(this).closest('.receive_tab').find('.rec_dept').text();
-      $.ajax({
-        url:'php_codes/update_seen_deleyed.php',
-        method:'POST',
-        data:{type:'per dept',dept:$dept}
-      });
-
       $(this).closest('.receive_tab').find('#hidden_form').submit();
-      
     });
 
     $('.pending_click').click(function(){
