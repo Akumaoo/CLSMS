@@ -12,6 +12,8 @@ if($_POST['data']!="")
 
 	$date_string_up="AND (DateReceiveNotif_Receive='".$newdate."')";
 	$date_string_down="WHERE DateReceiveNotif_Receive_Prog='".$newdate."'";
+
+	
 }
 else
 {

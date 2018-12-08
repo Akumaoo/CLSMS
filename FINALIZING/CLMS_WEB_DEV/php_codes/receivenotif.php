@@ -6,7 +6,7 @@
   Left Join
   (Select Organization.DepartmentID,SerialName as sn_prog,Organization.OrganizationID,ReceiveSerial_Program.ProgramID,DateReceiveNotif_Give_Prog from Serial Inner Join ReceiveSerial_Program On Serial.SerialID=ReceiveSerial_Program.SerialID
   Inner Join Program On ReceiveSerial_Program.ProgramID=Program.ProgramID
-  inner Join Organization on Program.OrganizationID=Organization.OrganizationID) as dsa on asd.DepartmentID=dsa.DepartmentID where (sn_main=sn_prog OR sn_prog IS NULL) AND DateReceiveNotif_Give=DateReceiveNotif_Give_Prog Group By asd.DepartmentID,Admin_Seen,DateReceiveNotif_Receive";
+  inner Join Organization on Program.OrganizationID=Organization.OrganizationID) as dsa on asd.DepartmentID=dsa.DepartmentID where (sn_main=sn_prog OR sn_prog IS NULL) AND (DateReceiveNotif_Give=DateReceiveNotif_Give_Prog OR DateReceiveNotif_Give IS NOT NULL AND DateReceiveNotif_Give_Prog IS NULL) Group By asd.DepartmentID,Admin_Seen,DateReceiveNotif_Receive";
     $receive_query=sqlsrv_query($conn,$receive_sqltxt,array('Received'));
 
     if(sqlsrv_has_rows($receive_query))
