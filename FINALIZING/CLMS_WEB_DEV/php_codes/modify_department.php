@@ -2,6 +2,9 @@
 require 'db.php';
 
 $input=filter_input_array(INPUT_POST);
+// $input['action']='delete_org';
+// $input['reason']='asd';
+// $input['orgID']='SICS';
 
 if($input['action']=='edit')
 {
@@ -20,6 +23,19 @@ else if($input['action']=='delete')
 
 	$sqltxtdel="Update Department SET Remove=?,Remove_Remarks=? Where DepartmentID=?";
 	$querydel=sqlsrv_query($conn,$sqltxtdel,array('Removed',$reason,$deptID));
+	
+	header('Content-type: application/json');
+	echo json_encode($input);
+}
+else if($input['action']=='delete_org')
+{
+	$reason=$input['reason'];
+	$orgID=$input['orgID'];
+	// $reason='asdas';
+	// $sID=34;
+
+	$sqltxtdel="Update Organization SET Remove_org=?,Remove_Remarks_org=? Where OrganizationID=?";
+	$querydel=sqlsrv_query($conn,$sqltxtdel,array('Removed',$reason,$orgID));
 	
 	header('Content-type: application/json');
 	echo json_encode($input);

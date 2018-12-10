@@ -43,9 +43,11 @@ if(isset($_POST['pass']))
 						<button class="custom-btn btn-active" type="button" id="rb_ser" style="height: 30px;width: 69px;padding:0">Serials</button>
 					 	<button class="custom-btn" type="button" id="rb_disb" style="height: 30px;width: 99px;padding:0;margin-left: 2px">Distributors</button>
 					 	<button class="custom-btn" type="button" id="rb_dept" style="height: 32px;width: 102px;padding:0;margin-left: 2px">Departments</button>
+					 	<button class="custom-btn" type="button" id="rb_org" style="height: 32px;width: 102px;padding:0;margin-left: 2px">Organization</button>
 					 	<button class="custom-btn" type="button" id="rb_user" style="height: 32px;width: 66px;padding:0;margin-left: 2px">Users</button>
 					 	<button class="custom-btn" type="button" id="rb_ps" style="height: 32px;width: 118px;padding:0;margin-left: 2px">Pending Serials</button>
 					 	<button class="custom-btn" type="button" id="rb_subs" style="height: 32px;width: 118px;padding:0;margin-left: 2px">Subscriptions</button>
+
 					';
 				}
 			 ?>

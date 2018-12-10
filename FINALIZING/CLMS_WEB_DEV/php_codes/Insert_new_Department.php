@@ -81,7 +81,7 @@ if(!empty($_POST))
 	}
 	else
 	{
-		$checksql="Select Count(OrganizationID) as num_org from Organization Where DepartmentID=?";
+		$checksql="Select Count(OrganizationID) as num_org from Organization Where DepartmentID=?";//Check to See if The Current Dept is Labeled as Single Dept
 		$checkquery=sqlsrv_query($conn,$checksql,array($deptID));
 		$row=sqlsrv_fetch_array($checkquery,SQLSRV_FETCH_ASSOC);
 		$num_org=$row['num_org'];

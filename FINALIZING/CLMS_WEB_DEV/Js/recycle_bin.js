@@ -38,6 +38,11 @@ $(function(){
 	{
 		$('#rb_subs').removeClass('btn-active');
 	}
+	else if($('#rb_org').hasClass('btn-active'))
+	{
+		$('#rb_org').removeClass('btn-active');
+	}
+
 
  		$(this).addClass('btn-active');
 
@@ -71,6 +76,10 @@ $(function(){
 		else if($('#rb_subs').hasClass('btn-active'))
 		{
 			$('#rb_subs').removeClass('btn-active');
+		}
+		else if($('#rb_org').hasClass('btn-active'))
+		{
+			$('#rb_org').removeClass('btn-active');
 		}
 
  		$(this).addClass('btn-active');
@@ -106,6 +115,10 @@ $(function(){
 		{
 			$('#rb_subs').removeClass('btn-active');
 		}
+		else if($('#rb_org').hasClass('btn-active'))
+		{
+			$('#rb_org').removeClass('btn-active');
+		}
 
  		$(this).addClass('btn-active');
 
@@ -139,6 +152,10 @@ $(function(){
 		else if($('#rb_subs').hasClass('btn-active'))
 		{
 			$('#rb_subs').removeClass('btn-active');
+		}
+		else if($('#rb_org').hasClass('btn-active'))
+		{
+			$('#rb_org').removeClass('btn-active');
 		}
 
  		$(this).addClass('btn-active');
@@ -174,6 +191,10 @@ $(function(){
 		{
 			$('#rb_subs').removeClass('btn-active');
 		}
+		else if($('#rb_org').hasClass('btn-active'))
+		{
+			$('#rb_org').removeClass('btn-active');
+		}
 
  		$(this).addClass('btn-active');
 
@@ -208,6 +229,10 @@ $(function(){
 		{
 			$('#rb_ps').removeClass('btn-active');
 		}
+		else if($('#rb_org').hasClass('btn-active'))
+		{
+			$('#rb_org').removeClass('btn-active');
+		}
 
  		$(this).addClass('btn-active');
 
@@ -219,5 +244,44 @@ $(function(){
  			}
  		});
  	});
+
+ 	$('#rb_org').click(function(){
+
+ 		if($('#rb_ser').hasClass('btn-active'))
+		{
+			$('#rb_ser').removeClass('btn-active');
+		}
+		else if($('#rb_disb').hasClass('btn-active'))
+		{
+			$('#rb_disb').removeClass('btn-active');
+		}
+		else if($('#rb_dept').hasClass('btn-active'))
+		{
+			$('#rb_dept').removeClass('btn-active');
+		}
+		else if($('#rb_user').hasClass('btn-active'))
+		{
+			$('#rb_user').removeClass('btn-active');
+		}
+		else if($('#rb_ps').hasClass('btn-active'))
+		{
+			$('#rb_ps').removeClass('btn-active');
+		}
+		else if($('#rb_subs').hasClass('btn-active'))
+		{
+			$('#rb_subs').removeClass('btn-active');
+		}
+
+ 		$(this).addClass('btn-active');
+
+ 		$.ajax({
+ 			url:"recycle/orgs.php",
+ 			method:"GET",
+ 			success:function(data){
+ 				$('#col_serials').html(data);
+ 			}
+ 		});
+ 	});
+
 
 });

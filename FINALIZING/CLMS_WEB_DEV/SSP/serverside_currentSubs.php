@@ -31,9 +31,8 @@ if($_POST['rid']=="")
 }
 else
 {
-	$rid=$_POST['rid'];
 	echo json_encode(
-	SSP::complex( $_POST, $sql_details, $table, $primary_key, $columns,null,"Status='OnGoing' AND ((Subscription_Date BETWEEN LEFT('".$rid."',4) AND RIGHT('".$rid."',4)) Or Status='OnGoing') AND DistributorName='".$dept."' AND Remove IS NULL AND arc is NULL" ));
+	SSP::complex( $_POST, $sql_details, $table, $primary_key, $columns,null,"(Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) Or Status='OnGoing') AND DistributorName='".$dept."' AND Remove IS NULL AND arc is NULL" ));
 }
 
 

@@ -20,11 +20,24 @@ if(isset($_POST['dept']))
 			<h4 class="dividerr"></h4>
 		</div>
 
+		<div class="alert alert-success alert-dismissible collapse center" id="msg_scs_update">
+    		<strong>Successfully Updated Organization!</strong>
+	 	</div>
+
+	 	<div class="alert alert-success alert-dismissible collapse center" id="msg_scs_remove">
+	    	<strong>Successfully Removed Organization!</strong>
+	 	</div>
+
+	  	<div class="alert alert-danger alert-dismissible collapse center" id="msg_fail">
+		    <strong>Something Went Wrong!</strong> , <span id="fail_msg">Please Check The Values You Entered And Try Again.</span>
+	  	</div>
+
 		<div class="custom_table">
 
 			<div class="container-fluid">
 			<div class="row">
 			<div class="col-lg-10 col-lg-offset-1">
+				<span class="fa fa-cog fa-lg cog_action" id="cog_action"></span>
 				<table cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover" id="table_dept_program">
 					<thead class="thead_theme">
 					<tr>
@@ -42,4 +55,8 @@ if(isset($_POST['dept']))
 		</div>
 	</div>
 </div>
-<script type="text/javascript" src="Js/dept_program.js?v=12" ></script>
+<?php 
+include 'Modals/remove_modal.php';
+include 'Modals/Re_categ_Org.php';
+ ?>
+<script type="text/javascript" src="Js/dept_program.js?v=132" ></script>
