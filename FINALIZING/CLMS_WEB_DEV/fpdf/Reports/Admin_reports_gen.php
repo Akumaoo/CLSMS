@@ -371,13 +371,31 @@ class PDF extends FPDF
 			
 			if($type_report=='OS')
 			{
-				$where_up='WHERE NumberOfItemReceived!=Frequency';
-				$where_down='WHERE NumberofItemsReceived_Prog!=Frequency';
+				$where_down=' Frequency!=(CASE
+											WHEN ProgramID IS NULL
+											THEN NumberOfItemReceived
+											ELSE NumberofItemsReceived_Prog
+											END	
+											)';
 			}
 			else
 			{
-				$where_up='WHERE NumberOfItemReceived=Frequency';
-				$where_down='WHERE NumberofItemsReceived_Prog=Frequency';
+				$where_down=' Frequency=(CASE
+											WHEN ProgramID IS NULL
+											THEN NumberOfItemReceived
+											ELSE NumberofItemsReceived_Prog
+											END	
+											)';
+			}
+
+			if($sort=='Sort')
+			{
+					$add_ext='WHERE '.$where_down.' '.$final_ext; 
+
+			}
+			else
+			{
+					$add_ext=$final_ext.' AND '.$where_down;
 			}
 			$sql="
 				Select DepartmentID,ProgramID,DistributorName,SerialName,TypeName,
@@ -391,12 +409,12 @@ class PDF extends FPDF
 					asd.DistributorID,SerialName,TypeName,sub_stat,asd.DepartmentID,ProgramID,NumberOfItemReceived,NumberofItemsReceived_Prog,Frequency from
 						(Select Serial.SerialID,CategoryID,Categorize_Serials.SubscriptionID,DistributorID,SerialName,TypeName,Serial.Origin,Subscription.Status as sub_stat,Archive,Subscription_Date,Frequency,Department.DepartmentID,NumberOfItemReceived,(Usage_Stat_Employee+Usage_Stat_Student) as Usage_Stat,Subscription.Remove from Serial Inner Join Subscription ON Serial.SerialID=Subscription.SerialID
 						Inner Join Categorize_Serials On Subscription.SubscriptionID=Categorize_Serials.SubscriptionID
-						Inner JOin Department On Categorize_Serials.DepartmentID=Department.DepartmentID ".$where_up.") as asd
+						Inner JOin Department On Categorize_Serials.DepartmentID=Department.DepartmentID) as asd
 					Left JOin
 						(Select Category_Serials_Program.SubscriptionID,CategoryID_Program,Category_Serials_Program.ProgramID,NumberofItemsReceived_Prog,DepartmentID,(Usage_Stat_Employee_Prog+Usage_Stat_Student_Prog) as Usage_stat_Prog from Subscription Inner Join Category_Serials_Program ON Subscription.SubscriptionID=Category_Serials_Program.SubscriptionID Inner Join Program ON Category_Serials_Program.ProgramID=Program.ProgramID 
-						Inner Join Organization On Program.OrganizationID=Organization.OrganizationID ".$where_down.") as dsa On asd.DepartmentID=dsa.DepartmentID
+						Inner Join Organization On Program.OrganizationID=Organization.OrganizationID) as dsa On asd.DepartmentID=dsa.DepartmentID
 						Where (asd.SubscriptionID=dsa.SubscriptionID OR (asd.SubscriptionID IS NOT NULL AND dsa.SubscriptionID IS NULL)) AND (asd.Archive IS NULL AND asd.Remove IS NULL)  AND (Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) OR sub_stat='OnGoing')) as T1
-					Inner Join Distributor On T1.DistributorID=Distributor.DistributorID ".$final_ext;
+					Inner Join Distributor On T1.DistributorID=Distributor.DistributorID ".$add_ext;
 
 			$query=sqlsrv_query($conn,$sql,array());
 			 while($rows=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
@@ -480,9 +498,12 @@ class PDF extends FPDF
 				),', ') as Departments,Frequency,sub_stat".$add_col_up." from 
 				(Select 
 					asd.DistributorID,SerialName,TypeName,sub_stat,asd.DepartmentID,ProgramID,NumberOfItemReceived,NumberofItemsReceived_Prog,Frequency,Subscription_Date from
-						(Select Serial.SerialID,CategoryID,Categorize_Serials.SubscriptionID,DistributorID,SerialName,TypeName,Serial.Origin,Subscription.Status as sub_stat,Archive,Subscription_Date,Frequency,Department.DepartmentID,NumberOfItemReceived,(Usage_Stat_Employee+Usage_Stat_Student) as Usage_Stat,Subscription.Remove from Serial Inner Join Subscription ON Serial.SerialID=Subscription.SerialID
+						(Select subt.SerialID,CategoryID,subt.SubscriptionID,subt.DistributorID,SerialName,TypeName,subt.Origin,sub_stat as sub_stat,Archive,Subscription_Date,Frequency,subt.DepartmentID,NumberOfItemReceived,Usage_Stat,subt.Remove,DistributorName from 
+						(Select Serial.SerialID,CategoryID,Categorize_Serials.SubscriptionID,DistributorID,SerialName,TypeName,Serial.Origin,Subscription.Status as sub_stat,Archive,Subscription_Date,Frequency,Department.DepartmentID,NumberOfItemReceived,(Usage_Stat_Employee+Usage_Stat_Student) as Usage_Stat,Subscription.Remove 
+						from Serial Inner Join Subscription ON Serial.SerialID=Subscription.SerialID
 						Inner Join Categorize_Serials On Subscription.SubscriptionID=Categorize_Serials.SubscriptionID
-						Inner JOin Department On Categorize_Serials.DepartmentID=Department.DepartmentID) as asd
+						Inner JOin Department On Categorize_Serials.DepartmentID=Department.DepartmentID) as subt
+						Inner Join Distributor On subt.DistributorID=Distributor.DistributorID) as asd
 					Left JOin
 						(Select Category_Serials_Program.SubscriptionID,CategoryID_Program,Category_Serials_Program.ProgramID,NumberofItemsReceived_Prog,DepartmentID,(Usage_Stat_Employee_Prog+Usage_Stat_Student_Prog) as Usage_stat_Prog from Subscription Inner Join Category_Serials_Program ON Subscription.SubscriptionID=Category_Serials_Program.SubscriptionID Inner Join Program ON Category_Serials_Program.ProgramID=Program.ProgramID 
 						Inner Join Organization On Program.OrganizationID=Organization.OrganizationID) as dsa On asd.DepartmentID=dsa.DepartmentID
