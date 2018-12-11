@@ -7,7 +7,8 @@ if(isset($_SESSION['current_user']))
 }
 
 
-if(isset($_POST['submit'])){
+if(isset($_POST['UserName']))
+{
     
     $username = $_POST['UserName'];
     $password = md5($_POST['Password']);
@@ -15,8 +16,10 @@ if(isset($_POST['submit'])){
     
     $sql = "SELECT * from [User] WHERE UserName = ? AND Password = ?";
     $query=sqlsrv_query($conn,$sql,array($username, $password));
-    if(sqlsrv_has_rows($query)){
-        while($row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC)){
+    if(sqlsrv_has_rows($query))
+    {
+        while($row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
+        {
          $dbusername=$row['UserName'];
          $dbrole=$row['Role'];
          $avat=$row['Avatar'];
@@ -38,10 +41,10 @@ if(isset($_POST['submit'])){
             $_SESSION['uID']=$uID;
             header ("Location:index.php");        
     }
-      
-
-    
-
+    else
+    {
+      $_SESSION['error_login']="Invalid Password";
+    }
 }
 	
  ?>
@@ -69,8 +72,18 @@ if(isset($_POST['submit'])){
     
 </head>
 <body>
-  	  <div id="login-page">
-	  	<div class="container">
+         <div id="video_background">
+                      
+              <video id="video_elem" preload="auto" autoplay="true" loop="loop" muted="muted">
+                <source src="video/Library_video.mp4" type="video/mp4">
+                  Video not Supported
+              </video>
+
+          </div>
+          
+          <div id="contentlogin">
+      	  <div id="login-page">
+    	  	<div class="container">
 	  	
 		      <form class="form-login" method="post">
 		        <h2 class="form-login-heading">Sign In now</h2>
@@ -78,14 +91,12 @@ if(isset($_POST['submit'])){
 					<div >
 						<a  class="logo" ><b><span>CL</span>SMS</b></a>
 					</div>
-				
-					
-					  
-		            <input type="text" class="form-control" name="UserName" id="username" placeholder="User ID" autofocus>
+               
+		            <input type="text" class="form-control" name="UserName" id="username" placeholder="Username" autofocus required>
 		            <br>
-		            <input type="password" class="form-control" name="Password" id="password" placeholder="Password">
+		            <input type="password" class="form-control" name="Password" id="password" placeholder="Password" required>
 		           
-		            <button class="btn btn-theme btn-block" name="submit" value="submit" type="submit"  style="margin-top: 20px;"><i class="fa fa-lock"></i> SIGN IN</button>
+		            <button class="btn btn-theme btn-block" name="submit" type="submit"  style="margin-top: 20px;"><i class="fa fa-lock"></i> SIGN IN</button>
 		            <hr>
 		            
 		            <div >
@@ -93,43 +104,28 @@ if(isset($_POST['submit'])){
 		            </div>
 		            
 		        </div>
-		          <!-- Modal -->
-		          <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
-		              <div class="modal-dialog">
-		                  <div class="modal-content">
-		                    
-		                      
-		                      
-		                  </div>
-		              </div>
-		          </div>
+		           <?php 
+                  if(isset($_SESSION['error_login']))
+                    {
+                      echo '
+                           <div class="alert alert-danger alert-dismissible center" style="margin-bottom:30px">
+                              <strong>'.$_SESSION['error_login'].'</strong>
+                            </div>
+                      ';
+
+                      $_POST=array();//UNSET POST VARIABLES
+                      unset($_SESSION['error_login']);
+                    }
+
+                 ?>
 		
 		      </form>	  	
 	  	
 	  	</div>
 	  </div>
+    </div>
 <script src="lib/jquery/jquery.min.js"></script>
   <script src="lib/bootstrap/js/bootstrap.min.js"></script>
   <!--BACKSTRETCH-->
   <!-- You can use an image of whatever size. This script will stretch to fit in any screen size.-->
-  <script type="text/javascript" src="lib/jquery.backstretch.min.js"></script>
-    <script>
-        $.backstretch("img/login-bg.jpg", {speed: 500});
-    </script>
   </body>
-<script>
-    $(function(){
-        $('#loginid_form').on('submit',function(event){
-        event.preventDefault();
-        
-        if($("#username").val()=="" && $("#password").val()==""){
-            alert("Username and Password is required!")
-        }
-        else{
-            
-        }
-                
-    });
-     
-     });
-</script>

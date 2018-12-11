@@ -2000,7 +2000,7 @@ ul li {
     font-weight: 300;
 }
 .login-wrap {
-    padding: 20px;
+    padding: 20px 20px 5px 20px;
 }
 .login-wrap .registration {
     text-align: center;

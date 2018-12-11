@@ -34,7 +34,7 @@
     <!--header start-->
     <header class="header black-bg">
       <!--logo start-->
-      <a href="index.php" class="logo"><b><span>CL</span>SMS</b></a>
+      <a href="index.php" class="logo" style="margin-top: 12px"><b><span>CL</span>SMS</b></a>
       <!--logo end-->
       <div class="nav notify-row" id="top_menu">
       </div>

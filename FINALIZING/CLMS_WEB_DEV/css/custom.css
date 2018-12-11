@@ -486,3 +486,14 @@ label
 {
 color:#3C3838;
 }
+
+.disb_click,.ser_click,.org_click
+{
+	font-weight: bold;
+	cursor:pointer;
+/*	color: #551A8B  ;*/
+}
+.disb_click:hover,.ser_click:hover,.org_click:hover
+{
+	color: #2A5DB0;
+}
