@@ -13,7 +13,7 @@ include 'Includes/header.php';
 <div class=" custom-panelbox">
 
 	<div class="">
-		<h5 class="fa fa-archive tag_style">Archiving:</h5>
+		<h5 class="fa fa-archive tag_style" style="color: black;"> Archiving:</h5>
 		<a href="javascript:void(0)" id="archive_btn"  style="font-size: 13px;margin-left: 10px;">Archive Now</a>
 		<h4 class="dividerr"></h4>
 	</div>

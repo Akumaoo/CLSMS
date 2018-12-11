@@ -12,7 +12,7 @@ include 'Includes/header.php';
 <div class="custom-panelbox">
 	<div class="">
 		<div class="">
-			<h5 class="fa fa-user-plus tag_style">Manage Users:</h5>
+			<h5 class="fa fa-user-plus tag_style" style="color: black;"> Manage Users:</h5>
 			<a href="javascript:void(0)" data-toggle="modal" data-target="#add_user_modal"  style="font-size: 13px;margin-left: 10px;">Add User</a>
 			<h4 class="dividerr"></h4>
 		</div>

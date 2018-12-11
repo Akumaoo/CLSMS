@@ -12,7 +12,7 @@ include 'Includes/header.php';
 <div class=" custom-panelbox">				
 	<div class="">
 		<div class="">
-			<h4 class="fa fa-building tag_style"> Manage Distributors:</h4>
+			<h4 class="fa fa-building tag_style" style="color: black;"> Manage Distributors:</h4>
 			<a href="javascript:void(0)" data-toggle="modal" data-target="#add_Distributor_data_Modal" style="font-size: 13px;margin-left: 10px;">Add New Distributor</a>
 
 			<h4 class="dividerr"></h4>

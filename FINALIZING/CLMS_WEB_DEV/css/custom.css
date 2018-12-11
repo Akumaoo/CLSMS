@@ -38,7 +38,16 @@ ligth blue color: left sidebar hover:active : #4ECDC4;
 	margin-left: 25px;
 	margin-top: 15px;
 }
-
+.custom-notif
+{
+	background:#FFFFFF;
+    border: 2px solid #DCDBD7;
+    margin: -3px 0;
+    padding: 30px 20px 35px;
+    min-height:80px;
+    max-height:80px;
+    text-align: center;
+}
 .context{
 	margin-top: 56px;
 	margin-left: 10px;
@@ -94,6 +103,7 @@ ligth blue color: left sidebar hover:active : #4ECDC4;
 	margin-top: 26px;
 	padding:0 12px;
 	width:auto;
+
 }
 .tag_style{
 	padding-top:10px;
@@ -111,7 +121,7 @@ ligth blue color: left sidebar hover:active : #4ECDC4;
 }
 .form_custom{
 
-	padding:66px;
+	padding:40px;
 }
 .form_remove_up_down{
 	-webkit-appearance: none; 
@@ -139,8 +149,27 @@ input[type=number]::-webkit-outer-spin-button {
 .custom-boxxx{
  margin-top:-5px;
  background: #ffffff;
-	box-shadow: 0px 3px 2px #aab2bd;
+ border: 4px solid #DCDBD7;
+box-shadow: 0px 3px 2px #aab2bd;
 max-height:170px;
+}
+.newdropdown{
+ display: block;
+  width: 100%;
+  height: 34px;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+  -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+       -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+          transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
 
 .custom-panel{
@@ -153,26 +182,59 @@ max-height:170px;
 	width:100%;
 
 }
-.custom-box{
-	background: #ffffff;
-	box-shadow: 0px 0px 0px #aab2bd;
-	padding-top: 0px;
-	padding-bottom: 0px;
-	min-height:55px;
-	width:100%;
 
+
+.custom-upperbox{
+	background:#FFFFFF;
+	border: 4px solid #DCDBD7;
+	box-shadow: 0px 2px 3px 2px #aab2bd;
+	margin-top: -12px;
+	margin-bottom: 5px;
+	min-height:80px;
+	max-height:80px;
+	text-align: center;
+}
+.custom-midbox{
+	background:#FFFFFF;
+	border: 4px solid #DCDBD7;
+	box-shadow: 0px 2px 3px 2px #aab2bd;
+	margin-top: -3px;
+	margin-bottom: 25px;
+	min-height:130px;
+	max-height:130px;
+	text-align: center;
+}
+.custom-subsbox{
+	background:#FFFFFF;
+	border-bottom: 2px solid grey;
+	min-height: 330px;
+	max-height: 330px;
+	text-align: center;
+	width: 100%;
+}
+.custom-overview-panel
+{
+	background:#DCDBD7;
+	border: 0px solid #DCDBD7;
+	margin-top: -3px;
+	margin-bottom: 25px;
+	min-height:130px;
+	max-height:130px;
+
+	width: 80%;
 }
 
 .custom-boxx{
 	
 	background: #ffffff;
 	box-shadow: 0px 2px 3px 2px #aab2bd;
+	margin-top: -5px;
 	padding-top: 0px;
 	padding-bottom: 0px;
-	min-height:400px;
+	min-height:350px;
 	width:100%;
 }
-.custom-boxxx{
+.custom-boxxxx{
 	background: #ffffff;
 	box-shadow: 0px 2px 3px 2px #aab2bd;
 	padding-top: 0px;
@@ -183,14 +245,35 @@ max-height:170px;
 }
 .custom-panelbox{
 	background: #ffffff;
+	border: 4px solid #DCDBD7;
 	box-shadow: 0px 2px 3px 2px #aab2bd;
-	margin-top:10px;	
+	margin-top:2px;	
 	margin-right: -15px;
 	margin-left: -15px;
-	min-height: 490px;
+	min-height: 590px;
 
 }
-
+.custom-panelbox1
+{
+	background: #ffffff;
+	border: 4px solid #DCDBD7;
+	box-shadow: 0px 2px 3px 2px #aab2bd;
+	margin-top:2px;	
+	min-height: 230px;
+}
+.custom-panelbox2
+{
+    background: #ffffff;
+    border: 4px solid #DCDBD7;
+    box-shadow: 0px 2px 3px 2px #aab2bd;
+    padding-top: 0px;
+    min-height: 580px;
+    overflow: auto;
+}
+.custom-overflow
+{
+	overflow: auto;
+}
 .prof-text{
 	position: center;
 	font-size: 18px !important;
@@ -216,12 +299,15 @@ max-height:170px;
 	margin-top:20px;
 	margin-bottom:-8px;
 	text-align:center;
+	color: black;
 }
 .remove-margin{
 	margin:0 !important;
 }
-table{
+table{ 
 	width: 100% !important;
+	color: black;
+
 }
 #c_pack,#c_pack_multiple
 {
@@ -257,7 +343,8 @@ p.RS_comment{
 }
 .rs-notif{
 	padding: 0;
-	height: 89px;
+	height: 20px;
+	width: 100%;
 	text-align: left;
 	float:left;
 
@@ -342,6 +429,10 @@ cursor:pointer;
 .progress-bar{
 	background-color: #21b0f1;
 	font-size: 15px;
+}
+.txt-color
+{
+	color: #21b0f1;
 }
 .Selection{
 	background-color:#e7e4e4;

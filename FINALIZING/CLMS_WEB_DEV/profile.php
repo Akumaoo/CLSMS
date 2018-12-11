@@ -4,11 +4,11 @@ include 'includes/header.php';
 
 ?>
 
-<div class="container-fluid">
-<div class="row custom-panelbox" style="min-height: 269px">
+<div class="">
+<div class="custom-panelbox1">
 <?php 
   echo '
-     <div class="centered profile-pic "><img src="img/Avatars/'.$_SESSION['Avatar'].'"weight="200px" height="200px" alt="No-Image"></div>
+     <div class="centered profile-pic "><img src="img/Avatars/'.$_SESSION['Avatar'].'"weight="180px" height="180px" alt="No-Image"></div>
     <h4 class="centered prof-text ">'.$_SESSION['current_user'].'</h4>
      ';
  
@@ -23,9 +23,9 @@ include 'includes/header.php';
 </div>
 
       <!---TAb-->
-<div class="row content-panel">
+<div class="content-panel">
 
-            <div class="panel-heading">
+            <div class="">
               <ul class="nav nav-tabs nav-justified">
                 <li class="active">
                   <a data-toggle="tab" href="#allusers">ALL USERS</a>

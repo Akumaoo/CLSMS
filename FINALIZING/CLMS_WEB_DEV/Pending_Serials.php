@@ -24,7 +24,7 @@ else
 <div class="custom-panelbox">			
 	<div class="">
 		<div class="">
-			<h5 class="fa fa-spinner tag_style"> Pending Serial: <span id="dept"><?php echo $dept; ?></span><span id="date" hidden><?php echo $date ?></span> <span id="seen" hidden><?php echo $seen?></span></h5>
+			<h5 class="fa fa-spinner tag_style" style="color: black;"> Pending Serial: <span id="dept"><?php echo $dept; ?></span><span id="date" hidden><?php echo $date ?></span> <span id="seen" hidden><?php echo $seen?></span></h5>
 			<h4 class="dividerr"></h4>
 		</div>
 

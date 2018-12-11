@@ -12,7 +12,7 @@ include 'Includes/header.php';
 <div class="custom-panelbox">			
 	<div class="">
 		<div class="">
-			<h5 class="fa fa-university tag_style"> Departments:</h5>
+			<h5 class="fa fa-university tag_style" style="color: black;"> Departments:</h5>
 			<a href="javascript:void(0)" data-toggle="modal" data-target="#add_Department_data_Modal"  style="font-size: 13px;margin-left: 10px;">New Department</a>
 			<h4 class="dividerr"></h4>
 		</div>

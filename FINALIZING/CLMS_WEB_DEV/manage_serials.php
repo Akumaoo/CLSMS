@@ -12,7 +12,7 @@ include 'Includes/header.php';
 <div class=" custom-panelbox">				
 	<div class="">
 		<div class="">
-			<h4 class="fa fa-plus-square tag_style"> Serials:</h4>
+			<h4 class="fa fa-plus-square tag_style" style="color: black;"> Serials:</h4>
 			<a href="javascript:void(0)" data-toggle="modal" data-target="#Add_Serial_Modal"  style="font-size: 13px;margin-left: 10px;">Add New Serial</a>
 			<h4 class="dividerr"></h4>
 		</div>

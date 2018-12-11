@@ -13,7 +13,7 @@ include 'Includes/header.php';
 <div class="row custom-panelbox">			
 	<div class="">
 		<div class="">
-			<h4 class="fa fa-truck tag_style "> Manage Subscription:</h4>
+			<h4 class="fa fa-truck tag_style "style="color: black;"> Manage Subscription:</h4>
 			<a href="javascript:void(0)" id="subs"  style="font-size: 13px;margin-left: 10px;">Subscribe Now!</a>
 			<h4 class="dividerr"></h4>
 		</div>

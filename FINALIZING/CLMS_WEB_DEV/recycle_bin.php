@@ -35,7 +35,7 @@ if(isset($_POST['pass']))
 <div class=" custom-panelbox">				
 	<div class="">
 		<div class="">
-			<h4 class="fa fa-recycle tag_style"> Recycle Bin:</h4>
+			<h4 class="fa fa-recycle tag_style" style="color: black;"> Recycle Bin:</h4>
 			<?php 
 				if(isset($_SESSION['verif_rb']))
 				{
