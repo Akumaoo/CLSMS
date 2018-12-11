@@ -207,7 +207,7 @@ max-height:170px;
 }
 .custom-subsbox{
 	background:#FFFFFF;
-	border-bottom: 2px solid grey;
+	/*border-bottom: 2px solid grey;*/
 	min-height: 330px;
 	max-height: 330px;
 	text-align: center;
