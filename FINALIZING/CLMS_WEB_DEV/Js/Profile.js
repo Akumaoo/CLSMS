@@ -24,6 +24,8 @@ $(function(){
 					}
 
 					$('#msg_scs').removeClass('collapse');
+					// $('#msg_scs').focus();
+					// $('.panel-body').animate({ scrollTop: $('#msg_scs').offset().top }, 'fast');
 
 					$('#FN').val(data.FN);
 					$('#LN').val(data.LN);

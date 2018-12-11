@@ -187,4 +187,4 @@ include 'includes/header.php';
 include 'Modals/Reset_Pass.php';
 include 'includes/footer.php';
  ?>
-<script src="Js/Profile.js?v=3" type="text/javascript"></script>
+<script src="Js/Profile.js?v=33" type="text/javascript"></script>

@@ -14,21 +14,21 @@
 				 				<div class="form-group ">
 				 					<label for="Dname" class="control-label col-lg-4">Distributor Name</label>
 				 					<div class="col-lg-8">
-				 						<input type="text" class="form-control" name="Dname" id="Dname">
+				 						<input type="text" class="form-control" name="Dname" id="Dname" required>
 				 					</div>
 				 				</div>
 
 				 				<div class="form-group ">
 				 					<label for="NOI" class="control-label col-lg-4">Name Of Incharge</label>
 				 					<div class="col-lg-8">
-				 						<input type="text" class="form-control" name="NOI" id="NOI">
+				 						<input type="text" class="form-control" name="NOI" id="NOI" required>
 				 					</div>
 				 				</div>
 
 				 				<div class="form-group ">
 				 					<label for="CN" class="control-label col-lg-4">Contact Number</label>
 				 					<div class="col-lg-8">
-				 						<input type="number" class="form-control" name="CN" id="CN">
+				 						<input type="number" class="form-control" name="CN" id="CN" required>
 				 					</div>
 				 				</div>
 

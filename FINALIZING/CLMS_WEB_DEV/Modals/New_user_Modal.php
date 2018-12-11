@@ -15,42 +15,42 @@
 				 			<div class="form-group">
 								<label for="FN" class="control-label col-lg-4">First Name</label>
 								<div class="col-lg-8">
-									<input type="text" class="form-control" name='FN' id="FN">
+									<input type="text" class="form-control" name='FN' id="FN" required>
 							</div>
 
 							</div>	
 							<div class="form-group">
 								<label for="LN" class="control-label col-lg-4">Last Name</label>
 								<div class="col-lg-8">
-									<input type="text" class="form-control" name='LN' id="LN">
+									<input type="text" class="form-control" name='LN' id="LN" required>
 								</div>
 							</div>	
 
 							<div class="form-group">
 								<label for="mail" class="control-label col-lg-4">Email</label>
 								<div class="col-lg-8">
-									<input type="email" class="form-control" name='mail' id="mail">
+									<input type="email" class="form-control" name='mail' id="mail" required>
 								</div>
 							</div>
 
 							<div class="form-group">
 								<label for="username" class="control-label col-lg-4">Username</label>
 								<div class="col-lg-8">
-									<input type="text" class="form-control" name='username' id="username">
+									<input type="text" class="form-control" name='username' id="username" required>
 								</div>
 
 							</div>	
 							<div class="form-group">
 								<label for="pass1" class="control-label col-lg-4">Password</label>
 								<div class="col-lg-8">
-									<input type="password" class="form-control" name='pass1' id="pass1">
+									<input type="password" class="form-control" name='pass1' id="pass1" required>
 								</div>
 
 							</div>
 							<div class="form-group">
 								<label for="pass2" class="control-label col-lg-4">Confirm Password</label>
 								<div class="col-lg-8">
-									<input type="password" class="form-control " name='pass2' id="pass2">
+									<input type="password" class="form-control " name='pass2' id="pass2" required>
 								</div>
 							</div>	
 							<div class="form-group">
@@ -91,7 +91,7 @@
 							<div class="form-group">
 								<label for="ava" class="control-label col-lg-4">Avatar</label>
 								<div class="col-lg-8">
-									<input type="file" class="form-control " name='ava' id="ava">
+									<input type="file" class="form-control " name='ava' id="ava" required>
 								</div>
 							</div>
 

@@ -248,7 +248,7 @@
                                               $disblist_ID=array();
                                               $disblist_names=array();
                                               $inc=0;
-                                              $sqldisb="Select DistributorID,DistributorName From Distributor";
+                                              $sqldisb="Select DistributorID,DistributorName From Distributor Where Remove IS NULL";
                                               $querydisb=sqlsrv_query($conn,$sqldisb,array());
                                               while($row=sqlsrv_fetch_array($querydisb,SQLSRV_FETCH_ASSOC))
                                               {
