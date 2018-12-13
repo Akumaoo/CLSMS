@@ -140,39 +140,42 @@ class PDF extends FPDF
 			$c_SY=$c_year.'-'.date('Y',strtotime('+1 year',strtotime($date_today)));
 		}
 	    // Logo
-	    $this->Image('../../img/icon.png',10,11,30);
+	    
 	    // Arial bold 15
-	    $this->SetFont('Arial','',12);
+	    $this->AddFont('Candara','B','Candara Bold.php');  
+        $this->SetFont('Candara','B',15); 
 	    // Move to the right
 	    // Title
-	     $this->Cell(203,6,'UNIVERSITY OF SAINT LOUIS',0,1,'C');
-	    $this->Cell(203,6,'UNIVERSITY LIBRARIES',0,1,'C');
-	    $this->Cell(203,6,'OFFICE OF THE COLLECTION DEVELOPMENT',0,0,'C');
-	    $this->Ln(10);
+	    $this->Cell(189,5,'University of Saint Louis Tuguegarao',0,1,'C');
 
-	    $this->SetFont('Arial','B',13);
-	    $this->Cell(203,6,'USAGE STATISTICS OF '.strtoupper($deptID).' DEPARTMENT',0,1,'C');
+	    $this->AddFont('Candara','','Candara.php'); 
+	    $this->SetFont('Candara','',12);
+	    $this->Cell(189,5,'University Libraries',0,1,'C');
+	    $this->Cell(189,4,'Office of the Collection Development',0,0,'C');
+	    $this->Ln(6);
+
+	    $this->SetFont('Times','B',13);
+	    $this->Cell(189,6,'USAGE STATISTICS OF '.strtoupper($deptID).' DEPARTMENT',0,1,'C');
 
 	    $this->SetFont('Arial','',12);
-	    $this->Cell(203,6,'SY ['.$c_SY.']',0,0,'C');
+	    $this->Cell(189,6,'SY ['.$c_SY.']',0,0,'C');
 	    // Line break
-	    $this->Ln(16);
+	    $this->Ln(10);
 	}
 
 	// Page footer
 	function Footer()
 	{
-		$date_today=date('M d,Y');
-	    // Position at 1.5 cm from bottom
-	    $this->SetY(-15);
-	    // Arial italic 8
-	    $this->SetFont('Arial','I',8);
-	    // Page number
-	    $this->Cell(0,3,'Page '.$this->PageNo().'/{nb}',0,1,'C');
-
-	    // Date
-	    $this->SetFont('Arial','I',8);
-	    $this->Cell(0,3,$date_today,0,0,'C');
+		date_default_timezone_set('Asia/Singapore');
+        // Position at 1.5 cm from bottom
+        $this->SetY(-15);
+        // Arial italic 8
+        $this->SetFont('Arial','I',9);
+        // Page number
+        $date = date("m/d/ Y");
+        $time = date("g:i a");
+        $this->Cell(0, 10, 'Report generated on '.$date .' at ' .$time, 0, false, 'C', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0,10,'Page '.$this->PageNo().'	   Total pages: {nb}',0,0,'R');
 	}
 
 	function checkType($dept)
