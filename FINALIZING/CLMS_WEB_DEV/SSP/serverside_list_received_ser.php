@@ -1,6 +1,14 @@
 <?php 
 require '../php_codes/db.php';
-$dept=$_POST['dept'];
+
+function sanitize($str)
+{
+	$sanitize_str=htmlentities(str_replace("'","", str_replace('"', '', $str)));
+
+	return $sanitize_str;
+}
+
+$dept=sanitize($_POST['dept']);
 
 $sqltype="Select Count(*) as nums from Department INNER Join Organization ON Department.DepartmentID=Organization.DepartmentID Where Department.DepartmentID=?";
 $querytype=sqlsrv_query($conn,$sqltype,array($dept));

@@ -6,10 +6,10 @@ require 'db.php';
 
 if(!empty($_POST))
 {
-	$deptID=$_POST['deptID'];
+	$deptID=ltrim($_POST['deptID']);
 	if(!empty($_POST['orgID']))
 	{
-		$orgID=$_POST['orgID'];
+		$orgID=ltrim($_POST['orgID']);
 		$progID_list_string=$_POST['progID'];
 
 		$progID_list_array=explode(',',$progID_list_string);
@@ -47,7 +47,7 @@ if(!empty($_POST))
 						for($x=0;$x<count($progID_list_array);$x++)
 						{
 							$insertsqlprog="Insert INTO Program(ProgramID,OrganizationID) VALUES(?,?)";
-							$queryinsertprog=sqlsrv_query($conn,$insertsqlprog,array($progID_list_array[$x],$orgID));
+							$queryinsertprog=sqlsrv_query($conn,$insertsqlprog,array(ltrim($progID_list_array[$x]),$orgID));
 						}
 
 						if($queryinsertprog)
@@ -97,9 +97,17 @@ if(!empty($_POST))
 					if($queryinsertorg)
 					{
 						for($x=0;$x<count($progID_list_array);$x++)
-						{
-							$insertsqlprog="Insert INTO Program(ProgramID,OrganizationID) VALUES(?,?)";
-							$queryinsertprog=sqlsrv_query($conn,$insertsqlprog,array($progID_list_array[$x],$orgID));
+						{	
+							if(CheckDup('Program','ProgramID',$progID_list_array[$x]))
+							{
+								$insertsqlprog="Insert INTO Program(ProgramID,OrganizationID) VALUES(?,?)";
+								$queryinsertprog=sqlsrv_query($conn,$insertsqlprog,array(ltrim($progID_list_array[$x]),$orgID));	
+							}
+							else
+							{
+								$queryinsertprog=true;
+							}
+
 							if($queryinsertprog)
 							{
 								$scs['status']='success';

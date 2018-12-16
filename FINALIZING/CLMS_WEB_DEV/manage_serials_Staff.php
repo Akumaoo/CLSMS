@@ -54,7 +54,7 @@ else
 			<table cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover" id="table_MS">
 				<thead class="thead_theme">
 					<?php 
-					if($datatype=='Single')
+					if($type=='Single')
 					{
 						echo '
 							<tr>

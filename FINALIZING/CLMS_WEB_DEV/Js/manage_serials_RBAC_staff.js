@@ -222,5 +222,24 @@ $(function(){
 		action: 'fpdf/Reports/Staff_List_Ser.php'
 	});
 
+	$.ajax({
+		url:"php_codes/select_dept_array.php",
+		method:"POST",
+		data:{type:'check_dept',dept:$dept},
+		success:function(data){
+			if(data.orgs!='')
+			{
+				$('.select_org_post').removeClass('collapse');
+				$('.org_list_post').append(data.orgs);
+
+				$('.org_list_post').append('<div id="script_org_post"></div>');
+
+				var s=document.createElement("script");
+				s.type='text/javascript';
+				s.src='Js/script_org_post_array.js';
+				$('#script_org_post').append(s);
+			}
+		}
+	});
 
 });

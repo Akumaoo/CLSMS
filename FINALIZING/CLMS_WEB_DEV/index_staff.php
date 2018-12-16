@@ -198,6 +198,7 @@ else
               <div class="container-fluid">
               <div class="row">
               <div class="col-lg-10 col-lg-offset-1">
+                <span class="fa fa-print fa-lg cog_action" id="gen_rep_rt"></span>
                 <table cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover" id="table_RS_STAFF" ">
                 <thead class="thead_theme">
                   <?php 
@@ -251,4 +252,6 @@ else
 </div>
 </div>
 </div>
-<?php include 'Modals/Receive_Modal.php' ?>
+<?php include 'Modals/Receive_Modal.php';
+      include 'Modals/Print_modal.php';
+ ?>

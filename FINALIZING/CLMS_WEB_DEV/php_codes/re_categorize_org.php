@@ -1,8 +1,9 @@
 <?php 
 require 'db.php';	
-// $_POST['list']='BS,IT';
-// // $_POST['list']='BS';
-// $_POST['orgID']='asd';
+// $_POST['list']='BLIS,BSCS,BSIT';
+// $_POST['list']='BLIS,BSCS';
+// $_POST['list']='B,B,C';
+// $_POST['orgID']='SICS';
 if(!empty($_POST))
 {
 	$list_string=$_POST['list'];
@@ -42,6 +43,21 @@ if(!empty($_POST))
 		return $key;
 	}
 	
+	function CheckDup($table,$PK,$Did)
+	{
+		require 'db.php';
+		$sql="Select * from ".$table." Where ".$PK."=?";
+		$query=sqlsrv_query($conn,$sql,array($Did));
+		if(sqlsrv_has_rows($query))
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+
 	if(checkorg($orgID))
 	{
 		// GET CURRENT LIST PROGRAMS
@@ -65,7 +81,8 @@ if(!empty($_POST))
 			if(in_array($clist[$x],$list_array))
 			{
 				$key=getKey($clist[$x],$list_array);
-			 	unset($list_array[$key]);			
+			 	unset($list_array[$key]);
+			 	$list_array=array_values($list_array);	//RE-ARRANGE ARRAY KEYS		
 			}
 			else
 			{
@@ -74,7 +91,7 @@ if(!empty($_POST))
 			}
 		}
 
-		$new_array_list=array_values($list_array);//RE-ARRANGE ARRAY KEYS
+		$new_array_list=array_values($list_array);//FINAL RE-ARRANGE ARRAY KEYS
 
 
 		// INSERTING THE FILTERED NEW PROG LIST
@@ -82,9 +99,17 @@ if(!empty($_POST))
 		{
 			for($z=0;$z<count($new_array_list);$z++)
 			{
-				$sqlinsert="Insert Into Program(ProgramID,OrganizationID) VALUES(?,?)";
-				$insertquery=sqlsrv_query($conn,$sqlinsert,array($new_array_list[$z],$orgID));
+				if(CheckDup('Program','ProgramID',$new_array_list[$z]))
+				{
 
+					$sqlinsert="Insert Into Program(ProgramID,OrganizationID) VALUES(?,?)";
+					$insertquery=sqlsrv_query($conn,$sqlinsert,array(ltrim($new_array_list[$z]),$orgID));
+
+				}
+				else
+				{
+					$insertquery=true;
+				}
 			}
 		}
 		else

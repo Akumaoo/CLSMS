@@ -32,7 +32,7 @@
 				 				</div>
 
 				 				<div class="form-group form-group-center">
-				 					<label for="type" class="control-label col-lg-3">Type</label>
+				 					<label for="type" class="control-label col-lg-3">Origin</label>
 				 					<div class="col-lg-6">
 				 						<select name="orig" id="orig">
 				 						<option value="Local">Local</option>

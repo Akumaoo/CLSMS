@@ -5,18 +5,27 @@ require('../../php_codes/db.php');
 
 // $deptID="ELEM";
 // $BP_size="A4";
+function sanitize($str)
+{
+	$sanitize_str=htmlentities(str_replace("'","", str_replace('"', '', $str)));
+
+	return $sanitize_str;
+}
+
 if(isset($_POST['s_f']))
 {
-$sort=$_POST['s_f'];
-$sb=$_POST['sort_by'];
+$sort=sanitize($_POST['s_f']);
+$sb=sanitize($_POST['sort_by']);
 // DEPT/DISB
-$tb=$_POST['tb'];
+$tb=sanitize($_POST['tb']);
 // COLLEGE DATA /DISB DATA
-$dt=$_POST['dt'];
-$org=$_POST['org'];
-$prog=$_POST['prog'];
-$type_report=$_POST['t_r'];
-$BP_size=$_POST['BP_size'];
+$dt=sanitize($_POST['dt']);
+$org=sanitize($_POST['org']);
+$prog=sanitize($_POST['prog']);
+$type_report=sanitize($_POST['t_r']);
+$SD=sanitize($_POST['SD']);
+$ED=sanitize($_POST['ED']);
+$BP_size=sanitize($_POST['BP_size']);
 $checkpass=false;
 
 class PDF extends FPDF
@@ -282,6 +291,9 @@ class PDF extends FPDF
 		
 		global $checkpass;
 
+		global $ED;
+		global $SD;
+
 
 
 
@@ -322,28 +334,77 @@ class PDF extends FPDF
 
 		if($type_report=='RT' || $type_report=='DT')
 		{
+
 			if($type_report=='RT')
 			{
-				$condition="AND (asd.Status='Received' OR dsa.Status_Prog='Received')";
+
+				$first_condition="AND (asd.Status='Received' OR dsa.Status_Prog='Received')";
+				
+				if($SD!=""  && $ED!="")
+				{
+					$second_condition=" Date_Receive BETWEEN '".$SD."' AND '".$ED."'";
+				}
+				else
+				{
+					$second_condition="";
+				}
+
 			}
 			else
 			{
-				$condition="";
+				$first_condition="";
+
+				if($SD!=""  && $ED!="")
+				{
+					$second_condition=" Delivery_Date BETWEEN '".$SD."' AND '".$ED."'";
+				}
+				else
+				{
+					$second_condition="";
+				}
+			}
+
+			if($sort=='Sort')
+			{
+				if($SD!=""  && $ED!="")
+				{
+					$add_ext='WHERE '.$second_condition.' '.$final_ext; 
+				}
+				else
+				{
+					$add_ext=$final_ext; 
+				}
+			}
+			else
+			{
+				if($SD!=""  && $ED!="")
+				{
+					$add_ext=$final_ext.' AND '.$second_condition;
+				}
+				else
+				{
+					$add_ext=$final_ext; 
+				}	
 			}
 
 			$sql="
-				Select DistributorName,DepartmentID,ProgramID,SerialName,TypeName,VolumeNumber,IssueNumber,DateofIssue from
+				Select DistributorName,DepartmentID,ProgramID,SerialName,TypeName,VolumeNumber,IssueNumber,DateofIssue,Date_Receive,Delivery_Date from
 				(Select 
 				asd.DistributorID,asd.DepartmentID,dsa.ProgramID,
-				asd.SerialName,TypeName,VolumeNumber,IssueNumber,DateofIssue from
-					(Select ReceivedSerialID,ReceiveSerial.DepartmentID,ControlNumber,SerialName,Subscription.DistributorID,TypeName,VolumeNumber,IssueNumber,DateofIssue,Staff_Comment,ReceiveSerial.Remove,ReceiveSerial.Status,Subscription.Status as subs_stat,DateReceiveNotif_Give from  Delivery Inner Join Delivery_Subs On Delivery.DeliveryID=Delivery_Subs.DeliveryID Inner Join Subscription On Delivery_Subs.SubscriptionID=Subscription.SubscriptionID Inner JOin Serial On Subscription.SerialID=Serial.SerialID Inner Join ReceiveSerial on Serial.SerialID=ReceiveSerial.SerialID 
+				asd.SerialName,TypeName,VolumeNumber,IssueNumber,DateofIssue,
+				(CASE
+					WHEN ProgramID IS NULL
+					THEN DateReceiveNotif_Receive
+					ELSE DateReceiveNotif_Receive_Prog
+					END) as Date_Receive,Receive_Date as Delivery_Date from
+					(Select Receive_Date,DateReceiveNotif_Receive,ReceivedSerialID,ReceiveSerial.DepartmentID,ControlNumber,SerialName,Subscription.DistributorID,TypeName,VolumeNumber,IssueNumber,DateofIssue,Staff_Comment,ReceiveSerial.Remove,ReceiveSerial.Status,Subscription.Status as subs_stat,DateReceiveNotif_Give from  Delivery Inner Join Delivery_Subs On Delivery.DeliveryID=Delivery_Subs.DeliveryID Inner Join Subscription On Delivery_Subs.SubscriptionID=Subscription.SubscriptionID Inner JOin Serial On Subscription.SerialID=Serial.SerialID Inner Join ReceiveSerial on Serial.SerialID=ReceiveSerial.SerialID 
 					Inner JOin Department On ReceiveSerial.DepartmentID=Department.DepartmentID WHERE (Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) OR Subscription.Status='OnGoing') AND Receive_Date=DateReceiveNotif_Give) as asd
 					Left Join
-					(Select Organization.DepartmentID,ReceiveSerialID_Program,ReceiveSerial_Program.ProgramID,SerialName,Staff_Comment_Prog,ControlNumber_Prog,Status_Prog,DateReceiveNotif_Give_Prog,ReceiveSerial_Program.Remove from Serial Inner JOin ReceiveSerial_Program On Serial.SerialID=ReceiveSerial_Program.SerialID
+					(Select DateReceiveNotif_Receive_Prog,Organization.DepartmentID,ReceiveSerialID_Program,ReceiveSerial_Program.ProgramID,SerialName,Staff_Comment_Prog,ControlNumber_Prog,Status_Prog,DateReceiveNotif_Give_Prog,ReceiveSerial_Program.Remove from Serial Inner JOin ReceiveSerial_Program On Serial.SerialID=ReceiveSerial_Program.SerialID
 					Inner Join Program on ReceiveSerial_Program.ProgramID=Program.ProgramID 
 					Inner JOin Organization on Program.OrganizationID=Organization.OrganizationID) as dsa ON asd.DepartmentID=dsa.DepartmentID 
-					WHERE (asd.SerialName=dsa.SerialName OR (asd.SerialName IS NOT NULL AND dsa.SerialName IS NULL)) AND (asd.DateReceiveNotif_Give=dsa.DateReceiveNotif_Give_Prog OR (asd.DateReceiveNotif_Give IS NOT NULL AND dsa.DateReceiveNotif_Give_Prog IS NULL)) AND (asd.Remove IS NULL AND dsa.Remove IS NULL) ".$condition.")as T1
-				Inner Join Distributor On T1.DistributorID=Distributor.DistributorID ".$final_ext;
+					WHERE (asd.SerialName=dsa.SerialName OR (asd.SerialName IS NOT NULL AND dsa.SerialName IS NULL)) AND (asd.DateReceiveNotif_Give=dsa.DateReceiveNotif_Give_Prog OR (asd.DateReceiveNotif_Give IS NOT NULL AND dsa.DateReceiveNotif_Give_Prog IS NULL)) AND (asd.Remove IS NULL AND dsa.Remove IS NULL) ".$first_condition.")as T1
+				Inner Join Distributor On T1.DistributorID=Distributor.DistributorID ".$add_ext;
 
 			$query=sqlsrv_query($conn,$sql,array());
 			 while($rows=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))

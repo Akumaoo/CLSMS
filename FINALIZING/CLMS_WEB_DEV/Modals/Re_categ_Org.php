@@ -22,7 +22,10 @@
 				 					</div>
 				 				</div>
 
-				 				<p style="text-align: right;">*NOTE: You can enter multiple Programs with the same Department And Organization by seperating them with comma(",")</p>
+				 				<p style="text-align: left;color:#3C3838">**NOTE**: 
+				 					<br><span style="margin-left: 30px">-You can enter multiple Programs with the same Department And Organization by seperating them with comma(",")</span>
+				 					<br><span style="margin-left: 30px">-You Can Only Re-Categorize Recently Added Programs.</span>
+				 				</p>
 
 
 

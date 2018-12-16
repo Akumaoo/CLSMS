@@ -3,7 +3,7 @@ require('../staff_verify.php');
 require('../fpdf.php');
 require('../../php_codes/db.php');
 
-// $deptID="ELEM";
+// $_POST['dept']="ELEM";
 // $BP_size="A4";
 if(isset($_POST['Dept']))
 {
@@ -25,21 +25,11 @@ if(!empty($_POST['progs']))
 	{
 		if($a==0)
 		{
-			$prog_string.="
-					(CASE
-					WHEN asd.ProgramID IS NULL
-					THEN dsa.ProgramID
-					ELSE asd.ProgramID
-					END)='".sanitize($prog_list[$a])."'";
+			$prog_string.=" ProgramID='".sanitize($prog_list[$a])."'";
 		}
 		else
 		{
-			$prog_string.="OR 
-					(CASE
-					WHEN asd.ProgramID IS NULL
-					THEN dsa.ProgramID
-					ELSE asd.ProgramID
-					END)='".sanitize($prog_list[$a])."'";
+			$prog_string.="OR ProgramID='".sanitize($prog_list[$a])."'";
 		}
 		
 	}
@@ -50,6 +40,8 @@ else
 	$prog_string="";
 }
 
+$SD=sanitize($_POST['SD']);
+$ED=sanitize($_POST['ED']);
 
 class PDF extends FPDF
 {	
@@ -196,7 +188,7 @@ class PDF extends FPDF
 	    $this->Ln(6);
 
 	    $this->SetFont('Times','B',13);
-	    $this->Cell(189,6,'USAGE STATISTICS OF '.strtoupper($deptID).' DEPARTMENT',0,1,'C');
+	    $this->Cell(189,6,'LIST OF TITLES RECEIVED BY '.strtoupper($deptID).' DEPARTMENT',0,1,'C');
 
 	    $this->SetFont('Arial','',12);
 	    $this->Cell(189,6,'SY ['.$c_SY.']',0,0,'C');
@@ -239,137 +231,123 @@ class PDF extends FPDF
 		return $type;
 	}
 	// Load data
-	function LoadData($dept,$emp_stud)
+	function LoadData($dept)
 	{
 		require('../../php_codes/db.php');
 
 		$inc=0;
 		$type=$this->checkType($dept);
+
+		global $deptID;
+		global $SD;
+		global $ED;
 		global $prog_string;
 
-		if($type=='Multiple')
+		if($type=='Single')
 		{
-			if($emp_stud=='Student')
-			{
-				$col='Usage_Stat_Student_Prog';
-				$col_tag_mag='Student_Magazine';
-				$col_tag_jour='Student_Journal';
-			}
-			else
-			{
-				$col='Usage_Stat_Employee_Prog';
-				$col_tag_mag='Employee_Magazine';
-				$col_tag_jour='Employee_Journal';
-			}
-
-			if($prog_string!="")
-			{
-				$f_ext=" Where (".$prog_string.")";
-			}
-			else
-			{
-				$f_ext="";
-			}
-
-			// echo $f_ext;
-
-	  	 $sql="
-			Select 
-			(CASE
-				WHEN asd.ProgramID IS NULL
-				THEN dsa.ProgramID 
-				ELSE asd.ProgramID
-				END
-			) as Program,
-			(CASE
-				WHEN ".$col_tag_jour." IS NULL
-				THEN 0
-				ELSE ".$col_tag_jour."
-				END
-			) as ".$col_tag_jour.",
-			(CASE
-				WHEN ".$col_tag_mag." IS NULL
-				THEN 0
-				ELSE ".$col_tag_mag."
-				END
-			)as ".$col_tag_mag."
-			 from 
-				(Select ProgramID,SUM(".$col.") as ".$col_tag_mag." from Serial Inner Join Subscription On Serial.SerialID=Subscription.SerialID
-				 Inner Join Category_Serials_Program On Subscription.SubscriptionID=Category_Serials_Program.SubscriptionID
-				WHERE (Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) OR Subscription.Status='OnGoing') AND (Subscription.Remove IS NULL AND Subscription.Archive IS NULL)
-				AND TypeName='Magazine' Group By ProgramID) as asd
-				Full Join 
-			(Select ProgramID,SUM(".$col.") as ".$col_tag_jour." from Serial Inner Join Subscription On Serial.SerialID=Subscription.SerialID
-				 Inner Join Category_Serials_Program On Subscription.SubscriptionID=Category_Serials_Program.SubscriptionID
-				WHERE (Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) OR Subscription.Status='OnGoing') AND (Subscription.Remove IS NULL AND Subscription.Archive IS NULL)
-				AND TypeName='Journal' Group By ProgramID) as dsa On asd.ProgramID=dsa.ProgramID ".$f_ext;
-
-			$query=sqlsrv_query($conn,$sql,array());
-			 while($rows=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
-			 {
-			   		$data[$inc][0]=$rows['Program'];
-			   		$data[$inc][1]=$rows[$col_tag_jour];
-			   		$data[$inc][2]=$rows[$col_tag_mag];
-			   		$inc++;
-			 }
-			 
+			$ext_Dept=" AND asd.DepartmentID='".$deptID."'";
 		}
 		else
 		{
-			if($emp_stud=='Student')
+			if($prog_string!="")
 			{
-				$col='Usage_Stat_Student';
-				$col_tag_mag='Student_Magazine';
-				$col_tag_jour='Student_Journal';
+				$ext_Dept=" AND asd.DepartmentID='".$deptID."' AND (".$prog_string.")";
 			}
 			else
 			{
-				$col='Usage_Stat_Employee';
-				$col_tag_mag='Employee_Magazine';
-				$col_tag_jour='Employee_Journal';
+				$ext_Dept=" AND asd.DepartmentID='".$deptID."'";
 			}
+		}
 
-	  	 $sql="
-			Select 
-			(CASE
-				WHEN asd.DepartmentID IS NULL
-				THEN dsa.DepartmentID
-				ELSE asd.DepartmentID
-				END
-			)as Department,
-			(CASE
-				WHEN ".$col_tag_mag." IS NULL
-				THEN 0
-				ELSE ".$col_tag_mag."
-				END
-			) as ".$col_tag_mag.",
-			(CASE
-				WHEN ".$col_tag_jour." IS NULL
-				THEN 0
-				ELSE ".$col_tag_jour."
-				END
-			)as ".$col_tag_jour."
-			 from 
-			(Select DepartmentID,SUM(".$col.") as ".$col_tag_mag." from Serial Inner Join Subscription On Serial.SerialID=Subscription.SerialID
-			Inner Join Categorize_Serials On Subscription.SubscriptionID=Categorize_Serials.SubscriptionID
-			WHERE (Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) OR Subscription.Status='OnGoing') AND (Subscription.Remove IS NULL AND Subscription.Archive IS NULL)
-				AND TypeName='Magazine' Group By DepartmentID) as asd	
-			FULL JOIN
-			(Select DepartmentID,SUM(".$col.") as ".$col_tag_jour." from Serial Inner Join Subscription On Serial.SerialID=Subscription.SerialID
-			Inner Join Categorize_Serials On Subscription.SubscriptionID=Categorize_Serials.SubscriptionID
-			WHERE (Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) OR Subscription.Status='OnGoing') AND (Subscription.Remove IS NULL AND Subscription.Archive IS NULL)
-				AND TypeName='Journal' Group By DepartmentID) as dsa ON asd.DepartmentID=dsa.DepartmentID WHERE asd.DepartmentID=?
-				";
+		if($SD!="" AND $ED!="")
+		{
+			$ext_date=" 
+					AND (CASE
+						WHEN ProgramID IS NULl
+						THEN DateReceiveNotif_Receive
+						ELSE DateReceiveNotif_Receive_Prog
+						END) BETWEEN '".$SD."' AND '".$ED."'
+			";
+		}
+		else
+		{
+			$ext_date="";
+		}
 
-			$query=sqlsrv_query($conn,$sql,array($dept));
-			 while($rows=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
-			 {
-			   		$data[$inc][0]=$rows[$col_tag_jour];
-			   		$data[$inc][1]=$rows[$col_tag_mag];
+		$f_ext=$ext_Dept.$ext_date;
+
+  	 $sql="Select ReceivedSerialID,asd.DepartmentID,dsa.ReceiveSerialID_Program,dsa.ProgramID,
+	(CASE
+		WHEN dsa.ProgramID IS NULL
+		THEN asd.ControlNumber
+		ELSE
+			dsa.ControlNumber_Prog
+		END
+	)as ControlNumber,asd.SerialName,TypeName,VolumeNumber,IssueNumber,DateofIssue,
+	(CASE
+		WHEN dsa.ProgramID IS NULL
+		THEN asd.Staff_Comment
+		ELSE 
+			dsa.Staff_Comment_Prog
+		END
+	)as Staff_Comment,
+	(CASE
+		WHEN dsa.ProgramID IS NULL
+		THEN DateReceiveNotif_Receive
+		ELSE DateReceiveNotif_Receive_Prog
+		END) as Date_Received from
+		(Select DateReceiveNotif_Receive,ReceivedSerialID,ReceiveSerial.DepartmentID,ControlNumber,SerialName,TypeName,VolumeNumber,IssueNumber,DateofIssue,Staff_Comment,ReceiveSerial.Remove,ReceiveSerial.Status,Subscription.Status as subs_stat,DateReceiveNotif_Give from Delivery Inner Join Delivery_Subs On Delivery.DeliveryID=Delivery_Subs.DeliveryID  Inner Join Subscription On Delivery_Subs.SubscriptionID=Subscription.SubscriptionID Inner JOin Serial On Subscription.SerialID=Serial.SerialID Inner Join ReceiveSerial on Serial.SerialID=ReceiveSerial.SerialID 
+		Inner JOin Department On ReceiveSerial.DepartmentID=Department.DepartmentID WHERE (Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) OR Subscription.Status='OnGoing') AND Receive_Date=DateReceiveNotif_Give) as asd
+		Left Join
+		(Select DateReceiveNotif_Receive_Prog,Organization.DepartmentID,ReceiveSerialID_Program,ReceiveSerial_Program.ProgramID,SerialName,Staff_Comment_Prog,ControlNumber_Prog,Status_Prog,DateReceiveNotif_Give_Prog,ReceiveSerial_Program.Remove from Serial Inner JOin ReceiveSerial_Program On Serial.SerialID=ReceiveSerial_Program.SerialID
+		Inner Join Program on ReceiveSerial_Program.ProgramID=Program.ProgramID 
+		Inner JOin Organization on Program.OrganizationID=Organization.OrganizationID) as dsa ON asd.DepartmentID=dsa.DepartmentID 
+		WHERE (asd.SerialName=dsa.SerialName OR (asd.SerialName IS NOT NULL AND dsa.SerialName IS NULL)) AND (asd.DateReceiveNotif_Give=dsa.DateReceiveNotif_Give_Prog OR (asd.DateReceiveNotif_Give IS NOT NULL AND dsa.DateReceiveNotif_Give_Prog IS NULL)) AND (asd.Remove IS NULL AND dsa.Remove IS NULL) AND (asd.Status='Received' OR dsa.Status_Prog='Received') ".$f_ext;
+
+		$query=sqlsrv_query($conn,$sql,array());
+		if($type=='Single')
+	 	{
+	 		 while($rows=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
+			 {		
+
+			   		$data[$inc][0]=$rows['ControlNumber'];
+			   		$data[$inc][1]=$rows['SerialName'];
+			   		$data[$inc][2]=$rows['VolumeNumber'];
+			   		$data[$inc][3]=$rows['IssueNumber'];
+			   		if(isset($rows['DateofIssue']))
+			   		{
+			   			$data[$inc][4]=$rows['DateofIssue']->format('Y-m-d');
+			   		}
+			   		else
+			   		{
+			   			$data[$inc][4]=$rows['DateofIssue'];
+			   		}
+			   		$data[$inc][5]=$rows['Date_Received']->format('Y-m-d');
 			   		$inc++;
 			 }
-			 
-		}
+	 	}
+	 	else
+	 	{
+	 		 while($rows=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
+			 {		
+
+			   		$data[$inc][0]=$rows['ProgramID'];
+			   		$data[$inc][1]=$rows['ControlNumber'];
+			   		$data[$inc][2]=$rows['SerialName'];
+			   		$data[$inc][3]=$rows['VolumeNumber'];
+			   		$data[$inc][4]=$rows['IssueNumber'];
+			   		if(isset($rows['DateofIssue']))
+			   		{
+			   			$data[$inc][5]=$rows['DateofIssue']->format('Y-m-d');
+			   		}
+			   		else
+			   		{
+			   			$data[$inc][5]=$rows['DateofIssue'];
+			   		}
+			   		$data[$inc][6]=$rows['Date_Received']->format('Y-m-d');
+			   		$inc++;
+			 }
+	 	}
 
 		return $data;
 	}
@@ -422,53 +400,28 @@ $type=$pdf->checkType($deptID);
 $pdf->AddPage();
 if($type=='Multiple')
 {
-	$header = array('Program','Journal','Magazine');
-	$pdf->SetWidths(array('65','65','65'));
+	$header = array('Program','Control#','Title','Vol#','Issue#','DateOfIssue','ReceivedDate');
+	$pdf->SetWidths(array('30','25','35','15','20','35','35'));
 }
 else
 {
-	$header = array('Journal','Magazine');
-	$pdf->SetWidths(array('65','65'));
+	$header = array('Control#','Title','Vol#','Issue#','DateOfIssue','Received Date');
+	$pdf->SetWidths(array('25','35','15','20','35','35'));
 }
 
 // Data loading STUDENT
-$pdf->SetFont('Arial','B',12);
-$pdf->Cell(203,20,'[STUDENT DATA]',0,1,'C');
-$data=$pdf->LoadData($deptID,'Student');
+$data=$pdf->LoadData($deptID);
 
 if($type=='Single')
-{$pdf->Cell(35);}
+{$pdf->Cell(17);}
 
 $pdf->FancyTableHeader($header);
-
-if($type=='Single')
-{$pdf->Cell(35);}
 
 $fill = false;
 for($x=0;$x<count($data);$x++)
 {
-	$pdf->Row($fill,$data[$x]);
-	$fill = !$fill;
-}
-
-$pdf->LN(15);
-
-// Data loading EMPLOYEE
-$pdf->SetFont('Arial','B',12);
-$pdf->Cell(203,20,'[EMPLOYEE DATA]',0,1,'C');
-$data=$pdf->LoadData($deptID,'Employee');
-
-if($type=='Single')
-{$pdf->Cell(35);}
-
-$pdf->FancyTableHeader($header);
-
-if($type=='Single')
-{$pdf->Cell(35);}
-
-$fill = false;
-for($x=0;$x<count($data);$x++)
-{
+	if($type=='Single')
+	{$pdf->Cell(17);}
 	$pdf->Row($fill,$data[$x]);
 	$fill = !$fill;
 }

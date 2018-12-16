@@ -8,8 +8,8 @@ if($input['action']=='delete')
 	function getSubID($RSID)
 	{
 		require 'db.php';
-		$sql="Select SubscriptionID from Subscription Inner Join ReceiveSerial ON Subscription.SerialID=ReceiveSerial.SerialID Where ReceivedSerialID=? AND Subscription.Status=? AND Subscription.Remove IS NULL";
-		$query=sqlsrv_query($conn,$sql,array($RSID,'OnGoing'));
+		$sql="Select SubscriptionID from Subscription Inner Join ReceiveSerial ON Subscription.SerialID=ReceiveSerial.SerialID Where ReceivedSerialID=? AND Subscription.Remove IS NULL";
+		$query=sqlsrv_query($conn,$sql,array($RSID));
 		$row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
 		$subID=$row['SubscriptionID'];
 		return $subID;

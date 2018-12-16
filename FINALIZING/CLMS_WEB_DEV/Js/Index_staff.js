@@ -34,7 +34,7 @@ $(function(){
 	$('#SA').change(function() {
 		if($(this).is(':checked'))
 		{
-			$('input[type="checkbox"]').each(function(){
+			$('input[name="rs_id"]').each(function(){
 				$(this).prop('checked',true);
 			});
 
@@ -49,8 +49,15 @@ $(function(){
 			
 
 		}
+	});
 
-
+	$('#SA_progs').change(function() {
+		if($(this).is(':checked'))
+		{
+			$('input[name="progs"]').each(function(){
+				$(this).prop('checked',true);
+			});
+		}
 	});
 
 	$('input[type="checkbox"]').on("change",function(){
@@ -124,6 +131,41 @@ $(function(){
  		});
 	 	
 	});
+
+	$('#form_report').attr({
+		action: 'fpdf/Reports/Staff_RT.php'
+	});
+
+	$date_view=false;
+	$('#gen_rep_rt').click(function(){
+		if(!$date_view)
+		{
+			$('#form_report').prepend('<div class="form-group form-group-center"><label for="SD" class="control-label col-lg-5">Start Date:</label><div class="col-lg-5"><input type="date" name="SD" id="SD" style="width: 135px;"></div></div><div class="form-group form-group-center"><label for="ED" class="control-label col-lg-5">End Date:</label><div class="col-lg-5"><input type="date" name="ED" id="ED" style="width: 135px;"></div></div>');
+		}
+		$('#Print_Modal').modal('show');
+		$date_view=true;
+	});
+
+	$.ajax({
+		url:"php_codes/select_dept_array.php",
+		method:"POST",
+		data:{type:'check_dept',dept:$dept},
+		success:function(data){
+			if(data.orgs!='')
+			{
+				$('.select_org_post').removeClass('collapse');
+				$('.org_list_post').append(data.orgs);
+
+				$('.org_list_post').append('<div id="script_org_post"></div>');
+
+				var s=document.createElement("script");
+				s.type='text/javascript';
+				s.src='Js/script_org_post_array.js';
+				$('#script_org_post').append(s);
+			}
+		}
+	});
+
 
 
 });

@@ -3,14 +3,14 @@ require "../db.php";
 
 $input=filter_input_array(INPUT_POST);
 
-// $input['ret_list']=array(2214,2214);
-// $input['ret_list_prog']=array(72,73);
+// $input['ret_list']=array(2253);
+// $input['ret_list_prog']=array();
 // $input['action']='PRS';
 	function getSubID($RSID)
 	{
 		require '../db.php';
-		$sql="Select SubscriptionID from Subscription Inner Join ReceiveSerial ON Subscription.SerialID=ReceiveSerial.SerialID Where ReceivedSerialID=? AND Subscription.Status=? AND Subscription.Remove IS NULL";
-		$query=sqlsrv_query($conn,$sql,array($RSID,'OnGoing'));
+		$sql="Select SubscriptionID from Subscription Inner Join ReceiveSerial ON Subscription.SerialID=ReceiveSerial.SerialID Where ReceivedSerialID=? AND Subscription.Remove IS NULL";
+		$query=sqlsrv_query($conn,$sql,array($RSID));
 		$row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
 		$subID=$row['SubscriptionID'];
 		return $subID;
@@ -89,6 +89,20 @@ $input=filter_input_array(INPUT_POST);
 
 		return $data;
 	}
+
+	function getstat($categID)
+	{
+		require '../db.php';
+
+		$sql="Select Subscription.Status as stat from Categorize_Serials Inner Join Subscription On Categorize_Serials.SubscriptionID=Subscription.SubscriptionID Where CategoryID=?";
+		$query=sqlsrv_query($conn,$sql,array($categID));
+		$row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
+		$data=$row['stat'];
+	
+
+		return $data;
+	}
+
 
 	function GetCategID($dept,$subID,$type)
 	{
@@ -199,6 +213,13 @@ $input=filter_input_array(INPUT_POST);
 			$newNIR=$cNIR-1;
 			$sqlupdateNIR="Update Categorize_Serials SET NumberOfItemReceived=? Where CategoryID=?";
 			$sqlupdateNIRquery=sqlsrv_query($conn,$sqlupdateNIR,array($newNIR,$categID));
+
+			$stat=getstat($categID);
+			if($stat=='Finished')
+			{
+				$sqlupdatestat="Update Subscription Set Status=? Where SubscriptionID=?";
+				$sqlupdatestatquery=sqlsrv_query($conn,$sqlupdatestat,array('OnGoing',$subID));
+			}
 
 			if($ret_list_prog[$x]=="")
 			{

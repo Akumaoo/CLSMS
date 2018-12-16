@@ -115,7 +115,23 @@ include 'Includes/header.php';
 		 							<option value="DT">Delivered Titles</option>
 		 						</select>
 		 					</div>
-		 				</div>	
+		 				</div>
+						
+						<div id="hidden_date" class="collapse">
+			 				<div class="form-group form-group-center">
+			 					<label for="SD" class="control-label col-lg-5">Start Date:</label>
+			 					<div class="col-lg-5">
+			 						<input type="date" name="SD" id="SD" style="width: 135px;">
+			 					</div>
+			 				</div>
+
+			 				<div class="form-group form-group-center">
+			 					<label for="ED" class="control-label col-lg-5">End Date:</label>
+			 					<div class="col-lg-5">
+			 						<input type="date" name="ED" id="ED" style="width: 135px;">
+			 					</div>
+			 				</div>
+		 				</div>
 
 		 				<div class="form-group form-group-center">
 		 					<label for="Reason" class="control-label col-lg-5">BondPaper Size:</label>

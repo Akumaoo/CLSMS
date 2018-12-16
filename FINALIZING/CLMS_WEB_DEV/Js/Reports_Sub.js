@@ -192,4 +192,16 @@ $(function(){
  	$('#form_report').attr({
 		action: 'fpdf/Reports/Admin_reports_gen.php'
 	});
+
+	$('#t_r').change(function(){
+
+		if($(this).val()=='RT' || $(this).val()=='DT')
+		{
+			$('#hidden_date').removeClass('collapse');
+		}
+		else
+		{
+			$('#hidden_date').addClass('collapse');
+		}
+	});
 });
