@@ -24,6 +24,8 @@
   <script type="text/javascript" src="TableEdit/jquery.tabledit.min.js"></script>
   <script type="text/javascript" src="lib/morris/morris.js"></script>
   <script type="text/javascript" src="lib/raphael/raphael.min.js"></script>
+  <script type="text/javascript" src="lib/multiple-select.js"></script>
   
   <!--custom scripts-->
+
    <script type="text/javascript" src="lib/custom_js.js"></script>

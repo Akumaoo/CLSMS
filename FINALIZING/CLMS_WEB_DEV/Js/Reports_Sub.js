@@ -147,6 +147,8 @@ $(function(){
 	 					$('#prog_list').attr("required",true);
 
 	 					$('#org_list').html(data.orgs);
+	 					$('#org_list').multipleSelect();
+	 					$('#prog_list').multipleSelect();
 	 				}
 	 				else
 	 				{
@@ -165,27 +167,30 @@ $(function(){
  	});
 
  	$('#org_list').change(function(){
- 		$org=$(this).val();
-
- 		if($org!="")
+ 		$arr=[];
+ 		$('input[data-name="selectItemorg"]').each(function(){
+ 			if($(this).is(':checked'))
+			{
+				$arr.push($(this).val());
+			}
+ 		});
+ 		if($arr.length>0)
  		{
 	 		$.ajax({
 	 			url:"php_codes/select_prog.php",
 	 			method:"POST",
-	 			data:{org:$org,type:"check_org"},
+	 			data:{org:$arr,type:"check_org"},
 	 			success:function(data){
-
-	 				
 	 					$('#prog_list').html(data.progs);
-	 				
-
+	 					$('#prog_list').multipleSelect();
 	 			}
 	 		});
  		}
 		else
 		{
 
-			$('#prog_list').html('');
+			$('#prog_list').closest('div.col-lg-5').find('.ms-drop').html('');
+			$('#prog_list').closest('div.col-lg-5').find('.ms-choice span').html('');
 		}
  	});
 
@@ -204,4 +209,5 @@ $(function(){
 			$('#hidden_date').addClass('collapse');
 		}
 	});
+	
 });

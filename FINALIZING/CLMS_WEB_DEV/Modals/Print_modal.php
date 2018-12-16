@@ -17,7 +17,7 @@
 				 					if($type!='Single')
 				 					{
 				 						echo '
-											<div class="form-group form-group-center select_org_post" id="">
+											<div class="form-group form-group-center select_org_post " id="">
 		 										<label for="org" class="control-label col-lg-5">Organizations</label>
 							 					<div class="col-lg-5">
 							 						<ul class="org_list_post" style="padding:0">

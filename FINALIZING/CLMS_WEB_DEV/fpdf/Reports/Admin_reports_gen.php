@@ -20,8 +20,26 @@ $sb=sanitize($_POST['sort_by']);
 $tb=sanitize($_POST['tb']);
 // COLLEGE DATA /DISB DATA
 $dt=sanitize($_POST['dt']);
-$org=sanitize($_POST['org']);
-$prog=sanitize($_POST['prog']);
+if(!empty($_POST['prog']))
+{
+	$prog_string="";
+	$prog=$_POST['prog'];
+	for($a=0;$a<count($prog);$a++)
+	{
+		if($a==0)
+		{
+			$prog_string.=" ProgramID='".sanitize($prog[$a])."'";
+		}
+		else
+		{
+			$prog_string.=" OR ProgramID='".sanitize($prog[$a])."'";
+		}
+	}
+}
+else
+{
+	$prog_string="";
+}
 $type_report=sanitize($_POST['t_r']);
 $SD=sanitize($_POST['SD']);
 $ED=sanitize($_POST['ED']);
@@ -282,10 +300,10 @@ class PDF extends FPDF
 		global $tb;
 		// COLLEGE DATA /DISB DATA (DEPTS/DISB)
 		global $dt;
-		// ORGANIZATIONS
-		global $org;
+
 		// PROGRAMS
-		global $prog;
+		// global $prog;
+		global $prog_string;
 		// TYPE OF REPORT OT BE GEN
 		global $type_report;
 		
@@ -317,7 +335,7 @@ class PDF extends FPDF
 			{
 				if($this->checkType($dt)=='Multiple')
 				{	
-					$filter_sort="WHERE DepartmentID='".$dt."' AND ProgramID='".$prog."'";
+					$filter_sort="WHERE DepartmentID='".$dt."' AND (".$prog_string.")";
 				}
 				else
 				{
@@ -510,7 +528,7 @@ class PDF extends FPDF
 				{
 					if($this->checkType($dt)=='Multiple')
 					{	
-						$filter_middle=" AND (asd.DepartmentID='".$dt."' AND ProgramID='".$prog."')";
+						$filter_middle=" AND (asd.DepartmentID='".$dt."' AND (".$prog_string."))";
 					}
 					else
 					{

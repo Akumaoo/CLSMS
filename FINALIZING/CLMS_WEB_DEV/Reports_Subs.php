@@ -89,7 +89,7 @@ include 'Includes/header.php';
 		 				<div class="form-group form-group-center">
 		 					<label for="org" class="control-label col-lg-5">Organization:</label>
 		 					<div class="col-lg-5">
-		 						<select class="newdropdown" name="org" id="org_list" style="width: 135px">
+		 						<select class="newdropdown" name="org" id="org_list" multiple="multiple" style="width: 135px">
 		 						</select>
 		 					</div>
 		 				</div>
@@ -97,7 +97,7 @@ include 'Includes/header.php';
 		 				<div class="form-group form-group-center">
 		 					<label for="prog" class="control-label col-lg-5">Program:</label>
 		 					<div class="col-lg-5">
-		 						<select class="newdropdown" name="prog" id="prog_list" style="width: 135px">
+		 						<select class="newdropdown" name="prog[]" id="prog_list" multiple="multiple" style="width: 135px;">
 		 						</select>
 		 					</div>
 		 				</div>
@@ -166,4 +166,4 @@ include 'Includes/header.php';
 ?>
 </body>
 </html>
-<script src="Js/Reports_Sub.js?v=211" type="text/javascript"></script>';
+<script src="Js/Reports_Sub.js?v=12" type="text/javascript"></script>';

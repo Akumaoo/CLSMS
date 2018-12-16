@@ -3,6 +3,12 @@ require 'db.php';
 
 // $_POST['type']='check_org';
 // $_POST['org']='SICS';
+function sanitize($str)
+{
+	$sanitize_str=htmlentities(str_replace("'","", str_replace('"', '', $str)));
+
+	return $sanitize_str;
+}
 
 if($_POST['type']=='check_dept')
 {
@@ -29,7 +35,7 @@ if($_POST['type']=='check_dept')
 		$query=sqlsrv_query($conn,$sql,array($dept));
 		if(sqlsrv_has_rows($query))
 		{	
-			$data['orgs']='<option value=""></option>';
+			$data['orgs']='';
 			
 			while($row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
 			{
@@ -45,10 +51,23 @@ if($_POST['type']=='check_dept')
 else if($_POST['type']=='check_org')
 {
 	$org=$_POST['org'];
-	$sql="Select ProgramID from Organization Inner Join Program On Organization.OrganizationID=Program.OrganizationID Where Organization.OrganizationID=?";
-	$query=sqlsrv_query($conn,$sql,array($org));
+	$org_string="";
+	for($z=0;$z<count($org);$z++)
+	{
+		if($z==0)
+		{
+			$org_string.=" Organization.OrganizationID='".sanitize($org[$z])."'";
+		}
+		else
+		{
+			$org_string.=" OR Organization.OrganizationID='".sanitize($org[$z])."'";
+		}
+	}
+
+	$sql="Select ProgramID from Organization Inner Join Program On Organization.OrganizationID=Program.OrganizationID Where (".$org_string.")";
+	$query=sqlsrv_query($conn,$sql,array());
 	if(sqlsrv_has_rows($query))
-	{	$data['progs']='<option value=""></option>';
+	{	$data['progs']='';
 	
 		while($row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
 		{
