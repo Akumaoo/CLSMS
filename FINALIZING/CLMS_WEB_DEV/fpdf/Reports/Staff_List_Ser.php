@@ -17,29 +17,19 @@ function sanitize($str)
 
 $deptID=sanitize($_POST['Dept']);
 $BP_size=sanitize($_POST['BP_size']);
-if(!empty($_POST['progs']))
+if(!empty($_POST['org']))
 {
-	$prog_list=$_POST['progs'];
+	$prog_list=$_POST['org'];
 	$prog_string="";
 	for($a=0;$a<count($prog_list);$a++)
 	{
 		if($a==0)
 		{
-			$prog_string.="
-					(CASE
-					WHEN asd.ProgramID IS NULL
-					THEN dsa.ProgramID
-					ELSE asd.ProgramID
-					END)='".sanitize($prog_list[$a])."'";
+			$prog_string.=" OrganizationID='".sanitize($prog_list[$a])."'";
 		}
 		else
 		{
-			$prog_string.="OR 
-					(CASE
-					WHEN asd.ProgramID IS NULL
-					THEN dsa.ProgramID
-					ELSE asd.ProgramID
-					END)='".sanitize($prog_list[$a])."'";
+			$prog_string.="OR OrganizationID='".sanitize($prog_list[$a])."'";
 		}
 		
 	}
@@ -199,7 +189,7 @@ class PDF extends FPDF
 	    $this->Cell(189,6,'USAGE STATISTICS OF '.strtoupper($deptID).' DEPARTMENT',0,1,'C');
 
 	    $this->SetFont('Arial','',12);
-	    $this->Cell(189,6,'SY ['.$c_SY.']',0,0,'C');
+	    $this->Cell(189,6,'SY '.$c_SY.'',0,0,'C');
 	    // Line break
 	    $this->Ln(10);
 	}
@@ -252,7 +242,7 @@ class PDF extends FPDF
 			if($emp_stud=='Student')
 			{
 				$col='Usage_Stat_Student_Prog';
-				$col_tag_mag='Student_Magazine';
+				$col_tag_mag='col_tag_mag';
 				$col_tag_jour='Student_Journal';
 			}
 			else
@@ -274,44 +264,53 @@ class PDF extends FPDF
 			// echo $f_ext;
 
 	  	 $sql="
-			Select 
-			(CASE
-				WHEN asd.ProgramID IS NULL
-				THEN dsa.ProgramID 
-				ELSE asd.ProgramID
-				END
-			) as Program,
-			(CASE
-				WHEN ".$col_tag_jour." IS NULL
-				THEN 0
-				ELSE ".$col_tag_jour."
-				END
-			) as ".$col_tag_jour.",
-			(CASE
-				WHEN ".$col_tag_mag." IS NULL
-				THEN 0
-				ELSE ".$col_tag_mag."
-				END
-			)as ".$col_tag_mag."
-			 from 
-				(Select ProgramID,SUM(".$col.") as ".$col_tag_mag." from Serial Inner Join Subscription On Serial.SerialID=Subscription.SerialID
-				 Inner Join Category_Serials_Program On Subscription.SubscriptionID=Category_Serials_Program.SubscriptionID
-				WHERE (Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) OR Subscription.Status='OnGoing') AND (Subscription.Remove IS NULL AND Subscription.Archive IS NULL)
-				AND TypeName='Magazine' Group By ProgramID) as asd
-				Full Join 
-			(Select ProgramID,SUM(".$col.") as ".$col_tag_jour." from Serial Inner Join Subscription On Serial.SerialID=Subscription.SerialID
-				 Inner Join Category_Serials_Program On Subscription.SubscriptionID=Category_Serials_Program.SubscriptionID
-				WHERE (Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) OR Subscription.Status='OnGoing') AND (Subscription.Remove IS NULL AND Subscription.Archive IS NULL)
-				AND TypeName='Journal' Group By ProgramID) as dsa On asd.ProgramID=dsa.ProgramID ".$f_ext;
-
-			$query=sqlsrv_query($conn,$sql,array());
+	  	 Select SUM(".$col_tag_jour.") as ".$col_tag_jour.",SUM(".$col_tag_mag.") as ".$col_tag_mag.",OrganizationID from
+		(Select 
+		(CASE
+			WHEN asd.ProgramID IS NULL
+			THEN dsa.ProgramID 
+			ELSE asd.ProgramID
+			END
+		) as Program,
+		(CASE
+			WHEN ".$col_tag_jour." IS NULL
+			THEN 0
+			ELSE ".$col_tag_jour."
+			END
+		) as ".$col_tag_jour.",
+		(CASE
+			WHEN ".$col_tag_mag." IS NULL
+			THEN 0
+			ELSE ".$col_tag_mag."
+			END
+		)as ".$col_tag_mag."
+			from 
+			(Select ProgramID,SUM(".$col.") as ".$col_tag_mag." from Serial Inner Join Subscription On Serial.SerialID=Subscription.SerialID
+				Inner Join Category_Serials_Program On Subscription.SubscriptionID=Category_Serials_Program.SubscriptionID
+			WHERE (Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) OR Subscription.Status='OnGoing') AND (Subscription.Remove IS NULL AND Subscription.Archive IS NULL)
+			AND TypeName='Magazine' Group By ProgramID) as asd
+			Full Join 
+		(Select ProgramID,SUM(".$col.") as ".$col_tag_jour." from Serial Inner Join Subscription On Serial.SerialID=Subscription.SerialID
+				Inner Join Category_Serials_Program On Subscription.SubscriptionID=Category_Serials_Program.SubscriptionID
+			WHERE (Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) OR Subscription.Status='OnGoing') AND (Subscription.Remove IS NULL AND Subscription.Archive IS NULL)
+			AND TypeName='Journal' Group By ProgramID) as dsa On asd.ProgramID=dsa.ProgramID) as T1
+		Inner Join Program On T1.Program=Program.ProgramID ".$f_ext." Group By OrganizationID ";
+		// echo $sql;
+			$query=sqlsrv_query($conn,$sql,array(),$opt);
+			if(sqlsrv_num_rows($query)>0)
+			{
 			 while($rows=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
 			 {
-			   		$data[$inc][0]=$rows['Program'];
+			   		$data[$inc][0]=$rows['OrganizationID'];
 			   		$data[$inc][1]=$rows[$col_tag_jour];
 			   		$data[$inc][2]=$rows[$col_tag_mag];
 			   		$inc++;
 			 }
+			}
+			else
+			{
+				$data=[];
+			}
 			 
 		}
 		else
@@ -361,13 +360,20 @@ class PDF extends FPDF
 				AND TypeName='Journal' Group By DepartmentID) as dsa ON asd.DepartmentID=dsa.DepartmentID WHERE asd.DepartmentID=?
 				";
 
-			$query=sqlsrv_query($conn,$sql,array($dept));
+			$query=sqlsrv_query($conn,$sql,array($dept),$opt);
+			if(sqlsrv_num_rows($query)>0)
+			{
 			 while($rows=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
 			 {
 			   		$data[$inc][0]=$rows[$col_tag_jour];
 			   		$data[$inc][1]=$rows[$col_tag_mag];
 			   		$inc++;
 			 }
+			}
+			else
+			{
+				$data=[];
+			}
 			 
 		}
 

@@ -91,7 +91,7 @@
 							<div class="form-group">
 								<label for="ava" class="control-label col-lg-4">Avatar</label>
 								<div class="col-lg-8">
-									<input type="file" class="form-control " name='ava' id="ava" required>
+									<input type="file" class="form-control " name='ava' id="ava">
 								</div>
 							</div>
 

@@ -38,9 +38,7 @@ if(isset($_POST['sname']))
 			echo "<li><input type='checkbox' class='dept_cb' name='dept' value='".$dept_list[$x]."'>".$dept_list[$x]."</li>";
 		}
 		
-		echo '</ul>
-		<script type="text/javascript" src="Js/send_select_dept.js?v=13"></script>
-		';
+		echo '</ul>';
 	}
 }
 

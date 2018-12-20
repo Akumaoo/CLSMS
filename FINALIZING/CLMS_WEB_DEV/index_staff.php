@@ -1,56 +1,21 @@
 	<?php 
 require 'php_codes/db.php';
-$sqltype="Select Count(*) as nums from Department INNER Join Organization ON Department.DepartmentID=Organization.DepartmentID Where Department.DepartmentID=?";
-$querytype=sqlsrv_query($conn,$sqltype,array($_SESSION['Dept']));
-$row=sqlsrv_fetch_array($querytype,SQLSRV_FETCH_ASSOC);
-$datatype=$row['nums'];
-
-if($datatype==0)
-{
-  $type='Single';
-}
-else
-{
-  $type='Multiple';
-}
 
   function JgetElem($dept)
   {   require 'php_codes/db.php';
-      $sql="Select ReceivedSerialID from ReceiveSerial Inner Join Serial On ReceiveSerial.SerialID=Serial.SerialID Inner Join Subscription On Serial.SerialID=Subscription.SerialID Where ReceiveSerial.DepartmentID=? AND ReceiveSerial.Status=? AND TypeName=? And ReceiveSerial.Remove IS NULL AND Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) Group By ReceivedSerialID";
-      $query=sqlsrv_query($conn,$sql,array($dept,'Received','Journal'),$opt);
+      $sql="Select ReceivedSerialID from ReceiveSerial Inner Join Serial On ReceiveSerial.SerialID=Serial.SerialID Inner Join Subscription On Serial.SerialID=Subscription.SerialID Where ReceiveSerial.DepartmentID=? AND TypeName=? And ReceiveSerial.Remove IS NULL AND Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) Group By ReceivedSerialID";
+      $query=sqlsrv_query($conn,$sql,array($dept,'Journal'),$opt);
       $row=sqlsrv_num_rows($query);
       return $row;
   }
 
   function  MgetElem($dept)
   {   require 'php_codes/db.php';
-      $sql="Select ReceivedSerialID from ReceiveSerial Inner Join Serial On ReceiveSerial.SerialID=Serial.SerialID Inner Join Subscription On Serial.SerialID=Subscription.SerialID Where ReceiveSerial.DepartmentID=? AND ReceiveSerial.Status=? AND TypeName=? And ReceiveSerial.Remove IS NULL AND Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) Group By ReceivedSerialID";
-      $query=sqlsrv_query($conn,$sql,array($dept,'Received','Magazine'),$opt);
+      $sql="Select ReceivedSerialID from ReceiveSerial Inner Join Serial On ReceiveSerial.SerialID=Serial.SerialID Inner Join Subscription On Serial.SerialID=Subscription.SerialID Where ReceiveSerial.DepartmentID=? AND TypeName=? And ReceiveSerial.Remove IS NULL AND Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) Group By ReceivedSerialID";
+      $query=sqlsrv_query($conn,$sql,array($dept,'Magazine'),$opt);
       $row=sqlsrv_num_rows($query);
       return $row;
   }
-  function  MgetCOl()
-    {   require 'php_codes/db.php';
-        $sql="Select Count(*) as nums from Subscription Inner Join Serial On Subscription.SerialID=Serial.SerialID
-              Inner Join ReceiveSerial_Program On Serial.SerialID=ReceiveSerial_Program.SerialID
-              Inner Join Program on ReceiveSerial_Program.ProgramID=Program.ProgramID
-              Where Status_Prog=? And TypeName=? AND (ReceiveSerial_Program.Remove IS NULL AND Subscription.Remove IS NULL) And Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01'))";
-         $query=sqlsrv_query($conn,$sql,array('Received','Magazine'));
-        $row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
-        $nums=$row['nums'];
-        return $nums;
-    }
-  function JgetCOl()
-    {   require 'php_codes/db.php';
-        $sql="Select Count(*) as nums from Subscription Inner Join Serial On Subscription.SerialID=Serial.SerialID
-              Inner Join ReceiveSerial_Program On Serial.SerialID=ReceiveSerial_Program.SerialID
-              Inner Join Program on ReceiveSerial_Program.ProgramID=Program.ProgramID
-              Where Status_Prog=? And TypeName=? AND (ReceiveSerial_Program.Remove IS NULL AND Subscription.Remove IS NULL) And Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01'))";
-         $query=sqlsrv_query($conn,$sql,array('Received','Journal'));
-        $row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
-        $nums=$row['nums'];
-        return $nums;
-    }
 
    ?>
 
@@ -84,14 +49,7 @@ else
           <!-- JOURNAL -->
           <div class=" hidden-sm hidden-xs " style="margin-left: 40px;">
                 <h4 ><?php
-                 if($type=='Single')
-                  {
                     echo JgetElem($_SESSION['Dept']);
-                  }
-                  else
-                  {
-                    echo JgetCOl();
-                  }
                  ?></h4>
           </div>
       </div>
@@ -106,15 +64,7 @@ else
         <!-- MAGAZINE -->
         <div class=" hidden-sm hidden-xs " style="margin-left: 35px;">
               <h4 ><?php 
-              if($type=='Single')
-              {
                 echo MgetElem($_SESSION['Dept']);
-              }
-              else
-              {
-                echo MgetCOl();
-              }
-              
               ?></h4>
         </div>
     </div>
@@ -137,15 +87,10 @@ else
       $dept= $_SESSION['Dept'];
       
 
-      $sql="Select Count(*) as Num_rec from 
-          (Select SerialName,ReceiveSerial.DepartmentID,Status,DateReceiveNotif_Give,ReceiveSerial.Remove from Serial Inner Join ReceiveSerial on Serial.SerialID=ReceiveSerial.SerialID 
-          Inner JOin Department On ReceiveSerial.DepartmentID=Department.DepartmentID) as asd
-        Left Join
-          (Select SerialName,Organization.DepartmentID,ReceiveSerial_Program.ProgramID,DateReceiveNotif_Give_Prog,Status_Prog,ReceiveSerial_Program.Remove from Serial Inner JOin ReceiveSerial_Program On Serial.SerialID=ReceiveSerial_Program.SerialID
-          Inner Join Program on ReceiveSerial_Program.ProgramID=Program.ProgramID
-          Inner JOin Organization on Program.OrganizationID=Organization.OrganizationID) as dsa ON asd.DepartmentID=dsa.DepartmentID 
-          WHERE (asd.SerialName=dsa.SerialName OR (asd.SerialName IS NOT NULL AND dsa.SerialName IS NULL)) AND (asd.DateReceiveNotif_Give=dsa.DateReceiveNotif_Give_Prog OR (asd.DateReceiveNotif_Give IS NOT NULL AND dsa.DateReceiveNotif_Give_Prog IS NULL)) AND (asd.Remove IS NULL AND dsa.Remove IS NULL) AND (asd.Status=? AND dsa.Status_Prog=? OR(asd.Status=? AND dsa.Status_Prog IS NULL)) AND asd.DepartmentID=?";
-      $query=sqlsrv_query($conn,$sql,array('NotReceived','NotReceived','NotReceived',$dept));
+      $sql="Select Count(*) as Num_rec from  Serial Inner Join ReceiveSerial on Serial.SerialID=ReceiveSerial.SerialID 
+            Inner JOin Department On ReceiveSerial.DepartmentID=Department.DepartmentID
+            WHERE ReceiveSerial.Remove IS NULL  AND ReceiveSerial.Status=? AND ReceiveSerial.DepartmentID=?";
+      $query=sqlsrv_query($conn,$sql,array('NotReceived',$dept));
       $row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
       $Num_rec=$row['Num_rec'];
 
@@ -201,10 +146,6 @@ else
                 <span class="fa fa-print fa-lg cog_action" id="gen_rep_rt"></span>
                 <table cellpadding="0" cellspacing="0" border="0" class="table table-bordered table-hover" id="table_RS_STAFF" ">
                 <thead class="thead_theme">
-                  <?php 
-                    if($type=='Single')
-                    {
-                      echo '
                             <tr>
                               <th class="radio-label-center">Control Number</th>
                               <th class="radio-label-center">Serial Name</th>
@@ -213,23 +154,6 @@ else
                               <th class="radio-label-center">Date Of Issue</th>
                               <th class="radio-label-center">Remarks</th>
                             </tr>
-                      ';
-                    }
-                    else
-                    {
-                      echo '
-                            <tr>
-                              <th class="radio-label-center">Program</th>
-                              <th class="radio-label-center">Control Number</th>
-                              <th class="radio-label-center">Serial Name</th>
-                              <th class="radio-label-center">Volume Number</th>
-                              <th class="radio-label-center">Issue Number</th>
-                              <th class="radio-label-center">Date Of Issue</th>
-                              <th class="radio-label-center">Remarks</th>
-                            </tr>';
-                    }
-                   ?>
-             
               </thead>
               <tbody>
               </tbody>

@@ -1,13 +1,9 @@
   <?php
   // GET ADDITIONAL INFO ON DELAYED NOTIF
 
-  $delivery_sqltxt="Select Top 3 Count(asd.DepartmentID) as nums_depts,asd.DepartmentID,DateReceiveNotif_Give,Staff_Seen from
-  (Select ReceiveSerial.DepartmentID,SerialName as sn_main,Status,DateReceiveNotif_Give,ReceiveSerial.Remove,Staff_Seen from Serial Inner Join ReceiveSerial On Serial.SerialID=ReceiveSerial.SerialID
-  Inner Join Department on ReceiveSerial.DepartmentID=Department.DepartmentID Where Status=? and ReceiveSerial.Remove IS NULL) as asd
-  Left Join
-  (Select Organization.DepartmentID,SerialName as sn_prog,Organization.OrganizationID,ReceiveSerial_Program.ProgramID,DateReceiveNotif_Give_Prog,ReceiveSerial_Program.Remove from Serial Inner Join ReceiveSerial_Program On Serial.SerialID=ReceiveSerial_Program.SerialID
-  Inner Join Program On ReceiveSerial_Program.ProgramID=Program.ProgramID
-  inner Join Organization on Program.OrganizationID=Organization.OrganizationID WHERE ReceiveSerial_Program.Remove IS NULL) as dsa on asd.DepartmentID=dsa.DepartmentID where (sn_main=sn_prog OR sn_prog IS NULL) AND ((asd.DateReceiveNotif_Give=dsa.DateReceiveNotif_Give_Prog) OR (asd.DateReceiveNotif_Give IS NOT NULL AND dsa.DateReceiveNotif_Give_Prog IS NULL)) Group By asd.DepartmentID,DateReceiveNotif_Give,Staff_Seen
+  $delivery_sqltxt="Select Top 3 Count(ReceiveSerial.DepartmentID) as nums_depts,ReceiveSerial.DepartmentID,DateReceiveNotif_Give,Staff_Seen from Serial Inner Join ReceiveSerial On Serial.SerialID=ReceiveSerial.SerialID
+  Inner Join Department on ReceiveSerial.DepartmentID=Department.DepartmentID Where Status=? and ReceiveSerial.Remove IS NULL
+ Group By ReceiveSerial.DepartmentID,DateReceiveNotif_Give,Staff_Seen
 
 ";
 

@@ -40,6 +40,7 @@ $(function(){
 						$('#msg_scs').addClass('collapse');
 					}
 
+					$('#msg_error').html(data.status)
 					$('#msg_fail_enter').removeClass('collapse');
 				}
 			}

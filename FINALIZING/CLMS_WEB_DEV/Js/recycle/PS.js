@@ -44,8 +44,8 @@ $('#table_pending_ser').on('draw.dt', function() {
 			}
 
 			   $('tbody>tr').append('<td><input type="checkbox" class="cb_ser" style="margin-left:25px"></td>');
-			$('thead>tr>th:nth-child(9)').addClass('collapse');
-			$('tbody>tr>td:nth-child(9)').addClass('collapse');
+			$('thead>tr>th:nth-child(7)').addClass('collapse');
+			$('tbody>tr>td:nth-child(7)').addClass('collapse');
 
 			$('tbody>tr>td:nth-child(4)').addClass('rs_progID');
 		}
@@ -53,10 +53,10 @@ $('#table_pending_ser').on('draw.dt', function() {
 
  	$('#cog_action').click(function(){
 
- 		if($('thead>tr>th:nth-child(9)').hasClass('collapse'))
+ 		if($('thead>tr>th:nth-child(7)').hasClass('collapse'))
  		{
- 			$('thead>tr>th:nth-child(9)').removeClass('collapse');
-			$('tbody>tr>td:nth-child(9)').removeClass('collapse');
+ 			$('thead>tr>th:nth-child(7)').removeClass('collapse');
+			$('tbody>tr>td:nth-child(7)').removeClass('collapse');
 			$('#PRS').removeClass('collapse');
 			$('#RS').removeClass('collapse');
 			
@@ -64,8 +64,8 @@ $('#table_pending_ser').on('draw.dt', function() {
  		else
  		{
 
- 			$('thead>tr>th:nth-child(9)').addClass('collapse');
-			$('tbody>tr>td:nth-child(9)').addClass('collapse');
+ 			$('thead>tr>th:nth-child(7)').addClass('collapse');
+			$('tbody>tr>td:nth-child(7)').addClass('collapse');
 			$('#PRS').addClass('collapse');
 			$('#RS').addClass('collapse');
  		}
@@ -76,21 +76,18 @@ $('#table_pending_ser').on('draw.dt', function() {
  		if(CheckList())
  		{
 	 		$ret_list=[];
-	 		$ret_list_prog=[];
 	 		$('.cb_ser').each(function(){
 	 			if($(this).prop('checked'))
 	 			{	
 	 				$sID=$(this).closest('tr').find('.sorting_1').html();
-	 				$rs_prog=$(this).closest('tr').find('.rs_progID').text();
 	 				$ret_list.push($sID);
-	 				$ret_list_prog.push($rs_prog);
 	 			}
 	 		});
 
 	 		$.ajax({
 	 			url:"php_codes/recycle/modify_PS.php",
 	 			method:"POST",
-	 			data:{action:'retrieve',ret_list:$ret_list,ret_list_prog:$ret_list_prog},
+	 			data:{action:'retrieve',ret_list:$ret_list},
 	 			success:function(){
 
 	 				if(!$('#msg_scs_remove').hasClass('collapse'))

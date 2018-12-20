@@ -36,7 +36,6 @@ else
 					<tr>
 						<th class="radio-label-center">RS ID</th>
 						<th class="radio-label-center">Department</th>
-						<th class="radio-label-center">Program</th>
 						<th class="radio-label-center">Serial Name</th>
 						<th class="radio-label-center">Serial Type</th>
 					</tr>

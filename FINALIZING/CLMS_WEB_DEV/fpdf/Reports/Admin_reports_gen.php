@@ -210,13 +210,9 @@ class PDF extends FPDF
 	    {
 	    	$this->Cell(189,6,'LIST OF FULFILLED SUBSCRIPTIONS',0,1,'C');
 	    }
-	    else if($type_report=='RT')
-	    {
-	    	$this->Cell(189,6,'LIST OF RECEIVED TITLES',0,1,'C');
-	    }
 	    else if($type_report=='DT')
 	    {
-	    	$this->Cell(189,6,'LIST OF DELIVERED TITLES',0,1,'C');
+	    	$this->Cell(189,6,'LIST OF RECEIVED TITLES',0,1,'C');
 	    }
 	    else if ($type_report=='Subscriptions')
 	    {
@@ -226,7 +222,7 @@ class PDF extends FPDF
 	    
 
 	    $this->SetFont('Arial','',12);
-	    $this->Cell(189,6,'SY ['.$c_SY.']',0,0,'C');
+	    $this->Cell(189,6,'SY '.$c_SY.'',0,0,'C');
 	    // Line break
 	    $this->Ln(10);
 	}
@@ -317,70 +313,64 @@ class PDF extends FPDF
 
 		$filter_sort="";
 
-		if($sort=='Sort')
-		{
-			if($tb=='Department')
+		if($type_report=='DT')
+		{	
+			if(!empty($_POST['prog']))
 			{
-				$filter_sort="Order By DepartmentID ".$sb.",ProgramID ".$sb;
-
+				$prog_string="";
+				$prog=$_POST['prog'];
+				for($a=0;$a<count($prog);$a++)
+				{
+					if($a==0)
+					{
+						$prog_string.=" Programs LIKE '%".sanitize($prog[$a])."%'";
+					}
+					else
+					{
+						$prog_string.=" OR Programs LIKE '%".sanitize($prog[$a])."%'";
+					}
+				}
 			}
 			else
 			{
-				$filter_sort="Order By DistributorName ".$sb;
+				$prog_string="";
 			}
-		}
-		else
-		{	
-			if($tb=='Department')
+
+			if($sort=='Sort')
 			{
-				if($this->checkType($dt)=='Multiple')
-				{	
+				if($tb=='Department')
+				{
+					$filter_sort="Order By DepartmentID ".$sb.",Programs ".$sb;
+
+				}
+				else
+				{
+					$filter_sort="Order By DistributorName ".$sb;
+				}
+			}
+			else
+			{	
+				if($tb=='Department')
+				{
 					$filter_sort="WHERE DepartmentID='".$dt."' AND (".$prog_string.")";
 				}
 				else
 				{
-					$filter_sort="WHERE DepartmentID='".$dt."'";
+					$filter_sort="WHERE DistributorName='".$dt."'";
 				}
+			}
+
+			$final_ext=htmlentities($filter_sort);
+
+			if($SD!=""  && $ED!="")
+			{
+				$second_condition=" Delivery_Date BETWEEN '".$SD."' AND '".$ED."'";
 			}
 			else
 			{
-				$filter_sort="WHERE DistributorName='".$dt."'";
+				$second_condition="";
 			}
-		}
-
-		$final_ext=htmlentities($filter_sort);
-
-		if($type_report=='RT' || $type_report=='DT')
-		{
-
-			if($type_report=='RT')
-			{
-
-				$first_condition="AND (asd.Status='Received' OR dsa.Status_Prog='Received')";
-				
-				if($SD!=""  && $ED!="")
-				{
-					$second_condition=" Date_Receive BETWEEN '".$SD."' AND '".$ED."'";
-				}
-				else
-				{
-					$second_condition="";
-				}
-
-			}
-			else
-			{
-				$first_condition="";
-
-				if($SD!=""  && $ED!="")
-				{
-					$second_condition=" Delivery_Date BETWEEN '".$SD."' AND '".$ED."'";
-				}
-				else
-				{
-					$second_condition="";
-				}
-			}
+			
 
 			if($sort=='Sort')
 			{
@@ -406,30 +396,21 @@ class PDF extends FPDF
 			}
 
 			$sql="
-				Select DistributorName,DepartmentID,ProgramID,SerialName,TypeName,VolumeNumber,IssueNumber,DateofIssue,Date_Receive,Delivery_Date from
-				(Select 
-				asd.DistributorID,asd.DepartmentID,dsa.ProgramID,
-				asd.SerialName,TypeName,VolumeNumber,IssueNumber,DateofIssue,
-				(CASE
-					WHEN ProgramID IS NULL
-					THEN DateReceiveNotif_Receive
-					ELSE DateReceiveNotif_Receive_Prog
-					END) as Date_Receive,Receive_Date as Delivery_Date from
-					(Select Receive_Date,DateReceiveNotif_Receive,ReceivedSerialID,ReceiveSerial.DepartmentID,ControlNumber,SerialName,Subscription.DistributorID,TypeName,VolumeNumber,IssueNumber,DateofIssue,Staff_Comment,ReceiveSerial.Remove,ReceiveSerial.Status,Subscription.Status as subs_stat,DateReceiveNotif_Give from  Delivery Inner Join Delivery_Subs On Delivery.DeliveryID=Delivery_Subs.DeliveryID Inner Join Subscription On Delivery_Subs.SubscriptionID=Subscription.SubscriptionID Inner JOin Serial On Subscription.SerialID=Serial.SerialID Inner Join ReceiveSerial on Serial.SerialID=ReceiveSerial.SerialID 
-					Inner JOin Department On ReceiveSerial.DepartmentID=Department.DepartmentID WHERE (Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) OR Subscription.Status='OnGoing') AND Receive_Date=DateReceiveNotif_Give) as asd
-					Left Join
-					(Select DateReceiveNotif_Receive_Prog,Organization.DepartmentID,ReceiveSerialID_Program,ReceiveSerial_Program.ProgramID,SerialName,Staff_Comment_Prog,ControlNumber_Prog,Status_Prog,DateReceiveNotif_Give_Prog,ReceiveSerial_Program.Remove from Serial Inner JOin ReceiveSerial_Program On Serial.SerialID=ReceiveSerial_Program.SerialID
-					Inner Join Program on ReceiveSerial_Program.ProgramID=Program.ProgramID 
-					Inner JOin Organization on Program.OrganizationID=Organization.OrganizationID) as dsa ON asd.DepartmentID=dsa.DepartmentID 
-					WHERE (asd.SerialName=dsa.SerialName OR (asd.SerialName IS NOT NULL AND dsa.SerialName IS NULL)) AND (asd.DateReceiveNotif_Give=dsa.DateReceiveNotif_Give_Prog OR (asd.DateReceiveNotif_Give IS NOT NULL AND dsa.DateReceiveNotif_Give_Prog IS NULL)) AND (asd.Remove IS NULL AND dsa.Remove IS NULL) ".$first_condition.")as T1
-				Inner Join Distributor On T1.DistributorID=Distributor.DistributorID ".$add_ext;
+				Select rec.SubscriptionID,DistributorName,DepartmentID,SerialName,TypeName,VolumeNumber,IssueNumber,DateofIssue,Date_Receive,Delivery_Date,Programs from
+(Select SubscriptionID,DistributorName,DepartmentID,SerialName,TypeName,VolumeNumber,IssueNumber,DateofIssue,Date_Receive,Delivery_Date from
+(Select Subscription.SubscriptionID,Receive_Date as Delivery_Date,DateReceiveNotif_Receive as Date_Receive,ReceivedSerialID,ReceiveSerial.DepartmentID,ControlNumber,SerialName,Subscription.DistributorID,TypeName,VolumeNumber,IssueNumber,DateofIssue,Staff_Comment,ReceiveSerial.Remove,ReceiveSerial.Status,Subscription.Status as subs_stat,DateReceiveNotif_Give from  Delivery Inner Join Delivery_Subs On Delivery.DeliveryID=Delivery_Subs.DeliveryID Inner Join Subscription On Delivery_Subs.SubscriptionID=Subscription.SubscriptionID Inner JOin Serial On Subscription.SerialID=Serial.SerialID Inner Join ReceiveSerial on Serial.SerialID=ReceiveSerial.SerialID 
+Inner JOin Department On ReceiveSerial.DepartmentID=Department.DepartmentID WHERE (Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) OR Subscription.Status='OnGoing') AND Receive_Date=DateReceiveNotif_Give) as T1
+Inner Join Distributor On T1.DistributorID=Distributor.DistributorID )as rec
+Inner Join
+(Select STRING_AGG(ProgramID,', ') as Programs,Subscription.SubscriptionID from Category_Serials_Program Inner Join Subscription On Category_Serials_Program.SubscriptionID=Subscription.SubscriptionID
+Inner Join Serial On Subscription.SerialID=Serial.SerialID Group By Subscription.SubscriptionID) as categ on rec.SubscriptionID=categ.SubscriptionID  ".$add_ext;
 
 			$query=sqlsrv_query($conn,$sql,array());
 			 while($rows=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
 			 {
 			   		$data[$inc][0]=$rows['DistributorName'];
 			   		$data[$inc][1]=$rows['DepartmentID'];
-			   		$data[$inc][2]=$rows['ProgramID'];
+			   		$data[$inc][2]=$rows['Programs'];
 			   		$data[$inc][3]=$rows['SerialName'];
 			   		$data[$inc][4]=$rows['TypeName'];
 			   		$data[$inc][5]=$rows['VolumeNumber'];
@@ -447,43 +428,60 @@ class PDF extends FPDF
 		}
 		else if($type_report=='OS' || $type_report=='FS')
 		{
-			
+			if($sort=='Sort')
+			{
+				if($tb=='Department')
+				{
+					$filter_sort="Order By DepartmentID ".$sb.",ProgramID ".$sb;
+
+				}
+				else
+				{
+					$filter_sort="Order By DistributorName ".$sb;
+				}
+			}
+			else
+			{	
+				if($tb=='Department')
+				{
+					if($this->checkType($dt)=='Multiple')
+					{	
+						$filter_sort="WHERE DepartmentID='".$dt."' AND (".$prog_string.")";
+					}
+					else
+					{
+						$filter_sort="WHERE DepartmentID='".$dt."'";
+					}
+				}
+				else
+				{
+					$filter_sort="WHERE DistributorName='".$dt."'";
+				}
+			}
+
+			$final_ext=htmlentities($filter_sort);
+
 			if($type_report=='OS')
 			{
-				$where_down=' Frequency!=(CASE
-											WHEN ProgramID IS NULL
-											THEN NumberOfItemReceived
-											ELSE NumberofItemsReceived_Prog
-											END	
-											)';
+				$where_down=' Frequency!=NumberOfItemReceived';
 			}
 			else
 			{
-				$where_down=' Frequency=(CASE
-											WHEN ProgramID IS NULL
-											THEN NumberOfItemReceived
-											ELSE NumberofItemsReceived_Prog
-											END	
-											)';
+				$where_down=' Frequency=NumberOfItemReceived';
 			}
 
 			if($sort=='Sort')
 			{
-					$add_ext='WHERE '.$where_down.' '.$final_ext; 
+					$add_ext='WHERE '.$where_down.' Group By DepartmentID,DistributorName,SerialName,TypeName,NumberOfItemReceived,Frequency '.$final_ext; 
 
 			}
 			else
 			{
-					$add_ext=$final_ext.' AND '.$where_down;
+					$add_ext=$final_ext.' AND '.$where_down.'  Group By DepartmentID,DistributorName,SerialName,TypeName,NumberOfItemReceived,Frequency';
 			}
 			$sql="
-				Select DepartmentID,ProgramID,DistributorName,SerialName,TypeName,
-				CONCAT((CASE
-					WHEN ProgramID IS NULL
-					THEN  NumberOfItemReceived
-					ELSE NumberofItemsReceived_Prog
-					END
-				),'/',Frequency) as Status from 
+				Select DepartmentID,STRING_AGG(ProgramID,', ') as ProgramID,DistributorName,SerialName,TypeName,
+				CONCAT(NumberOfItemReceived,'/',Frequency) as Status from 
 				(Select 
 					asd.DistributorID,SerialName,TypeName,sub_stat,asd.DepartmentID,ProgramID,NumberOfItemReceived,NumberofItemsReceived_Prog,Frequency from
 						(Select Serial.SerialID,CategoryID,Categorize_Serials.SubscriptionID,DistributorID,SerialName,TypeName,Serial.Origin,Subscription.Status as sub_stat,Archive,Subscription_Date,Frequency,Department.DepartmentID,NumberOfItemReceived,(Usage_Stat_Employee+Usage_Stat_Student) as Usage_Stat,Subscription.Remove from Serial Inner Join Subscription ON Serial.SerialID=Subscription.SerialID
@@ -644,7 +642,7 @@ class PDF extends FPDF
 		    $this->SetTextColor(255);
 		    $this->SetDrawColor(37,38,41);
 
-		    if($type_report=='DT' || $type_report=="RT")
+		    if($type_report=='DT')
 		    {
 		    	$this->SetFont('Arial','B','11');
 		    }
@@ -673,10 +671,10 @@ if($type_report=='OS' || $type_report=='FS')
 	$header = array('Department','Program','Distributor','Title','Type','Status');
 	$pdf->SetWidths(array('35','35','35','35','30','25'));
 }
-else if($type_report=='RT' || $type_report=="DT")
+else if($type_report=="DT")
 {
-	$header = array('Distributor','Department','Program','Title','Type','Vol #','Issue #','Date Of Issue');
-	$pdf->SetWidths(array('25','25','25','30','25','18','18','31'));
+	$header = array('Distributor','Department','Programs','Title','Type','Vol #','Issue #','Date Of Issue');
+	$pdf->SetWidths(array('25','25','30','30','23','18','18','30'));
 }
 else if($type_report=='Subscriptions')
 {

@@ -241,8 +241,6 @@ $(function(){
 		event.preventDefault();
 
 		$depts=[];
-		$orgs=[];
-		$progs=[];
 
 		$('.dept_cb').each(function(){
 			if($(this).is(':checked'))
@@ -252,29 +250,6 @@ $(function(){
 					$depts.push($(this).val());
 				}
 			}
-		});
-		$org_counter=0;
-		$('.org_cb').each(function(){
-			if($(this).is(':checked'))
-			{
-				if($(this).val()!='SA')
-				{
-					$orgs.push($(this).val());
-				}
-			}
-			$org_counter++;
-		});
-
-		$prog_counter=0;
-		$('.prog_cb').each(function(){
-			if($(this).is(':checked'))
-			{
-				if($(this).val()!='SA')
-				{
-					$progs.push($(this).val());
-				}
-			}
-			$prog_counter++;
 		});
 
 
@@ -291,14 +266,6 @@ $(function(){
 		else if($depts.length==0)
 		{
 			alert('Please Choose A Department');
-		}
-		else if($org_counter>1 && $orgs.length==0)
-		{
-			alert('Please Select Atleast One Organization');
-		}
-		else if($prog_counter>1 && $progs.length==0)
-		{
-			alert('Please Select Atleast One Program');
 		}	
 		else
 		{
@@ -306,7 +273,7 @@ $(function(){
 	 		$.ajax({
 	 			url:"php_codes/insert_serial_pack.php",
 	 			method:"POST",
-	 			data:{sn:$sn,DOI:$DOI,VN:$VN,IN:$IN,depts:$depts,orgs:$orgs,progs:$progs},
+	 			data:{sn:$sn,DOI:$DOI,VN:$VN,IN:$IN,depts:$depts},
 	 			success:function(data)
 	 			{
 					$("#receive_del_form")[0].reset();
@@ -371,14 +338,6 @@ $(function(){
 	 	$('input[type="checkbox"]').each(function(){
 	 		$(this).prop('checked',false);
 	 	});
-
-	 	$('.org_list').html('');
-	 	$('.prog_list').html('');
-	 	$('#script_org').remove();
-	 	$script_org_inc=false;
-
-	 	$('.select_org').addClass('collapse');
-	 	$('.select_prog').addClass('collapse');
 	 }
 
 	$('#cog_action').click(function(){

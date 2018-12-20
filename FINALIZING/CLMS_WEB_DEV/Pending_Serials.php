@@ -44,8 +44,6 @@ else
 						<th class="radio-label-center">RS ID</th>
 						<th class="radio-label-center">Department</th>
 						<th class="radio-label-center">Serial Name</th>
-						<th class="radio-label-center">Rs Program ID</th>
-						<th class="radio-label-center">Program</th>
 						<th class="radio-label-center">Date Sent</th>
 						<th class="radio-label-center">Staff Seen</th>
 					</tr>

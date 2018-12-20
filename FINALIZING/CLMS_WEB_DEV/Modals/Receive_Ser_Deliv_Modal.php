@@ -64,24 +64,6 @@
 							</div>
 						</div>
 
-						<div class="form-group form-group-center collapse select_org" id="">
-		 					<label for="org" class="control-label col-lg-3">Organizations</label>
-		 					<div class="col-lg-6">
-		 						<ul class="org_list">
-		 						</ul>
-		 					</div>
-		 				</div>
-
-		 				<div class="form-group form-group-center collapse select_prog" id="">
-		 					<label for="prog" class="control-label col-lg-3">Programs</label>
-		 					<div class="col-lg-6">
-		 						<ul>
-		 							<ul class="prog_list" style="padding: 0">
-		 							</ul>
-		 						</ul>
-		 					</div>
-		 				</div>
-
 
 						<div class="form-group form-group-center" id="save_btn">
 							<div class="col-lg-offset-8">

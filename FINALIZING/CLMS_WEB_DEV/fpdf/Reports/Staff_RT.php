@@ -25,11 +25,11 @@ if(!empty($_POST['progs']))
 	{
 		if($a==0)
 		{
-			$prog_string.=" ProgramID='".sanitize($prog_list[$a])."'";
+			$prog_string.=" Programs LIKE '%".sanitize($prog_list[$a])."%'";
 		}
 		else
 		{
-			$prog_string.="OR ProgramID='".sanitize($prog_list[$a])."'";
+			$prog_string.="OR Programs LIKE '%".sanitize($prog_list[$a])."%'";
 		}
 		
 	}
@@ -191,7 +191,7 @@ class PDF extends FPDF
 	    $this->Cell(189,6,'LIST OF TITLES RECEIVED BY '.strtoupper($deptID).' DEPARTMENT',0,1,'C');
 
 	    $this->SetFont('Arial','',12);
-	    $this->Cell(189,6,'SY ['.$c_SY.']',0,0,'C');
+	    $this->Cell(189,6,'SY '.$c_SY.'',0,0,'C');
 	    // Line break
 	    $this->Ln(10);
 	}
@@ -245,28 +245,24 @@ class PDF extends FPDF
 
 		if($type=='Single')
 		{
-			$ext_Dept=" AND asd.DepartmentID='".$deptID."'";
+			$ext_Dept=" WHERE rec.DepartmentID='".$deptID."'";
 		}
 		else
 		{
 			if($prog_string!="")
 			{
-				$ext_Dept=" AND asd.DepartmentID='".$deptID."' AND (".$prog_string.")";
+				$ext_Dept=" WHERE rec.DepartmentID='".$deptID."' AND (".$prog_string.")";
 			}
 			else
 			{
-				$ext_Dept=" AND asd.DepartmentID='".$deptID."'";
+				$ext_Dept=" WHERE rec.DepartmentID='".$deptID."'";
 			}
 		}
 
 		if($SD!="" AND $ED!="")
 		{
 			$ext_date=" 
-					AND (CASE
-						WHEN ProgramID IS NULl
-						THEN DateReceiveNotif_Receive
-						ELSE DateReceiveNotif_Receive_Prog
-						END) BETWEEN '".$SD."' AND '".$ED."'
+					AND DateReceiveNotif_Receive BETWEEN '".$SD."' AND '".$ED."'
 			";
 		}
 		else
@@ -276,79 +272,44 @@ class PDF extends FPDF
 
 		$f_ext=$ext_Dept.$ext_date;
 
-  	 $sql="Select ReceivedSerialID,asd.DepartmentID,dsa.ReceiveSerialID_Program,dsa.ProgramID,
-	(CASE
-		WHEN dsa.ProgramID IS NULL
-		THEN asd.ControlNumber
-		ELSE
-			dsa.ControlNumber_Prog
-		END
-	)as ControlNumber,asd.SerialName,TypeName,VolumeNumber,IssueNumber,DateofIssue,
-	(CASE
-		WHEN dsa.ProgramID IS NULL
-		THEN asd.Staff_Comment
-		ELSE 
-			dsa.Staff_Comment_Prog
-		END
-	)as Staff_Comment,
-	(CASE
-		WHEN dsa.ProgramID IS NULL
-		THEN DateReceiveNotif_Receive
-		ELSE DateReceiveNotif_Receive_Prog
-		END) as Date_Received from
-		(Select DateReceiveNotif_Receive,ReceivedSerialID,ReceiveSerial.DepartmentID,ControlNumber,SerialName,TypeName,VolumeNumber,IssueNumber,DateofIssue,Staff_Comment,ReceiveSerial.Remove,ReceiveSerial.Status,Subscription.Status as subs_stat,DateReceiveNotif_Give from Delivery Inner Join Delivery_Subs On Delivery.DeliveryID=Delivery_Subs.DeliveryID  Inner Join Subscription On Delivery_Subs.SubscriptionID=Subscription.SubscriptionID Inner JOin Serial On Subscription.SerialID=Serial.SerialID Inner Join ReceiveSerial on Serial.SerialID=ReceiveSerial.SerialID 
-		Inner JOin Department On ReceiveSerial.DepartmentID=Department.DepartmentID WHERE (Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) OR Subscription.Status='OnGoing') AND Receive_Date=DateReceiveNotif_Give) as asd
-		Left Join
-		(Select DateReceiveNotif_Receive_Prog,Organization.DepartmentID,ReceiveSerialID_Program,ReceiveSerial_Program.ProgramID,SerialName,Staff_Comment_Prog,ControlNumber_Prog,Status_Prog,DateReceiveNotif_Give_Prog,ReceiveSerial_Program.Remove from Serial Inner JOin ReceiveSerial_Program On Serial.SerialID=ReceiveSerial_Program.SerialID
-		Inner Join Program on ReceiveSerial_Program.ProgramID=Program.ProgramID 
-		Inner JOin Organization on Program.OrganizationID=Organization.OrganizationID) as dsa ON asd.DepartmentID=dsa.DepartmentID 
-		WHERE (asd.SerialName=dsa.SerialName OR (asd.SerialName IS NOT NULL AND dsa.SerialName IS NULL)) AND (asd.DateReceiveNotif_Give=dsa.DateReceiveNotif_Give_Prog OR (asd.DateReceiveNotif_Give IS NOT NULL AND dsa.DateReceiveNotif_Give_Prog IS NULL)) AND (asd.Remove IS NULL AND dsa.Remove IS NULL) AND (asd.Status='Received' OR dsa.Status_Prog='Received') ".$f_ext;
+  	 $sql="Select rec.SubscriptionID,ReceivedSerialID,rec.DepartmentID,categ.Programs,ControlNumber,SerialName,TypeName,VolumeNumber,IssueNumber,DateofIssue,Staff_Comment,Date_Received from
+(Select Subscription.SubscriptionID,ReceivedSerialID,ReceiveSerial.DepartmentID,ControlNumber,SerialName,TypeName,VolumeNumber,IssueNumber,DateofIssue,Staff_Comment,DateReceiveNotif_Receive as Date_Received
+from Delivery Inner Join Delivery_Subs On Delivery.DeliveryID=Delivery_Subs.DeliveryID
+Inner Join Subscription On Delivery_Subs.SubscriptionID=Subscription.SubscriptionID
+Inner JOin Serial On Subscription.SerialID=Serial.SerialID
+Inner Join ReceiveSerial on Serial.SerialID=ReceiveSerial.SerialID 
+Inner JOin Department On ReceiveSerial.DepartmentID=Department.DepartmentID WHERE (Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) OR Subscription.Status='OnGoing') AND Receive_Date=DateReceiveNotif_Give AND  ReceiveSerial.Remove IS NULL AND ReceiveSerial.Status='Received') as  rec
+Inner Join
+(Select STRING_AGG(ProgramID,', ') as Programs,Subscription.SubscriptionID from Category_Serials_Program Inner Join Subscription On Category_Serials_Program.SubscriptionID=Subscription.SubscriptionID
+Inner Join Serial On Subscription.SerialID=Serial.SerialID Group By Subscription.SubscriptionID) as categ on rec.SubscriptionID=categ.SubscriptionID ".$f_ext;
 
-		$query=sqlsrv_query($conn,$sql,array());
-		if($type=='Single')
-	 	{
-	 		 while($rows=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
-			 {		
+		$query=sqlsrv_query($conn,$sql,array(),$opt);
+		if(sqlsrv_num_rows($query)>0)
+		{
+ 		 while($rows=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
+		 {		
 
-			   		$data[$inc][0]=$rows['ControlNumber'];
-			   		$data[$inc][1]=$rows['SerialName'];
-			   		$data[$inc][2]=$rows['VolumeNumber'];
-			   		$data[$inc][3]=$rows['IssueNumber'];
-			   		if(isset($rows['DateofIssue']))
-			   		{
-			   			$data[$inc][4]=$rows['DateofIssue']->format('Y-m-d');
-			   		}
-			   		else
-			   		{
-			   			$data[$inc][4]=$rows['DateofIssue'];
-			   		}
-			   		$data[$inc][5]=$rows['Date_Received']->format('Y-m-d');
-			   		$inc++;
-			 }
-	 	}
-	 	else
-	 	{
-	 		 while($rows=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC))
-			 {		
-
-			   		$data[$inc][0]=$rows['ProgramID'];
-			   		$data[$inc][1]=$rows['ControlNumber'];
-			   		$data[$inc][2]=$rows['SerialName'];
-			   		$data[$inc][3]=$rows['VolumeNumber'];
-			   		$data[$inc][4]=$rows['IssueNumber'];
-			   		if(isset($rows['DateofIssue']))
-			   		{
-			   			$data[$inc][5]=$rows['DateofIssue']->format('Y-m-d');
-			   		}
-			   		else
-			   		{
-			   			$data[$inc][5]=$rows['DateofIssue'];
-			   		}
-			   		$data[$inc][6]=$rows['Date_Received']->format('Y-m-d');
-			   		$inc++;
-			 }
-	 	}
-
+		   		$data[$inc][0]=$rows['ControlNumber'];
+		   		$data[$inc][1]=$rows['SerialName'];
+		   		$data[$inc][2]=$rows['VolumeNumber'];
+		   		$data[$inc][3]=$rows['IssueNumber'];
+		   		if(isset($rows['DateofIssue']))
+		   		{
+		   			$data[$inc][4]=$rows['DateofIssue']->format('Y-m-d');
+		   		}
+		   		else
+		   		{
+		   			$data[$inc][4]=$rows['DateofIssue'];
+		   		}
+		   		$data[$inc][5]=$rows['Date_Received']->format('Y-m-d');
+		   		$inc++;
+		 }
+		}
+		else
+		{
+			$data=[];
+		}
+ 	
 		return $data;
 	}
 	// Colored table
@@ -398,30 +359,21 @@ $pdf->AliasNbPages();
 // Column headings
 $type=$pdf->checkType($deptID);
 $pdf->AddPage();
-if($type=='Multiple')
-{
-	$header = array('Program','Control#','Title','Vol#','Issue#','DateOfIssue','ReceivedDate');
-	$pdf->SetWidths(array('30','25','35','15','20','35','35'));
-}
-else
-{
-	$header = array('Control#','Title','Vol#','Issue#','DateOfIssue','Received Date');
-	$pdf->SetWidths(array('25','35','15','20','35','35'));
-}
+
+$header = array('Control#','Title','Vol#','Issue#','DateOfIssue','Received Date');
+$pdf->SetWidths(array('25','35','15','20','35','35'));
 
 // Data loading STUDENT
 $data=$pdf->LoadData($deptID);
 
-if($type=='Single')
-{$pdf->Cell(17);}
+$pdf->Cell(17);
 
 $pdf->FancyTableHeader($header);
 
 $fill = false;
 for($x=0;$x<count($data);$x++)
 {
-	if($type=='Single')
-	{$pdf->Cell(17);}
+	$pdf->Cell(17);
 	$pdf->Row($fill,$data[$x]);
 	$fill = !$fill;
 }

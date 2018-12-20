@@ -75,10 +75,6 @@ $('#table_user').on('draw.dt', function() {
 	 	{
 	 		alert('User Role Is Required');
 	 	}
-	 	else if($("#ava").val()=="")
-	 	{
-	 		alert('Avatar Is Required');
-	 	}
 	 	else{
 	 		$.ajax({
 	 			url:"php_codes/Insert_new_User.php",

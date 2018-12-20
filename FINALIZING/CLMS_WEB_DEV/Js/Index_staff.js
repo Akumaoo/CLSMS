@@ -90,17 +90,8 @@ $(function(){
 	$('#SEND_RECEIVE').on('submit',function(event){
 		event.preventDefault();
 		$rs_list=[];
-		$rs_prog_list=[];
 		$cn_list=[];
 		$rem_list=[];
-
-		$iden=$('#iden').text();
-		if($iden!="")
-		{
-			$('input[name="rsprog_id"]').each(function(){
-				$rs_prog_list.push($(this).val());
-			});
-		}
 
 		$('input[name="rs_id"]').each(function(){
 			$rs_list.push($(this).val());
@@ -117,7 +108,7 @@ $(function(){
  		$.ajax({
  			url:'php_codes/Receive_Seen.php',
  			method:"POST",
- 			data:{type:'receive',rs_list:$rs_list,cn_list:$cn_list,rem_list:$rem_list,rs_prog_list:$rs_prog_list},
+ 			data:{type:'receive',rs_list:$rs_list,cn_list:$cn_list,rem_list:$rem_list},
  			success:function(data)
  			{	
  				if(data=='success')

@@ -3,16 +3,6 @@ require 'db.php';
 
 if(!empty($_POST))
 {	
-	session_start();
-	if(isset($_SESSION['Dept']))
-	{
-		$dept=$_SESSION['Dept'];
-	}
-	else
-	{
-		$dept="COLLEGE";
-	}
-
 	$FName=$_POST['FN'];
 	$LName=$_POST['LN'];
 	$mail=$_POST['mail'];
@@ -36,14 +26,22 @@ if(!empty($_POST))
 	// $mail='asd';
 	// $usern='asd';
 	// $pass='asd';
-	// $role='Admin';
-	// $dept='';
+	// $role='Staff';
+	// $dept='ELEM';
+	if($_FILES['ava']['size']>0)
+	{
+		$avaname=$dept.'_'.$_FILES['ava']['name'];
+		$avasize=$_FILES['ava']['size'];
+		$temp_path=$_FILES['ava']['tmp_name'];
+		$dir='../img/Avatars/'.$avaname;
+	}
+	else
+	{
+		
+		$avaname='no_image.png';
+		$avasize=0;
+	}
 
-	$avaname=$dept.'_'.$_FILES['ava']['name'];
-	$avasize=$_FILES['ava']['size'];
-	$avatype=$_FILES['ava']['type'];
-	$temp_path=$_FILES['ava']['tmp_name'];
-	$dir='../img/Avatars/'.$avaname;
 	$maxsize=200000;
 
 	$ext=explode('.',$avaname);
@@ -74,7 +72,26 @@ if(!empty($_POST))
 			if($avasize<=$maxsize)
 			{	
 				$insertsql="Insert INTO [User](UserName,Password,FirstName,LastName,Avatar,Email,Role,DepartmentID) VALUES(?,?,?,?,?,?,?,?)";
-				if(move_uploaded_file($temp_path,$dir))
+				if($_FILES['ava']['size']>0)
+				{
+					if(move_uploaded_file($temp_path,$dir))
+					{
+						$queryinsert=sqlsrv_query($conn,$insertsql,array($usern,$pass,$FName,$LName,$avaname,$mail,$role,$dept));
+						if($queryinsert)
+						{
+							$scs['status']="success";
+						}
+						else
+						{
+							$scs['status']='<br><strong>ERROR ON:</strong> Inserting New User';
+						}
+					}
+					else
+					{
+						$scs['status']='<br>Fail To Move Avatar To Database Image Path';
+					}
+				}
+				else
 				{
 					$queryinsert=sqlsrv_query($conn,$insertsql,array($usern,$pass,$FName,$LName,$avaname,$mail,$role,$dept));
 					if($queryinsert)
@@ -86,10 +103,7 @@ if(!empty($_POST))
 						$scs['status']='<br><strong>ERROR ON:</strong> Inserting New User';
 					}
 				}
-				else
-				{
-					$scs['status']='<br>Fail To Move Avatar To Database Image Path';
-				}
+				
 			}
 			else
 			{
@@ -98,7 +112,7 @@ if(!empty($_POST))
 		}
 		else
 		{
-			$scs['status']='<br>Avatar Must Be PNG Or JPEG Format';
+			$scs['status']='<br>Avatar Must Be PNG Or JPEG Format'.$F_ext;
 		}
 		 
 	}

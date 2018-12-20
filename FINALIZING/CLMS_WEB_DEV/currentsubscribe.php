@@ -76,6 +76,23 @@ if(isset($_POST['dname']))
 			<button type="button" id="SN" data-toggle="modal" data-target="#add_data_Modal_activate" class="custom-btn">Activate Subscription!</button>
 		</div>
 	</div>
+
+	<aside>
+		<div class="col-lg-5 col-lg-offset-1">
+			<div class="custom-upperbox" style="min-height: 250px;max-height:  250px;">
+				<ul style="text-align: left;color: #3C3838;">
+					<li style="margin-top: 10px"><strong>Legends:</strong></li>
+					<br>
+					<li><strong>P1</strong> :: <br>-No Titles Delivered Yet, Waiting For Delivery On First Title</li>
+					<br>
+					<li><strong>P2</strong> :: <br>-The Initial Delivery Has Been Posponed, Late On Delivering The First Title</li>
+					<br>
+					<li><strong>P3</strong> :: <br>-The Delivery Of First Title Has Been Made, The Distributor Delivered The Title On Time</li>
+				</ul>
+			</div>
+		</div>
+
+	</aside>
 </div>
 </div>
 <?php
@@ -83,5 +100,5 @@ include 'Modals/activate_Pre-Subs_Modal.php';
 include 'Modals/Receive_Ser_Deliv_Modal.php';
 include 'Modals/remove_modal.php';
 ?>
-<script type="text/javascript" src="Js/Subscription_main.js?v=.13132"></script>
+<script type="text/javascript" src="Js/Subscription_main.js?v=.32"></script>
 

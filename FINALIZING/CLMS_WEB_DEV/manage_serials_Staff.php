@@ -95,7 +95,7 @@ else
 </div>
 </div>
 <?php
-	  include 'Modals/Print_modal.php';
+	  include 'Modals/Print_modal_Org_Only.php';
 	  include 'Includes/footer.php';
 ?>
 </body>

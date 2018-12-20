@@ -39,6 +39,16 @@ if($_POST['action']=='update')
 			return true;
 		}
 	}
+	function getCava($UID)
+	{
+		require 'db.php';
+		$sql="Select * from [User] Where UserID=?";
+		$query=sqlsrv_query($conn,$sql,array($UID));
+		$row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
+		$data=$row['Avatar'];
+
+		return $data;
+	}
 
 	if(CheckDup($usern,$uID))
 	{	
@@ -61,11 +71,28 @@ if($_POST['action']=='update')
 			{	
 				$insertsql="Update [User] Set FirstName=?,LastName=?,Email=?,UserName=?,Avatar=? Where UserID=?";
 				if(move_uploaded_file($temp_path,$dir))
-				{
+				{	$c_img=getCava($uID);
 					$queryinsert=sqlsrv_query($conn,$insertsql,array($FName,$LName,$mail,$usern,$avaname,$uID));
 					if($queryinsert)
 					{
-						if(unlink('../img/Avatars/'.$prev_ava))
+						
+						if($c_img!="no_image.png")
+						{
+							if(unlink('../img/Avatars/'.$prev_ava))
+							{
+								$ul=true;
+							}
+							else
+							{
+								$ul=false;
+							}
+						}
+						else
+						{
+							$ul=true;
+						}
+
+						if($ul)
 						{
 							$scs['status']="success";
 							$_SESSION['Avatar']=$avaname;
@@ -76,22 +103,22 @@ if($_POST['action']=='update')
 						}
 						else
 						{
-							$scs['status']='fail';
+							$scs['status']='fail '.$c_img.'||asd';
 						}
 					}
 					else
 					{
-						$scs['status']='fail';
+						$scs['status']='<br><strong>ERROR ON:</strong> Updating User Settings';
 					}
 				}
 				else
 				{
-					$scs['status']='fail';
+					$scs['status']='<br><strong>ERROR ON:</strong> Moving The Temporary File To Folder';
 				}
 			}
 			else
 			{
-				$scs['status']='fail';
+				$scs['status']='<br>Image Size Is Too Big Or Extension Type Is Not JPEG/PNG';
 			}
 
 		}
@@ -109,14 +136,14 @@ if($_POST['action']=='update')
 			}
 			else
 			{
-				$scs['status']='fail';
+				$scs['status']='<br><strong>ERROR ON:</strong> Updating User Settings';
 			}
 		}
 		
 	}
 	else
 	{
-		$scs['status']='fail';
+		$scs['status']='<br>Username <strong>'.$usern.'</strong> Already In Used Please Try Another One';
 	}
 
 	header('Content-type: application/json');

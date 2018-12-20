@@ -1,12 +1,8 @@
   <?php
 
-    $receive_sqltxt="Select Top 3 Count(asd.DepartmentID) as nums_depts,asd.DepartmentID,asd.DateReceiveNotif_Receive,Admin_Seen from
-  (Select ReceiveSerial.DepartmentID,SerialName as sn_main,Status,DateReceiveNotif_Give,ReceiveSerial.Remove,Admin_Seen,ReceiveSerial.DateReceiveNotif_Receive from Serial Inner Join ReceiveSerial On Serial.SerialID=ReceiveSerial.SerialID
-  Inner Join Department on ReceiveSerial.DepartmentID=Department.DepartmentID Where Status=? and ReceiveSerial.Remove IS NULL And Admin_Seen IS NULL) as asd
-  Left Join
-  (Select Organization.DepartmentID,SerialName as sn_prog,Organization.OrganizationID,ReceiveSerial_Program.ProgramID,DateReceiveNotif_Give_Prog from Serial Inner Join ReceiveSerial_Program On Serial.SerialID=ReceiveSerial_Program.SerialID
-  Inner Join Program On ReceiveSerial_Program.ProgramID=Program.ProgramID
-  inner Join Organization on Program.OrganizationID=Organization.OrganizationID) as dsa on asd.DepartmentID=dsa.DepartmentID where (sn_main=sn_prog OR sn_prog IS NULL) AND (DateReceiveNotif_Give=DateReceiveNotif_Give_Prog OR DateReceiveNotif_Give IS NOT NULL AND DateReceiveNotif_Give_Prog IS NULL) Group By asd.DepartmentID,Admin_Seen,DateReceiveNotif_Receive";
+    $receive_sqltxt="Select Top 3 Count(ReceiveSerial.DepartmentID) as nums_depts,ReceiveSerial.DepartmentID,DateReceiveNotif_Receive,Staff_Seen from Serial Inner Join ReceiveSerial On Serial.SerialID=ReceiveSerial.SerialID
+  Inner Join Department on ReceiveSerial.DepartmentID=Department.DepartmentID Where Status=? and ReceiveSerial.Remove IS NULL and Admin_Seen IS NULL
+ Group By ReceiveSerial.DepartmentID,DateReceiveNotif_Receive,Staff_Seen";
     $receive_query=sqlsrv_query($conn,$receive_sqltxt,array('Received'));
 
     if(sqlsrv_has_rows($receive_query))

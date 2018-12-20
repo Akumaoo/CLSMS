@@ -165,7 +165,7 @@ function getNewSubID()
 						$ERD=date("Y/m/d",strtotime($SSD.'+ 6 month'));	
 					}
 					$sqlinsert="Insert Into Subscription(DistributorID,SerialID,Frequency,Cost,Status,IDD_Phase,InitialDeliveryDate,Subscription_Date,Subscription_End_Date) Values(?,?,?,?,?,?,?,?,?)";
-					$query=sqlsrv_query($conn,$sqlinsert,array($dID,$SID,$freq,$cost,'OnGoing','Phase1',$ERD,$SSD,$SED));
+					$query=sqlsrv_query($conn,$sqlinsert,array($dID,$SID,$freq,$cost,'OnGoing','P1',$ERD,$SSD,$SED));
 
 					if($query)
 					{

@@ -2,46 +2,25 @@
         require 'php_codes/db.php';
 
             // Journals
-            function JgetElem($dept)
+            function Jget($dept)
             {   require 'php_codes/db.php';
-                $sql="Select ReceivedSerialID from ReceiveSerial Inner Join Serial On ReceiveSerial.SerialID=Serial.SerialID Inner Join Subscription On Serial.SerialID=Subscription.SerialID Where ReceiveSerial.DepartmentID=? AND ReceiveSerial.Status=? AND TypeName=? And ReceiveSerial.Remove IS NULL AND Subscription.Remove IS NULL AND Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) Group By ReceivedSerialID";
-                $query=sqlsrv_query($conn,$sql,array($dept,'Received','Journal'),$opt);
+                $sql="Select ReceivedSerialID from ReceiveSerial Inner Join Serial On ReceiveSerial.SerialID=Serial.SerialID Inner Join Subscription On Serial.SerialID=Subscription.SerialID Where ReceiveSerial.DepartmentID=? AND TypeName=? And ReceiveSerial.Remove IS NULL AND Subscription.Remove IS NULL AND Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) Group By ReceivedSerialID";
+                $query=sqlsrv_query($conn,$sql,array($dept,'Journal'),$opt);
                 $row=sqlsrv_num_rows($query);
                 return $row;
-            }
-             function JgetCOl()
-            {   require 'php_codes/db.php';
-                $sql="Select Count(*) as nums from Subscription Inner Join Serial On Subscription.SerialID=Serial.SerialID
-                      Inner Join ReceiveSerial_Program On Serial.SerialID=ReceiveSerial_Program.SerialID
-                      Inner Join Program on ReceiveSerial_Program.ProgramID=Program.ProgramID
-                      Where Status_Prog=? And TypeName=? AND (ReceiveSerial_Program.Remove IS NULL AND Subscription.Remove IS NULL) And Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01'))";
-                 $query=sqlsrv_query($conn,$sql,array('Received','Journal'));
-                $row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
-                $nums=$row['nums'];
-                return $nums;
-            }
+            }        
 
             // MAGAZINE
 
 
-            function  MgetElem($dept)
+            function  Mget($dept)
             {   require 'php_codes/db.php';
-                $sql="Select ReceivedSerialID from ReceiveSerial Inner Join Serial On ReceiveSerial.SerialID=Serial.SerialID Inner Join Subscription On Serial.SerialID=Subscription.SerialID Where ReceiveSerial.DepartmentID=? AND ReceiveSerial.Status=? AND TypeName=? And ReceiveSerial.Remove IS NULL AND Subscription.Remove IS NULL AND Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) Group By ReceivedSerialID";
-                $query=sqlsrv_query($conn,$sql,array($dept,'Received','Magazine'),$opt);
+                $sql="Select ReceivedSerialID from ReceiveSerial Inner Join Serial On ReceiveSerial.SerialID=Serial.SerialID Inner Join Subscription On Serial.SerialID=Subscription.SerialID Where ReceiveSerial.DepartmentID=? AND TypeName=? And ReceiveSerial.Remove IS NULL AND Subscription.Remove IS NULL AND Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) Group By ReceivedSerialID";
+                $query=sqlsrv_query($conn,$sql,array($dept,'Magazine'),$opt);
                 $row=sqlsrv_num_rows($query);
                 return $row;
             }
-             function  MgetCOl()
-            {   require 'php_codes/db.php';
-                $sql="Select Count(*) as nums from Subscription Inner Join Serial On Subscription.SerialID=Serial.SerialID
-                      Inner Join ReceiveSerial_Program On Serial.SerialID=ReceiveSerial_Program.SerialID
-                      Inner Join Program on ReceiveSerial_Program.ProgramID=Program.ProgramID
-                      Where Status_Prog=? And TypeName=? AND (ReceiveSerial_Program.Remove IS NULL AND Subscription.Remove IS NULL) And Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01'))";
-                 $query=sqlsrv_query($conn,$sql,array('Received','Magazine'));
-                $row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
-                $nums=$row['nums'];
-                return $nums;
-            }
+          
        ?>
 
         <div class="custom-upperbox">
@@ -65,46 +44,30 @@
                       <div><h4 class="magazine-text2 right-divider">MAGAZINES</h4></div>
                   </div>
              </div>
+              <?php 
+                $deptget="Select DepartmentID from Department";
+                $queryget=sqlsrv_query($conn,$deptget,array());
+                $dept_list=[];
+                $inc=0;
+                while($row=sqlsrv_fetch_array($queryget,SQLSRV_FETCH_ASSOC))
+                {
+                  $dept_list[$inc]=$row['DepartmentID'];
+                  $inc++;
+                }
 
-              <div>
-                  <div class="col-md-2">    
-                     <div><h4 class="journal-text2 right-divider"><?php echo JgetElem('ELEM'); ?></h4></div>
-                      <div><h4 class="magazine-text2 right-divider"><?php echo MgetElem('ELEM'); ?></h4></div>
-                      <div><h5 class="dept-text">ELEMENTARY</h5></div>
-                  </div>
-             </div>
+                for($x=0;$x<count($dept_list);$x++)
+                {
+                   echo '<div>
+                              <div class="col-md-2">    
+                                 <div><h4 class="journal-text2 right-divider">'. Jget($dept_list[$x]).'</h4></div>
+                                  <div><h4 class="magazine-text2 right-divider">'. Mget($dept_list[$x]).'</h4></div>
+                                  <div><h5 class="dept-text">'.$dept_list[$x].'</h5></div>
+                              </div>
+                         </div>';
 
-              <div>
-                  <div class="col-md-2">    
-                     <div><h4 class="journal-text2 right-divider"><?php echo JgetElem('JHS'); ?></h4></div>
-                      <div><h4 class="magazine-text2 right-divider"><?php echo MgetElem('JHS'); ?></h4></div>
-                      <div><h5 class="dept-text">JUNIOR HIGH</h5></div>
-                  </div>
-             </div>
+                }
 
-              <div>
-                  <div class="col-md-2">    
-                     <div><h4 class="journal-text2 right-divider"><?php echo JgetElem('HS'); ?></h4></div>
-                      <div><h4 class="magazine-text2 right-divider"><?php echo MgetElem('HS'); ?></h4></div>
-                      <div><h5 class="dept-text">HIGH SCHOOL</h5></div>
-                  </div>
-             </div>
-
-              <div>
-                  <div class="col-md-2">    
-                     <div><h4 class="journal-text2 right-divider"><?php echo JgetElem('SHS'); ?></h4></div>
-                      <div><h4 class="magazine-text2 right-divider"><?php echo MgetElem('SHS'); ?></h4></div>
-                      <div><h5 class="dept-text">SENIOR HIGH</h5></div>
-                  </div>
-             </div>
-
-               <div>
-                  <div class="col-md-2">    
-                     <div><h4 class="journal-text2 "><?php echo JgetCOl(); ?></h4></div>
-                      <div><h4 class="magazine-text2"><?php echo MgetCOl(); ?></h4></div>
-                      <div><h5 class="dept-text">COLLEGE</h5></div>
-                  </div>
-             </div>            
+               ?>
 
             </div>
 

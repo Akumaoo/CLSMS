@@ -38,16 +38,6 @@
 							 						</ul>
 							 					</div>
 							 				</div>
-
-							 				<div class="form-group form-group-center collapse select_prog_post" id="">
-							 					<label for="prog" class="control-label col-lg-5">Programs</label>
-							 					<div class="col-lg-5">
-							 						<ul style="padding:0">
-							 							<ul class="prog_list_post" style="padding: 0">
-							 							</ul>
-							 						</ul>
-							 					</div>
-							 				</div>
 				 						';
 				 					}		
 

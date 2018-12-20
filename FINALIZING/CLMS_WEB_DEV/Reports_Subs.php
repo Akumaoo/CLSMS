@@ -111,8 +111,7 @@ include 'Includes/header.php';
 		 							<option value="Subscriptions">S.Y. Subscriptions</option>
 		 							<option value="OS">OnGoing Subscriptions</option>
 		 							<option value="FS">Fulfilled Subscriptions</option>
-		 							<option value="RT">Received Titles</option>
-		 							<option value="DT">Delivered Titles</option>
+		 							<option value="DT">Received Titles</option>
 		 						</select>
 		 					</div>
 		 				</div>

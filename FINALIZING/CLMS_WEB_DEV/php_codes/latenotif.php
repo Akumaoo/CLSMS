@@ -4,7 +4,7 @@
   $delivery_sqltxt="Select TOP 3 Count(DistributorName) AS num_rec,DistributorName,IDD_Phase from Subscription Inner Join Distributor ON Subscription.DistributorID=Distributor.DistributorID WHERE InitialDeliveryDate<CONVERT(VARCHAR(10), GETDATE(), 110) AND Subscription.Status=? AND IDD_Phase!=? AND Subscription.Remove IS NULL Group By DistributorName,IDD_Phase
 ";
 
-  $delivery_query=sqlsrv_query($conn,$delivery_sqltxt,array('OnGoing','Complete'));
+  $delivery_query=sqlsrv_query($conn,$delivery_sqltxt,array('OnGoing','P3'));
  
     while($delivery_row=sqlsrv_fetch_array($delivery_query,SQLSRV_FETCH_ASSOC))
     {
@@ -20,7 +20,7 @@
           echo '
             <div class="deleyed_tab">
               <div class="thumb">';
-              if($phase=='Phase2')
+              if($phase=='P2')
                 { 
                  echo '<a href="javascript:void(0)" class="click_seen_deleyed"> <span class=""> <img src="img/alert3.png"  height="35" width="35"> </span></a>';
                 }

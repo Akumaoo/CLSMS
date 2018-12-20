@@ -101,7 +101,7 @@ include 'includes/header.php';
              </div>
             
             <div class="alert alert-danger alert-dismissible collapse center" id="msg_fail_enter">
-              <strong>Something Went Wrong!</strong> , Please Check The Values You Entered And Try Again.
+              <strong>Something Went Wrong!</strong> ,<span id="msg_error"> Please Check The Values You Entered And Try Again.</span>
             </div>
 
             <div class="form form_custom form-panel">

@@ -16,7 +16,7 @@ if($_POST['type']=='check_dept')
 			{
 				if(isset($row['OrganizationID'][0]))
 				{
-					$data['orgs'].="<li class='tag_".$dept."'><input type='checkbox' class='org_cb' name='org' value='".$row['OrganizationID']."'>".$row['OrganizationID']."</li>";
+					$data['orgs'].="<li class='tag_".$dept."'><input type='checkbox' class='org_cb' name='org[]' value='".$row['OrganizationID']."'>".$row['OrganizationID']."</li>";
 				}
 			}
 		
