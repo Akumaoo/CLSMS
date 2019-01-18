@@ -46,7 +46,7 @@ include 'Includes/header.php';
 				<tr>
 					<th class="radio-label-center">Distributor ID</th>
 					<th class="radio-label-center">Distributor Name</th>
-					<th class="radio-label-center">Name Of Incharge</th>
+					<th class="radio-label-center">Name of Incharge</th>
 					<th class="radio-label-center">Contact Number</th>
 					<th class="radio-label-center">Email</th>
 

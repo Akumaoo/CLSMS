@@ -37,4 +37,17 @@ $sql_details=array(
 // 	'pass'=>'Vq3MB7_2_TVd'
 // );
 
+$date_today=date('Y-m-d');
+$c_year=date('Y');
+$sub_date=$c_year.'-08-01';
+
+if($date_today<$sub_date)
+{
+	$bet="DATEADD(YEAR,-1,CONCAT(DATEPART(YYYY,GETDATE()),'-08-01'))  AND  CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')";
+}
+else
+{
+	$bet="CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01'))";
+}
+
 ?>

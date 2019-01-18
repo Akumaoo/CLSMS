@@ -15,16 +15,20 @@
 		$('tbody tr td:nth-child(1)').addClass('disb_click');
 
 		$(".disb_click").click(function(){
-			var disbn=$(this).text();
-			var RID=$(this).closest('tr').find('.srd').text();
-			$.ajax({
-			type:'POST',
-			url:'currentsubscribe.php',
-			data:{dname:disbn,req:RID},
-			success:function(data){
-				$('.main-chart').html(data)
+
+			if($(this).text()!='No data available in table')
+			{
+				var disbn=$(this).text();
+				var RID=$(this).closest('tr').find('.srd').text();
+				$.ajax({
+				type:'POST',
+				url:'currentsubscribe.php',
+				data:{dname:disbn,req:RID},
+				success:function(data){
+					$('.main-chart').html(data)
+				}
+				});
 			}
-			});
 		});
 	});
 

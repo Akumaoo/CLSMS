@@ -265,8 +265,22 @@ class PDF extends FPDF
 	function checkPassSubs()
 	{
 		require('../../php_codes/db.php');
-		$sql="Select Count(*) as rows from Subscription Where
+		$date_today=date('Y-m-d');
+		$c_year=date('Y');
+		$sub_date=$c_year.'-08-01';
+
+		if($date_today<$sub_date)
+		{
+			$sql="Select Count(*) as rows from Subscription Where 
+				Subscription_Date NOT BETWEEN DATEADD(YEAR,-1,CONCAT(DATEPART(YYYY,GETDATE()),'-08-01'))  AND  CONCAT(DATEPART(YYYY,GETDATE()),'-05-01') AND Subscription.Status=?";
+		}
+		else
+		{
+			$sql="Select Count(*) as rows from Subscription Where
 				Subscription_Date NOT BETWEEN CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) AND Subscription.Status=?";
+		}
+		
+		
 		$query=sqlsrv_query($conn,$sql,array('OnGoing'));
 		$row=sqlsrv_fetch_array($query,SQLSRV_FETCH_ASSOC);
 		$num_rows=$row['rows'];
@@ -307,7 +321,7 @@ class PDF extends FPDF
 
 		global $ED;
 		global $SD;
-
+		global $bet;
 
 
 
@@ -399,7 +413,7 @@ class PDF extends FPDF
 				Select rec.SubscriptionID,DistributorName,DepartmentID,SerialName,TypeName,VolumeNumber,IssueNumber,DateofIssue,Date_Receive,Delivery_Date,Programs from
 (Select SubscriptionID,DistributorName,DepartmentID,SerialName,TypeName,VolumeNumber,IssueNumber,DateofIssue,Date_Receive,Delivery_Date from
 (Select Subscription.SubscriptionID,Receive_Date as Delivery_Date,DateReceiveNotif_Receive as Date_Receive,ReceivedSerialID,ReceiveSerial.DepartmentID,ControlNumber,SerialName,Subscription.DistributorID,TypeName,VolumeNumber,IssueNumber,DateofIssue,Staff_Comment,ReceiveSerial.Remove,ReceiveSerial.Status,Subscription.Status as subs_stat,DateReceiveNotif_Give from  Delivery Inner Join Delivery_Subs On Delivery.DeliveryID=Delivery_Subs.DeliveryID Inner Join Subscription On Delivery_Subs.SubscriptionID=Subscription.SubscriptionID Inner JOin Serial On Subscription.SerialID=Serial.SerialID Inner Join ReceiveSerial on Serial.SerialID=ReceiveSerial.SerialID 
-Inner JOin Department On ReceiveSerial.DepartmentID=Department.DepartmentID WHERE (Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) OR Subscription.Status='OnGoing') AND Receive_Date=DateReceiveNotif_Give) as T1
+Inner JOin Department On ReceiveSerial.DepartmentID=Department.DepartmentID WHERE (Subscription_Date Between ".$bet." OR Subscription.Status='OnGoing') AND Receive_Date=DateReceiveNotif_Give) as T1
 Inner Join Distributor On T1.DistributorID=Distributor.DistributorID )as rec
 Inner Join
 (Select STRING_AGG(ProgramID,', ') as Programs,Subscription.SubscriptionID from Category_Serials_Program Inner Join Subscription On Category_Serials_Program.SubscriptionID=Subscription.SubscriptionID
@@ -490,7 +504,7 @@ Inner Join Serial On Subscription.SerialID=Serial.SerialID Group By Subscription
 					Left JOin
 						(Select Category_Serials_Program.SubscriptionID,CategoryID_Program,Category_Serials_Program.ProgramID,NumberofItemsReceived_Prog,DepartmentID,(Usage_Stat_Employee_Prog+Usage_Stat_Student_Prog) as Usage_stat_Prog from Subscription Inner Join Category_Serials_Program ON Subscription.SubscriptionID=Category_Serials_Program.SubscriptionID Inner Join Program ON Category_Serials_Program.ProgramID=Program.ProgramID 
 						Inner Join Organization On Program.OrganizationID=Organization.OrganizationID) as dsa On asd.DepartmentID=dsa.DepartmentID
-						Where (asd.SubscriptionID=dsa.SubscriptionID OR (asd.SubscriptionID IS NOT NULL AND dsa.SubscriptionID IS NULL)) AND (asd.Archive IS NULL AND asd.Remove IS NULL)  AND (Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) OR sub_stat='OnGoing')) as T1
+						Where (asd.SubscriptionID=dsa.SubscriptionID OR (asd.SubscriptionID IS NOT NULL AND dsa.SubscriptionID IS NULL)) AND (asd.Archive IS NULL AND asd.Remove IS NULL)  AND (Subscription_Date Between ".$bet." OR sub_stat='OnGoing')) as T1
 					Inner Join Distributor On T1.DistributorID=Distributor.DistributorID ".$add_ext;
 
 			$query=sqlsrv_query($conn,$sql,array());
@@ -584,7 +598,7 @@ Inner Join Serial On Subscription.SerialID=Serial.SerialID Group By Subscription
 					Left JOin
 						(Select Category_Serials_Program.SubscriptionID,CategoryID_Program,Category_Serials_Program.ProgramID,NumberofItemsReceived_Prog,DepartmentID,(Usage_Stat_Employee_Prog+Usage_Stat_Student_Prog) as Usage_stat_Prog from Subscription Inner Join Category_Serials_Program ON Subscription.SubscriptionID=Category_Serials_Program.SubscriptionID Inner Join Program ON Category_Serials_Program.ProgramID=Program.ProgramID 
 						Inner Join Organization On Program.OrganizationID=Organization.OrganizationID) as dsa On asd.DepartmentID=dsa.DepartmentID
-						Where (asd.SubscriptionID=dsa.SubscriptionID OR (asd.SubscriptionID IS NOT NULL AND dsa.SubscriptionID IS NULL)) AND (asd.Archive IS NULL AND asd.Remove IS NULL)  AND (Subscription_Date ".$not_add." BETWEEN CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01'))) ".$filter_middle.$con_add." ) as T1
+						Where (asd.SubscriptionID=dsa.SubscriptionID OR (asd.SubscriptionID IS NOT NULL AND dsa.SubscriptionID IS NULL)) AND (asd.Archive IS NULL AND asd.Remove IS NULL)  AND (Subscription_Date ".$not_add." BETWEEN ".$bet.") ".$filter_middle.$con_add." ) as T1
 					Inner Join Distributor On T1.DistributorID=Distributor.DistributorID Group By DistributorName,SerialName,TypeName,Frequency,sub_stat".$add_col_down.$filter_end;
 
 			$query=sqlsrv_query($conn,$sql,array());
@@ -698,8 +712,10 @@ if($type_report=='Subscriptions')
 
 	if($checkpass)
 	{
-		$pdf->SetFont('Arial','B',12);
-		$pdf->Cell(203,20,'EXTENDED SUBSCRIPTIONS',0,1,'C');
+
+		$pdf->SetFont('Times','B',13);
+		$pdf->SetTextColor('0, 0, 0');
+		$pdf->Cell(187,20,'EXTENDED SUBSCRIPTIONS',0,1,'C');
 
 		$header = array('Distributor','Title','Type','Departments','Freq','S.Y');
 		$pdf->SetWidths(array('35','35','30','43','20','30'));

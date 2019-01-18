@@ -23,7 +23,7 @@ else
 $table=<<<EOT
  (Select SerialName,TypeName,ReceivedSerialID,ReceiveSerial.DepartmentID,ReceiveSerial.DateReceiveNotif_Give,Staff_Seen,ReceiveSerial.Remove as remv_main from Serial Inner Join ReceiveSerial On Serial.SerialID=ReceiveSerial.SerialID
   Inner Join Department on ReceiveSerial.DepartmentID=Department.DepartmentID Where Status='Received' and ReceiveSerial.Remove IS NULL
-  AND DateReceiveNotif_Give Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) $data $date_string_up
+  AND DateReceiveNotif_Give Between $bet $data $date_string_up
 	) temp
 EOT;
 

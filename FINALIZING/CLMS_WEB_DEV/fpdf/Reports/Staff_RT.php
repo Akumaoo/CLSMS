@@ -262,7 +262,7 @@ class PDF extends FPDF
 		if($SD!="" AND $ED!="")
 		{
 			$ext_date=" 
-					AND DateReceiveNotif_Receive BETWEEN '".$SD."' AND '".$ED."'
+					AND Date_Received BETWEEN '".$SD."' AND '".$ED."'
 			";
 		}
 		else
@@ -278,7 +278,7 @@ from Delivery Inner Join Delivery_Subs On Delivery.DeliveryID=Delivery_Subs.Deli
 Inner Join Subscription On Delivery_Subs.SubscriptionID=Subscription.SubscriptionID
 Inner JOin Serial On Subscription.SerialID=Serial.SerialID
 Inner Join ReceiveSerial on Serial.SerialID=ReceiveSerial.SerialID 
-Inner JOin Department On ReceiveSerial.DepartmentID=Department.DepartmentID WHERE (Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) OR Subscription.Status='OnGoing') AND Receive_Date=DateReceiveNotif_Give AND  ReceiveSerial.Remove IS NULL AND ReceiveSerial.Status='Received') as  rec
+Inner JOin Department On ReceiveSerial.DepartmentID=Department.DepartmentID WHERE (Subscription_Date Between ".$bet." OR Subscription.Status='OnGoing') AND Receive_Date=DateReceiveNotif_Give AND  ReceiveSerial.Remove IS NULL AND ReceiveSerial.Status='Received') as  rec
 Inner Join
 (Select STRING_AGG(ProgramID,', ') as Programs,Subscription.SubscriptionID from Category_Serials_Program Inner Join Subscription On Category_Serials_Program.SubscriptionID=Subscription.SubscriptionID
 Inner Join Serial On Subscription.SerialID=Serial.SerialID Group By Subscription.SubscriptionID) as categ on rec.SubscriptionID=categ.SubscriptionID ".$f_ext;

@@ -287,12 +287,12 @@ class PDF extends FPDF
 			from 
 			(Select ProgramID,SUM(".$col.") as ".$col_tag_mag." from Serial Inner Join Subscription On Serial.SerialID=Subscription.SerialID
 				Inner Join Category_Serials_Program On Subscription.SubscriptionID=Category_Serials_Program.SubscriptionID
-			WHERE (Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) OR Subscription.Status='OnGoing') AND (Subscription.Remove IS NULL AND Subscription.Archive IS NULL)
+			WHERE (Subscription_Date Between ".$bet." OR Subscription.Status='OnGoing') AND (Subscription.Remove IS NULL AND Subscription.Archive IS NULL)
 			AND TypeName='Magazine' Group By ProgramID) as asd
 			Full Join 
 		(Select ProgramID,SUM(".$col.") as ".$col_tag_jour." from Serial Inner Join Subscription On Serial.SerialID=Subscription.SerialID
 				Inner Join Category_Serials_Program On Subscription.SubscriptionID=Category_Serials_Program.SubscriptionID
-			WHERE (Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) OR Subscription.Status='OnGoing') AND (Subscription.Remove IS NULL AND Subscription.Archive IS NULL)
+			WHERE (Subscription_Date Between ".$bet." OR Subscription.Status='OnGoing') AND (Subscription.Remove IS NULL AND Subscription.Archive IS NULL)
 			AND TypeName='Journal' Group By ProgramID) as dsa On asd.ProgramID=dsa.ProgramID) as T1
 		Inner Join Program On T1.Program=Program.ProgramID ".$f_ext." Group By OrganizationID ";
 		// echo $sql;
@@ -351,12 +351,12 @@ class PDF extends FPDF
 			 from 
 			(Select DepartmentID,SUM(".$col.") as ".$col_tag_mag." from Serial Inner Join Subscription On Serial.SerialID=Subscription.SerialID
 			Inner Join Categorize_Serials On Subscription.SubscriptionID=Categorize_Serials.SubscriptionID
-			WHERE (Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) OR Subscription.Status='OnGoing') AND (Subscription.Remove IS NULL AND Subscription.Archive IS NULL)
+			WHERE (Subscription_Date Between ".$bet." OR Subscription.Status='OnGoing') AND (Subscription.Remove IS NULL AND Subscription.Archive IS NULL)
 				AND TypeName='Magazine' Group By DepartmentID) as asd	
 			FULL JOIN
 			(Select DepartmentID,SUM(".$col.") as ".$col_tag_jour." from Serial Inner Join Subscription On Serial.SerialID=Subscription.SerialID
 			Inner Join Categorize_Serials On Subscription.SubscriptionID=Categorize_Serials.SubscriptionID
-			WHERE (Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) OR Subscription.Status='OnGoing') AND (Subscription.Remove IS NULL AND Subscription.Archive IS NULL)
+			WHERE (Subscription_Date Between ".$bet." OR Subscription.Status='OnGoing') AND (Subscription.Remove IS NULL AND Subscription.Archive IS NULL)
 				AND TypeName='Journal' Group By DepartmentID) as dsa ON asd.DepartmentID=dsa.DepartmentID WHERE asd.DepartmentID=?
 				";
 

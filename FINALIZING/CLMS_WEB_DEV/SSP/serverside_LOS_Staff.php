@@ -46,7 +46,7 @@ $table=<<<EOT
 	Left JOin
 		(Select SubscriptionID,CategoryID_Program,Category_Serials_Program.ProgramID,NumberofItemsReceived_Prog,DepartmentID,(Usage_Stat_Employee_Prog+Usage_Stat_Student_Prog) as Usage_stat_Prog from Category_Serials_Program Inner Join Program ON Category_Serials_Program.ProgramID=Program.ProgramID 
 		Inner Join Organization On Program.OrganizationID=Organization.OrganizationID) as dsa On asd.DepartmentID=dsa.DepartmentID
-		Where (asd.SubscriptionID=dsa.SubscriptionID OR (asd.SubscriptionID IS NOT NULL AND dsa.SubscriptionID IS NULL)) AND (asd.Archive IS NULL AND asd.Remove IS NULL) AND asd.DepartmentID='$deptID' AND (Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) OR sub_stat='OnGoing')) temp
+		Where (asd.SubscriptionID=dsa.SubscriptionID OR (asd.SubscriptionID IS NOT NULL AND dsa.SubscriptionID IS NULL)) AND (asd.Archive IS NULL AND asd.Remove IS NULL) AND asd.DepartmentID='$deptID' AND (Subscription_Date Between $bet OR sub_stat='OnGoing')) temp
 EOT;
 
 $primary_key='CategoryID';

@@ -14,7 +14,7 @@ $dept=sanitize($_POST['dept']);
 $table=<<<EOT
  	(Select ReceivedSerialID,ReceiveSerial.DepartmentID,ControlNumber,SerialName,TypeName,VolumeNumber,IssueNumber,DateofIssue,Staff_Comment
   from Delivery Inner Join Delivery_Subs On Delivery.DeliveryID=Delivery_Subs.DeliveryID  Inner Join Subscription On Delivery_Subs.SubscriptionID=Subscription.SubscriptionID Inner JOin Serial On Subscription.SerialID=Serial.SerialID Inner Join ReceiveSerial on Serial.SerialID=ReceiveSerial.SerialID 
-		Inner JOin Department On ReceiveSerial.DepartmentID=Department.DepartmentID WHERE (Subscription_Date Between CONCAT(DATEPART(YYYY,GETDATE()),'-08-01') AND DATEADD(YEAR,1,CONCAT(DATEPART(YYYY,GETDATE()),'-05-01')) OR Subscription.Status='OnGoing') AND Receive_Date=DateReceiveNotif_Give And ReceiveSerial.Remove IS NULL AND ReceiveSerial.Status='Received' AND ReceiveSerial.DepartmentID='$dept') temp
+		Inner JOin Department On ReceiveSerial.DepartmentID=Department.DepartmentID WHERE (Subscription_Date Between $bet OR Subscription.Status='OnGoing') AND Receive_Date=DateReceiveNotif_Give And ReceiveSerial.Remove IS NULL AND ReceiveSerial.Status='Received' AND ReceiveSerial.DepartmentID='$dept') temp
 EOT;
 
 $primary_key='ControlNumber';

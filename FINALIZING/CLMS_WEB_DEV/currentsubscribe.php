@@ -15,7 +15,7 @@ if(isset($_POST['dname']))
 				</div>
 			</div>
 
-<div class="custom-panelbox">				
+<div class="custom-panelbox" style="min-height: 630px;">				
 	<div class="">
 		<div class="">
 			<h4 class="fa fa-handshake-o tag_style"> Manage Subscription: <strong id="disbn"><?php echo $dn;?></strong> Subscription Date:(<span id="rid"><?php echo $req; ?></span>)</h4>
@@ -83,11 +83,11 @@ if(isset($_POST['dname']))
 				<ul style="text-align: left;color: #3C3838;">
 					<li style="margin-top: 10px"><strong>Legends:</strong></li>
 					<br>
-					<li><strong>P1</strong> :: <br>-No Titles Delivered Yet, Waiting For Delivery On First Title</li>
+					<li><strong>P1</strong> :: <br>-No titles delivered yet, waiting for delivery on first title</li>
 					<br>
-					<li><strong>P2</strong> :: <br>-The Initial Delivery Has Been Posponed, Late On Delivering The First Title</li>
+					<li><strong>P2</strong> :: <br>-The initial delivery has been posponed, late on delivering the first title</li>
 					<br>
-					<li><strong>P3</strong> :: <br>-The Delivery Of First Title Has Been Made, The Distributor Delivered The Title On Time</li>
+					<li><strong>P3</strong> :: <br>-The delivery of first title has been made, the distributor delivered the title on time</li>
 				</ul>
 			</div>
 		</div>
